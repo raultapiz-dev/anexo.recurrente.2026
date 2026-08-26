@@ -477,7 +477,7 @@
     <!-- GRID DE LOS 9 MÓDULOS -->
     <div class="modules-grid" id="modulesContainer">
 
-      <!-- MÓDULO 1.1 -->
+      <!-- MÓDULO 1.1 TWR-->
       <div class="module-card" id="card-tema_1_1" data-title="1.1 mgtam capitulo 7 control de aerodromo torre pista separacion reducida">
         <div>
           <div class="module-top">
@@ -490,6 +490,30 @@
             <span class="module-tag">MGTAM 7.1 - 7.17</span>
             <span class="module-tag">Figura 7-1</span>
             <span class="module-tag">Separación 7.11</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_1" onchange="toggleModuleCheck('tema_1_1')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_1.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+ <!-- MÓDULO 1.1 APP-->
+      <div class="module-card" id="card-tema_1_1_APP" data-title="1.1 REPASO DE SECCIONES IMPORTANTES DEL MGTAM PARA APP">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.1 - APP</span>
+            <span class="badge-doc" style="font-size:0.65rem;">MGTAM</span>
+          </div>
+          <h3 class="module-title">Repaso de secciones importantes del MGTAM para APP</h3>
+          <p class="module-desc">Procedimientos reglamentarios para el control de aproximación (APP La Paz / MMLP): Control de velocidad horizontal, separaciones convencionales y radar, protección de esperas, turbulencia de estela y verificación altimétrica RVSM.</p>
+          <div class="module-tags">
+            <span class="module-tag">MGTAM 4.6</span>
+            <span class="module-tag">MGTAM 5.3</span>
+            <span class="module-tag">MGTMAM 8.5</span>
           </div>
         </div>
         <div class="module-bottom">
