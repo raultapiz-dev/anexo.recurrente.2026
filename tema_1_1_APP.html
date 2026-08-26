@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 1.1 APP | MGTAM: Control de Aproximación (SENEAM MMLP)</title>
+  
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-main: #060D1A;
+      --bg-card: #0F1C2E;
+      --bg-card-hover: #162945;
+      --primary: #00F0FF;
+      --primary-glow: rgba(0, 240, 255, 0.25);
+      --accent-radar: #38BDF8;
+      --accent-speed: #F59E0B;
+      --accent-sep: #10B981;
+      --accent-alert: #EF4444;
+      --accent-purple: #8B5CF6;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-color: #1E3250;
+      --nav-width: 310px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA LATERAL */
+    #sidebar {
+      width: var(--nav-width);
+      background: #081220;
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: fixed;
+      left: 0; top: 0;
+      display: flex; flex-direction: column;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, #10243E 0%, #081220 100%);
+    }
+
+    .badge-doc {
+      display: inline-block; font-size: 0.7rem; font-weight: 700;
+      padding: 3px 8px; border-radius: 4px;
+      background: rgba(0, 240, 255, 0.15); color: var(--primary);
+      border: 1px solid var(--primary); text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 8px;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.05rem; font-weight: 700; color: #fff;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .sidebar-header p { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+    .search-box { padding: 12px 18px; border-bottom: 1px solid var(--border-color); }
+    .search-input-wrap { position: relative; }
+    .search-input-wrap input {
+      width: 100%; background: var(--bg-main); border: 1px solid var(--border-color);
+      color: #fff; padding: 8px 12px 8px 34px; border-radius: 6px;
+      font-size: 0.85rem; outline: none; transition: border 0.2s;
+    }
+    .search-input-wrap input:focus { border-color: var(--primary); }
+    .search-input-wrap i {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem;
+    }
+
+    .sidebar-menu {
+      flex: 1; overflow-y: auto; padding: 12px 10px; list-style: none;
+    }
+    .sidebar-menu::-webkit-scrollbar { width: 5px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+    .menu-cat-title {
+      font-size: 0.68rem; text-transform: uppercase; font-weight: 700;
+      color: var(--text-muted); padding: 10px 10px 4px 10px; letter-spacing: 0.8px;
+    }
+
+    .sidebar-menu a {
+      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+      color: var(--text-muted); text-decoration: none; border-radius: 6px;
+      font-size: 0.85rem; font-weight: 500; transition: all 0.2s ease; margin-bottom: 2px;
+    }
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(0, 240, 255, 0.12); color: #fff; border-left: 3px solid var(--primary);
+    }
+    .sidebar-menu a span.num {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--primary);
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    #main-content {
+      margin-left: var(--nav-width);
+      flex: 1; min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+
+    .top-header {
+      background: rgba(8, 18, 32, 0.85); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 900;
+      padding: 12px 30px; border-bottom: 1px solid var(--border-color);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .top-header-meta { display: flex; align-items: center; gap: 15px; }
+    .pill {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; color: var(--text-muted);
+    }
+    .pill strong { color: #fff; }
+
+    .header-actions { display: flex; gap: 10px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 6px; font-size: 0.82rem;
+      font-weight: 600; cursor: pointer; border: none; transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: #000; }
+    .btn-primary:hover { background: #38bdf8; box-shadow: 0 0 15px var(--primary-glow); }
+    .btn-outline { background: transparent; border: 1px solid var(--border-color); color: #fff; }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+    .container {
+      max-width: 1100px; margin: 0 auto; padding: 30px 20px 80px 20px; width: 100%;
+    }
+
+    /* HERO */
+    .hero-banner {
+      background: linear-gradient(135deg, #05283C 0%, #0F1C2E 55%, #060D1A 100%);
+      border: 1px solid var(--border-color); border-radius: 12px;
+      padding: 30px; margin-bottom: 35px; position: relative; overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .hero-banner::after {
+      content: '\f5b0';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900; position: absolute;
+      right: 25px; top: -20px; font-size: 9.5rem;
+      color: rgba(0, 240, 255, 0.04); pointer-events: none;
+    }
+    .hero-title { font-size: 1.8rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 8px; }
+    .hero-subtitle { color: var(--text-muted); font-size: 0.95rem; max-width: 820px; }
+
+    /* SECCIONES Y TARJETAS */
+    .norm-section { margin-bottom: 45px; scroll-margin-top: 80px; }
+    .section-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+      border-bottom: 2px solid var(--border-color); padding-bottom: 10px;
+    }
+    .section-num {
+      background: var(--primary); color: #031024;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+      font-weight: 700; padding: 4px 10px; border-radius: 6px;
+    }
+    .section-title { font-size: 1.35rem; font-weight: 700; color: #fff; }
+
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 10px; padding: 22px; margin-bottom: 16px;
+      transition: border-color 0.2s ease;
+    }
+    .card:hover { border-color: rgba(0, 240, 255, 0.35); }
+
+    .card-title-ref {
+      font-size: 0.95rem; font-weight: 700; color: var(--primary);
+      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .card-title-ref span.doc-tag {
+      color: #fff; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.95rem;
+    }
+
+    .rule-list { list-style: none; padding-left: 0; }
+    .rule-list > li {
+      position: relative; padding-left: 22px; margin-bottom: 8px;
+      font-size: 0.9rem; color: #cbd5e1;
+    }
+    .rule-list > li::before {
+      content: "•"; position: absolute; left: 6px; top: 0;
+      color: var(--primary); font-size: 1.2rem; line-height: 1;
+    }
+
+    .highlight-box {
+      background: rgba(0, 240, 255, 0.08); border-left: 4px solid var(--primary);
+      padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 0.88rem;
+    }
+    .speed-box {
+      background: rgba(245, 158, 11, 0.08); border-left: 4px solid var(--accent-speed);
+      padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 0.88rem;
+    }
+    .alert-box {
+      background: rgba(239, 68, 68, 0.08); border-left: 4px solid var(--accent-alert);
+      padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 0.88rem;
+    }
+
+    /* COMPONENTE INTERACTIVO */
+    .interactive-card {
+      background: #0b1728; border: 2px solid var(--border-color);
+      border-radius: 12px; padding: 24px; margin: 25px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+    .interactive-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);
+    }
+    .interactive-badge {
+      background: var(--primary); color: #000; font-weight: 700;
+      font-size: 0.72rem; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;
+    }
+
+    .form-control {
+      width: 100%; background: var(--bg-main); border: 1px solid var(--border-color);
+      color: #fff; padding: 10px 12px; border-radius: 6px; font-size: 0.88rem;
+      outline: none; font-family: inherit;
+    }
+    .form-control:focus { border-color: var(--primary); }
+
+    /* TABLAS ESTILIZADAS */
+    .table-responsive {
+      overflow-x: auto; margin: 15px 0; border-radius: 8px; border: 1px solid var(--border-color);
+    }
+    .custom-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    .custom-table th {
+      background: #08111e; padding: 12px 16px; color: #fff; font-weight: 600;
+      border-bottom: 2px solid var(--border-color); white-space: nowrap;
+    }
+    .custom-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); color: #cbd5e1; }
+    .custom-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* QUIZ */
+    .quiz-container {
+      background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color);
+      padding: 25px;
+    }
+    .quiz-q { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+    .quiz-q-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; gap: 10px; }
+    .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-opt {
+      background: #08111e; border: 1px solid var(--border-color); padding: 10px 14px;
+      border-radius: 6px; font-size: 0.88rem; cursor: pointer; transition: all 0.2s;
+    }
+    .quiz-opt:hover { background: #132239; border-color: var(--primary); }
+    .quiz-opt.correct {
+      background: rgba(16, 185, 129, 0.2) !important; border-color: var(--accent-sep) !important;
+      color: #34d399 !important; font-weight: 600;
+    }
+    .quiz-opt.incorrect {
+      background: rgba(239, 68, 68, 0.2) !important; border-color: var(--accent-alert) !important;
+      color: #f87171 !important;
+    }
+    .quiz-feedback { margin-top: 8px; font-size: 0.82rem; font-style: italic; display: none; }
+
+    /* MODAL DE PRESENTACIÓN */
+    .presentation-modal {
+      display: none; position: fixed; inset: 0; background: #040810;
+      z-index: 2000; padding: 40px; flex-direction: column; justify-content: space-between;
+    }
+    .presentation-modal.active { display: flex; }
+    .slide-body { max-width: 1000px; margin: auto; width: 100%; animation: fadeIn 0.3s ease; }
+    .slide-controls {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 20px; border-top: 1px solid var(--border-color);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      background: #040810; border-top: 1px solid var(--border-color);
+      padding: 25px 20px; text-align: center; font-size: 0.82rem; color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .menu-toggle-btn {
+      display: none; background: var(--primary); color: #000;
+      border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main-content { margin-left: 0; }
+      .menu-toggle-btn { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="badge-doc">SENEAM / MGTAM APP</span>
+      <h1><i class="fa-solid fa-radar text-primary"></i> Control APP MMLP</h1>
+      <p>Tema 1.1 — Secciones Importantes del MGTAM para APP</p>
+    </div>
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Buscar regla, numeral o separación..." onkeyup="filterSections()" />
+      </div>
+    </div>
+    <ul class="sidebar-menu" id="menuList">
+      <li class="menu-cat-title">Secciones Normativas MGTAM</li>
+      <li><a href="#sec-velocidad"><span class="num">4.6</span> Control de Velocidad Horizontal</a></li>
+      <li><a href="#sec-vertical"><span class="num">5.3 / 8.5</span> Separación Vertical & RVSM</a></li>
+      <li><a href="#sec-lateral"><span class="num">5.4.1</span> Separación Lateral & GNSS</a></li>
+      <li><a href="#sec-longitudinal"><span class="num">5.4.2</span> Separación Longitudinal (DME/GNSS)</a></li>
+      <li><a href="#sec-esperas"><span class="num">5.5</span> Protección de Esperas en Vuelo</a></li>
+      <li><a href="#sec-estela"><span class="num">5.8</span> Turbulencia de Estela (Tiempo)</a></li>
+      <li><a href="#sec-vigilancia"><span class="num">8.6 / 8.9</span> Vigilancia ATS & Vectores</a></li>
+      
+      <li class="menu-cat-title">Herramientas & Examen</li>
+      <li><a href="#sec-sim-esperas"><i class="fa-solid fa-layer-group text-primary"></i> Tabla de Esperas (2k-20k)</a></li>
+      <li><a href="#sec-quiz"><i class="fa-solid fa-graduation-cap text-primary"></i> Quiz de Evaluación APP</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="main-content">
+
+    <!-- TOP BAR -->
+    <header class="top-header">
+      <div class="top-header-meta">
+        <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <a href="index.html" class="btn btn-outline" style="font-size:0.78rem;"><i class="fa-solid fa-house"></i> Menú Principal</a>
+        <span class="pill">Módulo: <strong>1.1 MGTAM para APP (Aproximación)</strong></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="startPresentation()"><i class="fa-solid fa-play"></i> Modo Diapositivas</button>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- BANNER HERO -->
+      <section class="hero-banner">
+        <span class="badge-doc">Servicio de Control de Aproximación</span>
+        <h1 class="hero-title">REPASO DE SECCIONES IMPORTANTES DEL MGTAM PARA APP</h1>
+        <p class="hero-subtitle">
+          Procedimientos reglamentarios para el control de aproximación (APP La Paz / MMLP): Control de velocidad horizontal, separaciones convencionales y radar, protección de esperas, turbulencia de estela y verificación altimétrica RVSM.
+        </p>
+      </section>
+
+      <!-- 1. CONTROL DE VELOCIDAD HORIZONTAL (4.6) -->
+      <section id="sec-velocidad" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">4.6</span>
+          <h2 class="section-title">INSTRUCCIONES PARA EL CONTROL DE LA VELOCIDAD HORIZONTAL</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">4.6.3.2 a 4.6.3.6 <span class="doc-tag">Técnicas de Espaciamiento y Límites de Velocidad</span></div>
+          <ul class="rule-list">
+            <li><strong>4.6.3.2 Tipos de Instrucción:</strong> Puede instruirse a una aeronave que llegue a mantener su <em>«velocidad máxima»</em>, <em>«velocidad mínima limpia»</em>, <em>«velocidad mínima»</em> o una velocidad específica indicada.</li>
+            <li>
+              <strong>Definición de "Velocidad Mínima Limpia":</strong> Velocidad mínima a la cual una aeronave puede volar en configuración limpia (sin flaps, slats, frenos aerodinámicos ni tren de aterrizaje desplegados).
+            </li>
+            <li>
+              <strong>4.6.3.3 Descenso Inicial:</strong> Las reducciones a <strong>menos de 250 kt IAS</strong> para turborreactores durante el descenso inicial <strong>únicamente deberían aplicarse con la aprobación de la tripulación de vuelo</strong>.
+            </li>
+            <li>
+              <strong>4.6.3.5 Por debajo de FL150:</strong> Pueden aplicarse reducciones a aeronaves de turborreacción a <strong style="color:var(--accent-speed);">no menos de 220 kt IAS</strong>, que normalmente se acerca a su velocidad mínima limpia.
+            </li>
+            <li>
+              <strong>4.6.3.6 Aproximación Intermedia y Final:</strong> Solamente deberían utilizarse ajustes menores que <strong>no excedan de $\pm 20\text{ kt IAS}$</strong>.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2. SEPARACIÓN VERTICAL & ALTIMETRÍA (5.3 & 8.5) -->
+      <section id="sec-vertical" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">5.3 & 8.5</span>
+          <h2 class="section-title">SEPARACIÓN VERTICAL, RVSM Y VERIFICACIÓN ALTIMÉTRICA</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">5.3.2 & 5.3.4.1 <span class="doc-tag">Separación Vertical Mínima & Excepciones de Nivel Vaciado</span></div>
+          <p style="font-size:0.92rem;">
+            • <strong>5.3.2:</strong> Separación vertical mínima: Nominalmente <strong>1 000 ft</strong> por debajo de FL410 (en espacio RVSM) y <strong>2 000 ft</strong> a ese nivel o por encima.
+          </p>
+          <div class="alert-box" style="margin-top:10px;">
+            <strong>5.3.4.1 Prohibición de Autorizar a un Nivel Vaciado:</strong> Podrá autorizarse que una aeronave pase a un nivel previamente ocupado tras el reporte de haberlo dejado libre, <strong>EXCEPTO CUANDO</strong>:
+            <ul class="rule-list" style="margin-top:6px;">
+              <li><strong>a)</strong> Se sabe que existe turbulencia fuerte;</li>
+              <li><strong>b)</strong> La aeronave a más altura está efectuando un ascenso en crucero; o</li>
+              <li><strong>c)</strong> La diferencia de performance de las aeronaves es tal que puede llevar a una separación inferior a la mínima.</li>
+            </ul>
+          </div>
+
+          <div class="highlight-box" style="margin-top:14px;">
+            <strong>8.5.5 Verificación de Altitud de Presión (SSR / ADS-B):</strong>
+            <p>• <strong>8.5.5.1.1 Tolerancia RVSM:</strong> El valor de tolerancia para determinar que el nivel presentado es exacto será de <strong style="color:#fff;">$\pm 200\text{ ft}$</strong>.</p>
+            <p>• <strong>8.5.5.2.1 Nivel Ocupado:</strong> Criterio de nivel ocupado en RVSM: <strong style="color:#fff;">$\pm 200\text{ ft}$</strong>.</p>
+            <p>• <strong>8.5.5.2.4 Nivel Atravesado:</strong> Se considera que una aeronave en ascenso o descenso ha atravesado un nivel cuando indica que lo ha pasado en la dirección requerida en <strong style="color:var(--primary);">más de 300 ft</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. SEPARACIÓN LATERAL Y DERROTAS DIVERGENTES (5.4.1) -->
+      <section id="sec-lateral" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">5.4.1</span>
+          <h2 class="section-title">SEPARACIÓN LATERAL & DIVERGENCIA GNSS</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">5.4.1.2 <span class="doc-tag">Derrotas RNAV/RNP y Tabla de Divergencia</span></div>
+          <ul class="rule-list">
+            <li><strong>5.4.1.2.1.4 Procedimientos Publicados:</strong> Distancia entre derrotas RNAV 1 / RNP 1 / RNP APCH no inferior a <strong>13 km (7 NM)</strong>.</li>
+            <li><strong>5.4.1.2.1.6 Derrotas Paralelas:</strong> Separación mínima de <strong>15 NM</strong> con RNP 2 o GNSS y VHF directo.</li>
+          </ul>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Ángulo de Divergencia</th>
+                  <th>Distancia Mínima Requerida Fuera del Punto</th>
+                  <th>Criterio Aplicable (5.4.1.2.1.9)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong style="color:var(--primary);">30°</strong></td><td><strong>30 NM</strong></td><td>Aeronaves con GNSS (Letra G en FPL) y comunicación directa.</td></tr>
+                <tr><td><strong style="color:var(--primary);">50°</strong></td><td><strong>20 NM</strong></td><td>Derrotas que se cortan separadas lateralmente tras cruzar el punto.</td></tr>
+                <tr><td><strong style="color:var(--primary);">80°</strong></td><td><strong>15 NM</strong></td><td>Divergencia amplia permitiendo liberación lateral expedita.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. SEPARACIÓN LONGITUDINAL (5.4.2) -->
+      <section id="sec-longitudinal" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">5.4.2</span>
+          <h2 class="section-title">SEPARACIÓN LONGITUDINAL: TIEMPO, DME Y GNSS</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">5.4.2.1.5 <span class="doc-tag">Clasificación de Derrotas</span></div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:12px;">
+            <div style="background:#08111e; padding:10px; border-radius:6px; border-left:3px solid var(--primary);">
+              <strong>Misma Derrota:</strong> Diferencia angular <strong>&lt; 45° o &gt; 315°</strong>.
+            </div>
+            <div style="background:#08111e; padding:10px; border-radius:6px; border-left:3px solid var(--accent-alert);">
+              <strong>Derrotas Opuestas:</strong> Diferencia angular <strong>&gt; 135° pero &lt; 225°</strong>.
+            </div>
+            <div style="background:#08111e; padding:10px; border-radius:6px; border-left:3px solid var(--accent-speed);">
+              <strong>Derrotas que se Cruzan:</strong> Ángulos distintos a los anteriores.
+            </div>
+          </div>
+
+          <ul class="rule-list">
+            <li><strong>5.4.2.2 Basada en Tiempo:</strong> <strong style="color:var(--primary);">10 minutos</strong> al mismo nivel, en ascenso o descenso.</li>
+            <li><strong>5.4.2.3.3 Mismo Nivel de Crucero (DME/GNSS):</strong> <strong style="color:var(--primary);">20 NM</strong> en la misma derrota (mismo punto de recorrido con lecturas simultáneas). En derrotas que se cruzan: 20 NM si el ángulo relativo es <strong>&lt; 90°</strong>.</li>
+            <li><strong>5.4.2.3.4 En Ascenso y Descenso:</strong> <strong style="color:var(--primary);">10 NM</strong> en la misma derrota. En <strong>derrotas opuestas</strong>: <strong>10 NM</strong> después de haber determinado con certeza que las aeronaves se han cruzado.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 5. PROTECCIÓN DE ESPERAS (5.5) -->
+      <section id="sec-esperas" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">5.5</span>
+          <h2 class="section-title">SEPARACIÓN EN CIRCUITOS DE ESPERA EN VUELO</h2>
+        </div>
+
+        <div class="card">
+          <p style="font-size:0.9rem; margin-bottom:10px;">
+            <strong>5.5.2:</strong> Se aplicará separación vertical entre aeronaves en espera y otras que lleguen, salgan o en ruta siempre que la otra aeronave esté a <strong>menos de 5 minutos de tiempo de vuelo</strong> del área de espera.
+          </p>
+
+          <!-- TABLA INTERACTIVA DE DISTANCIAS DE PROTECCIÓN DE ESPERA -->
+          <div class="interactive-card" id="sec-sim-esperas">
+            <div class="interactive-header">
+              <div>
+                <h3 style="color:#fff; font-size:1.05rem;"><i class="fa-solid fa-layer-group text-primary"></i> Tabla Oficial de Distancias de Protección de Espera (MGTAM 5.5.2)</h3>
+                <p style="font-size:0.78rem; color:var(--text-muted);">Selecciona la altitud de espera para consultar los límites de espacio protegido.</p>
+              </div>
+              <span class="interactive-badge">MGTAM 5.5.2</span>
+            </div>
+
+            <div style="max-width:300px; margin-bottom:14px;">
+              <select id="holdAltSelect" class="form-control" onchange="updateHoldingData()">
+                <option value="2000">2,000 ft</option>
+                <option value="4000">4,000 ft</option>
+                <option value="6000">6,000 ft</option>
+                <option value="8000">8,000 ft</option>
+                <option value="10000" selected>10,000 ft</option>
+                <option value="12000">12,000 ft</option>
+                <option value="14000">14,000 ft</option>
+                <option value="16000">16,000 ft</option>
+                <option value="18000">18,000 ft</option>
+                <option value="20000">20,000 ft</option>
+              </select>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;" id="holdingDisplay">
+              <div style="background:#070d18; border:1px solid var(--border-color); padding:14px; border-radius:6px; text-align:center;">
+                <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">DISTANCIA POSTERIOR</span>
+                <div style="font-size:1.4rem; font-weight:800; color:var(--primary);" id="holdPost">4 NM</div>
+              </div>
+              <div style="background:#070d18; border:1px solid var(--border-color); padding:14px; border-radius:6px; text-align:center;">
+                <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">DISTANCIA ANTERIOR</span>
+                <div style="font-size:1.4rem; font-weight:800; color:var(--primary);" id="holdAnt">12 NM</div>
+              </div>
+              <div style="background:#070d18; border:1px solid var(--border-color); padding:14px; border-radius:6px; text-align:center;">
+                <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">DISTANCIA TRANSVERSAL</span>
+                <div style="font-size:1.4rem; font-weight:800; color:var(--primary);" id="holdTrans">9 NM</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. ESTELA TURBULENTA EN TIEMPO (5.8) -->
+      <section id="sec-estela" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">5.8</span>
+          <h2 class="section-title">SEPARACIÓN POR TURBULENCIA DE ESTELA EN FUNCIÓN DEL TIEMPO</h2>
+        </div>
+
+        <div class="card">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+            <div class="highlight-box">
+              <strong style="color:#fff;"><i class="fa-solid fa-plane-arrival"></i> Aeronaves que Llegan (5.8.2.1):</strong>
+              <ul class="rule-list" style="margin-top:6px;">
+                <li>Aeronave <strong>MEDIA detrás de PESADA:</strong> <strong style="color:var(--primary);">2 minutos</strong>.</li>
+                <li>Aeronave <strong>LIGERA detrás de PESADA o MEDIA:</strong> <strong style="color:var(--primary);">3 minutos</strong>.</li>
+              </ul>
+            </div>
+
+            <div class="highlight-box">
+              <strong style="color:#fff;"><i class="fa-solid fa-plane-departure"></i> Aeronaves que Salen (5.8.3.1):</strong>
+              <ul class="rule-list" style="margin-top:6px;">
+                <li>Aeronave <strong>LIGERA o MEDIA detrás de PESADA:</strong> <strong style="color:var(--primary);">2 minutos</strong>.</li>
+                <li>Aeronave <strong>LIGERA detrás de MEDIA:</strong> <strong style="color:var(--primary);">2 minutos</strong>.</li>
+              </ul>
+            </div>
+          </div>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-top:8px;">
+            <em>* 5.8.1.1:</em> No se requiere aplicar separación por estela a vuelos VFR o aproximaciones visuales cuando el piloto notifica tener la aeronave a la vista y mantiene su propia separación.
+          </p>
+        </div>
+      </section>
+
+      <!-- 7. VIGILANCIA ATS Y GUÍA VECTORIAL (8.6, 8.7 & 8.9) -->
+      <section id="sec-vigilancia" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">8.6 / 8.9</span>
+          <h2 class="section-title">PROCEDIMIENTOS DE VIGILANCIA ATS & GUÍA VECTORIAL</h2>
+        </div>
+
+        <div class="card">
+          <ul class="rule-list">
+            <li><strong>8.7.3.1 Mínima de Separación Radar / ADS-B / MLAT:</strong> La separación horizontal mínima será de <strong style="color:var(--primary);">5 NM</strong>.</li>
+            <li><strong>8.6.5.2 Franqueamiento de Obstáculos:</strong> En guía vectorial o rutas directas fuera de aerovía, el ATC debe expedir autorizaciones que mantengan en todo momento el margen de obstáculos prescrito.</li>
+            <li><strong>8.9.3.6 Vector a Final:</strong> El vector final permitirá a la aeronave quedar establecida antes de interceptar el planeo desde abajo, con un <strong>ángulo de interceptación $\le 45^\circ$</strong>.</li>
+            <li><strong>8.9.5 Vector a Aproximación Visual:</strong> Autorización emitida <strong>únicamente después de que el piloto haya notificado tener el aeródromo o la aeronave precedente a la vista</strong>, dando por terminada la guía vectorial.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- QUIZ DE EVALUACIÓN -->
+      <section id="sec-quiz" class="norm-section">
+        <div class="section-header">
+          <span class="section-num"><i class="fa-solid fa-graduation-cap"></i></span>
+          <h2 class="section-title">EVALUACIÓN INTERACTIVA DE CONOCIMIENTOS (TEMA 1.1 APP)</h2>
+        </div>
+
+        <div class="quiz-container">
+          <div class="quiz-q" id="q1">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">1.</span>
+              <span>Por debajo de FL150, ¿a qué velocidad mínima pueden aplicarse reducciones a turborreactores en aproximación? (MGTAM 4.6.3.5)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(1, 0, false)">A) A no menos de 180 kt IAS.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 1, true)">B) A no menos de 220 kt IAS (cercana a su velocidad mínima limpia).</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 2, false)">C) A no menos de 250 kt IAS estrictos.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <div class="quiz-q" id="q2">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">2.</span>
+              <span>¿Cuándo se considera que una aeronave en ascenso o descenso ha atravesado un nivel según el MGTAM 8.5.5.2.4?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(2, 0, false)">A) Exactamente al cruzar el nivel $\pm 50\text{ ft}$.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 1, true)">B) Cuando la altitud de presión indica que ha pasado ese nivel en la dirección requerida en más de 300 ft.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 2, false)">C) Únicamente tras 2 minutos de vuelo nivelado.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <div class="quiz-q" id="q3">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">3.</span>
+              <span>¿Cuál es el ángulo máximo de interceptación para vectorizar una aeronave a la derrota de aproximación final? (MGTAM 8.9.3.6)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(3, 0, true)">A) 45° o menos.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 1, false)">B) 90° exactamente.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 2, false)">C) 30° máximo en todos los casos.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+
+          <div class="quiz-q" id="q4">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">4.</span>
+              <span>¿Cuál es la separación longitudinal por estela turbulenta en tiempo para una aeronave LIGERA que aterriza detrás de una PESADA o MEDIA? (MGTAM 5.8.2.1)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(4, 0, false)">A) 2 minutos.</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 1, true)">B) 3 minutos.</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 2, false)">C) 5 minutos.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-4"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM) — Tema 1.1: Control de Aproximación (APP MMLP)</strong></p>
+      <p style="margin-top:4px;">SENEAM — Servicios a la Navegación en el Espacio Aéreo Mexicano | SICT / AFAC</p>
+    </footer>
+  </main>
+
+  <!-- MODAL DE PRESENTACIÓN DIAPOSITIVAS -->
+  <div class="presentation-modal" id="presentationModal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="badge-doc"><i class="fa-solid fa-tv"></i> Diapositivas MGTAM para APP</span>
+      <button class="btn btn-outline" onclick="closePresentation()"><i class="fa-solid fa-xmark"></i> Salir</button>
+    </div>
+
+    <div class="slide-body" id="slideContent"></div>
+
+    <div class="slide-controls">
+      <button class="btn btn-outline" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+      <span id="slideCounter" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:var(--text-muted);">Diapositiva 1 / 6</span>
+      <button class="btn btn-primary" onclick="nextSlide()">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // 1. TABLA DE DISTANCIAS DE PROTECCIÓN DE ESPERAS (5.5.2)
+    const holdData = {
+      "2000":  { post: "3 NM", ant: "10 NM", trans: "7 NM" },
+      "4000":  { post: "4 NM", ant: "10 NM", trans: "7 NM" },
+      "6000":  { post: "4 NM", ant: "11 NM", trans: "7 NM" },
+      "8000":  { post: "4 NM", ant: "11 NM", trans: "8 NM" },
+      "10000": { post: "4 NM", ant: "12 NM", trans: "9 NM" },
+      "12000": { post: "5 NM", ant: "13 NM", trans: "9 NM" },
+      "14000": { post: "5 NM", ant: "14 NM", trans: "10 NM" },
+      "16000": { post: "6 NM", ant: "18 NM", trans: "12 NM" },
+      "18000": { post: "6 NM", ant: "19 NM", trans: "13 NM" },
+      "20000": { post: "6 NM", ant: "20 NM", trans: "14 NM" }
+    };
+
+    function updateHoldingData() {
+      const alt = document.getElementById('holdAltSelect').value;
+      const d = holdData[alt];
+      document.getElementById('holdPost').innerText = d.post;
+      document.getElementById('holdAnt').innerText = d.ant;
+      document.getElementById('holdTrans').innerText = d.trans;
+    }
+
+    // 2. QUIZ
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      const parent = document.getElementById(`q${qNum}`);
+      const opts = parent.querySelectorAll('.quiz-opt');
+      const fb = document.getElementById(`fb-${qNum}`);
+
+      opts.forEach(o => {
+        o.classList.remove('correct', 'incorrect');
+        o.style.pointerEvents = 'none';
+      });
+
+      if (isCorrect) {
+        opts[optIdx].classList.add('correct');
+        fb.innerHTML = '<span style="color:var(--accent-sep);"><i class="fa-solid fa-circle-check"></i> ¡Correcto según las secciones del MGTAM para APP!</span>';
+      } else {
+        opts[optIdx].classList.add('incorrect');
+        fb.innerHTML = '<span style="color:var(--accent-alert);"><i class="fa-solid fa-circle-xmark"></i> Incorrecto. Revisa el numeral de referencia.</span>';
+      }
+      fb.style.display = 'block';
+    }
+
+    // 3. BUSCADOR LATERAL
+    function filterSections() {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('#menuList li a');
+      items.forEach(a => {
+        const text = a.textContent.toLowerCase();
+        a.parentElement.style.display = text.includes(val) ? 'block' : 'none';
+      });
+    }
+
+    // 4. DIAPOSITIVAS
+    const slides = [
+      {
+        title: "Repaso MGTAM para APP: Control de Velocidad (4.6)",
+        content: `
+          <div class="highlight-box" style="font-size:1.05rem; line-height:1.8;">
+            <p>• <strong>Velocidad Mínima Limpia:</strong> Vuelo en configuración limpia sin flaps, slats, spoilers ni tren.</p>
+            <p>• <strong>Descenso Inicial:</strong> Reducción a &lt; 250 kt IAS sólo con aprobación de tripulación.</p>
+            <p>• <strong>Debajo de FL150:</strong> Reducción no menor a <strong>220 kt IAS</strong>.</p>
+            <p>• <strong>Aproximación Intermedia/Final:</strong> Ajustes menores de <strong>$\pm 20\text{ kt IAS}$</strong>.</p>
+          </div>
+        `
+      },
+      {
+        title: "Separación Vertical & Tolerancias RVSM (5.3 & 8.5)",
+        content: `
+          <ul class="rule-list" style="font-size:1rem; line-height:1.8;">
+            <li>Separación vertical mínima: 1 000 ft (&lt; FL410) / 2 000 ft ($\ge$ FL410).</li>
+            <li><strong>Tolerancia Altimétrica RVSM:</strong> $\pm 200\text{ ft}$ (8.5.5.1.1).</li>
+            <li><strong>Criterio de Nivel Atravesado:</strong> Ha pasado el nivel en más de <strong>300 ft</strong> en la dirección requerida (8.5.5.2.4).</li>
+          </ul>
+        `
+      },
+      {
+        title: "Separación Lateral y Divergencia GNSS (5.4.1)",
+        content: `
+          <div class="table-responsive">
+            <table class="custom-table" style="font-size:0.95rem;">
+              <tr><th>Divergencia</th><th>Distancia Fuera del Punto</th></tr>
+              <tr><td>30°</td><td><strong>30 NM</strong></td></tr>
+              <tr><td>50°</td><td><strong>20 NM</strong></td></tr>
+              <tr><td>80°</td><td><strong>15 NM</strong></td></tr>
+            </table>
+          </div>
+        `
+      },
+      {
+        title: "Separación Longitudinal (5.4.2)",
+        content: `
+          <ul class="rule-list" style="font-size:1rem; line-height:1.8;">
+            <li><strong>En Tiempo:</strong> 10 minutos (misma derrota o cruzadas).</li>
+            <li><strong>DME / GNSS en Crucero:</strong> 20 NM misma derrota (o cruzadas con ángulo &lt; 90°).</li>
+            <li><strong>En Ascenso / Descenso:</strong> 10 NM misma derrota; 10 NM tras cruzarse en opuestas.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Protección de Esperas & Estela Turbulenta (5.5 & 5.8)",
+        content: `
+          <div class="card" style="font-size:0.95rem; line-height:1.8;">
+            <p>• <strong>Esperas:</strong> Separación vertical requerida a menos de 5 min del área de espera.</p>
+            <p>• <strong>Estela en Llegadas:</strong> Media tras Pesada = <strong>2 min</strong> | Ligera tras Pesada/Media = <strong>3 min</strong>.</p>
+            <p>• <strong>Estela en Salidas:</strong> Ligera/Media tras Pesada = <strong>2 min</strong> | Ligera tras Media = <strong>2 min</strong>.</p>
+          </div>
+        `
+      },
+      {
+        title: "Vigilancia ATS y Vectores Finales (8.6 & 8.9)",
+        content: `
+          <div class="highlight-box" style="font-size:1rem; line-height:1.8;">
+            <p>• <strong>Mínima de Separación Radar / ADS-B:</strong> <strong>5 NM</strong>.</p>
+            <p>• <strong>Vector Final:</strong> Interceptar trayectoria de planeo desde abajo con ángulo $\le 45^\circ$.</p>
+            <p>• <strong>Aproximación Visual:</strong> Autorizada sólo tras reporte de aeródromo o precedente a la vista.</p>
+          </div>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+    function startPresentation() {
+      currentSlide = 0; updateSlide();
+      document.getElementById('presentationModal').classList.add('active');
+    }
+    function closePresentation() {
+      document.getElementById('presentationModal').classList.remove('active');
+    }
+    function updateSlide() {
+      const data = slides[currentSlide];
+      document.getElementById('slideContent').innerHTML = `
+        <h2 style="font-size:1.8rem; color:#fff; margin-bottom:20px; font-weight:800;">${data.title}</h2>
+        <div>${data.content}</div>
+      `;
+      document.getElementById('slideCounter').innerText = `Diapositiva ${currentSlide + 1} / ${slides.length}`;
+    }
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) { currentSlide++; updateSlide(); }
+    }
+    function prevSlide() {
+      if (currentSlide > 0) { currentSlide--; updateSlide(); }
+    }
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    window.onload = () => {
+      updateHoldingData();
+    };
+  </script>
+</body>
+</html>
