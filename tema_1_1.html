@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MGTAM Cap. 7 | Procedimientos del Servicio de Control de Aeródromo (SENEAM)</title>
+  
+  <!-- Tipografía Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-main: #0B1325;
+      --bg-card: #152238;
+      --bg-card-hover: #1c2d4a;
+      --primary: #00A3FF;
+      --primary-glow: rgba(0, 163, 255, 0.25);
+      --accent: #F59E0B;
+      --accent-danger: #EF4444;
+      --accent-success: #10B981;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-color: #243552;
+      --nav-width: 310px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA LATERAL DE NAVEGACIÓN */
+    #sidebar {
+      width: var(--nav-width);
+      background: #0D182D;
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, #13223f 0%, #0D182D 100%);
+    }
+
+    .badge-doc {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(0, 163, 255, 0.15);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .search-box {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 12px 8px 34px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 10px;
+      list-style: none;
+    }
+
+    .sidebar-menu::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    .menu-cat-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 10px 4px 10px;
+      letter-spacing: 0.8px;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: var(--primary-glow);
+      color: #fff;
+      border-left: 3px solid var(--primary);
+    }
+
+    .sidebar-menu a span.num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--primary);
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    #main-content {
+      margin-left: var(--nav-width);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* CABECERA TOP */
+    .top-header {
+      background: rgba(13, 24, 45, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .pill strong { color: #fff; }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #000;
+    }
+    .btn-primary:hover {
+      background: #33b5ff;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: #fff;
+    }
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* CONTENEDOR DE PÁGINAS */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 80px 20px;
+      width: 100%;
+    }
+
+    /* BANNER HERO */
+    .hero-banner {
+      background: linear-gradient(135deg, #102142 0%, #152238 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 35px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .hero-banner::after {
+      content: '\f5b0';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 20px;
+      top: -10px;
+      font-size: 9rem;
+      color: rgba(255,255,255,0.03);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 800px;
+    }
+
+    /* SECCIONES Y TARJETAS */
+    .norm-section {
+      margin-bottom: 45px;
+      scroll-margin-top: 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .section-num {
+      background: var(--primary);
+      color: #031024;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 16px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 163, 255, 0.4);
+    }
+
+    .card-title-ref {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .card-title-ref span.doc-tag {
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .rule-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .rule-list > li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+      color: #cbd5e1;
+    }
+
+    .rule-list > li::before {
+      content: "•";
+      position: absolute;
+      left: 6px;
+      top: 0;
+      color: var(--primary);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .rule-subitem {
+      margin-top: 6px;
+      padding-left: 14px;
+      border-left: 2px solid var(--border-color);
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .highlight-box {
+      background: rgba(0, 163, 255, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .alert-box {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 4px solid var(--accent-danger);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .warning-box {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    /* TABLAS ESTILIZADAS */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .custom-table th {
+      background: #111e33;
+      padding: 12px 16px;
+      color: #fff;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .custom-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: #cbd5e1;
+    }
+
+    .custom-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* COMPONENTES INTERACTIVOS */
+    .interactive-card {
+      background: #0f1c31;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 25px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .interactive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .interactive-badge {
+      background: #10B981;
+      color: #000;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* DIAGRAMA INTERACTIVO (FIGURA 7-1) */
+    .diagram-container {
+      position: relative;
+      background: #080f1d;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .svg-circuit {
+      width: 100%;
+      max-width: 700px;
+      height: auto;
+    }
+
+    .pos-btn {
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .pos-btn circle {
+      fill: var(--primary);
+      transition: all 0.2s;
+    }
+
+    .pos-btn:hover circle, .pos-btn.active circle {
+      fill: var(--accent);
+      filter: drop-shadow(0 0 8px var(--accent));
+    }
+
+    .pos-btn text {
+      fill: #000;
+      font-weight: 800;
+      font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      pointer-events: none;
+    }
+
+    .position-info-display {
+      background: var(--bg-card);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 15px;
+      text-align: left;
+      min-height: 80px;
+      transition: all 0.3s;
+    }
+
+    /* CALCULADORA DE SEPARACIÓN REDUCIDA */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .form-control {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+    }
+
+    .calc-result-box {
+      background: #0a1424;
+      border: 2px dashed var(--primary);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .calc-val {
+      font-size: 2.2rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
+    }
+
+    .calc-condition-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* SIMULADOR DE PISTOLA DE LUCES */
+    .light-gun-sim {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .light-beamer {
+      height: 140px;
+      background: #000;
+      border-radius: 8px;
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .light-bulb {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #222;
+      transition: all 0.2s;
+    }
+
+    .light-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-light {
+      background: #152238;
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.84rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .btn-light:hover {
+      background: #1f3354;
+      border-color: var(--primary);
+    }
+
+    /* QUIZ INTERACTIVO */
+    .quiz-container {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 25px;
+      margin-top: 20px;
+    }
+
+    .quiz-q {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .quiz-q-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt {
+      background: #0f1a2c;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt:hover {
+      background: #172844;
+      border-color: var(--primary);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: var(--accent-success) !important;
+      color: #34d399 !important;
+      font-weight: 600;
+    }
+
+    .quiz-opt.incorrect {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: var(--accent-danger) !important;
+      color: #f87171 !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-style: italic;
+      display: none;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #080f1d;
+      border-top: 1px solid var(--border-color);
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    /* MODO PRESENTACIÓN PANTALLA COMPLETA */
+    .presentation-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #060c18;
+      z-index: 2000;
+      padding: 40px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .presentation-modal.active {
+      display: flex;
+    }
+
+    .slide-body {
+      max-width: 1000px;
+      margin: auto;
+      width: 100%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .slide-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* BOTÓN FLOTANTE MENÚ MÓVIL */
+    .menu-toggle-btn {
+      display: none;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar {
+        transform: translateX(-100%);
+      }
+      #sidebar.open {
+        transform: translateX(0);
+      }
+      #main-content {
+        margin-left: 0;
+      }
+      .menu-toggle-btn {
+        display: block;
+      }
+      .light-gun-sim {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="badge-doc">MGTAM-C00- Rev 08 | SENEAM</span>
+      <h1><i class="fa-solid fa-tower-control text-primary"></i> Control Aeródromo</h1>
+      <p>Capítulo 7 — Vigencia: Junio 2023</p>
+    </div>
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Buscar regla, numeral o tema..." onkeyup="filterSections()" />
+      </div>
+    </div>
+    <ul class="sidebar-menu" id="menuList">
+      <li class="menu-cat-title">Secciones Normativas</li>
+      <li><a href="#sec-7-1"><span class="num">7.1</span> Funciones de Torres</a></li>
+      <li><a href="#sec-7-2"><span class="num">7.2</span> Selección de Pista en Uso</a></li>
+      <li><a href="#sec-7-3"><span class="num">7.3</span> Llamada Inicial</a></li>
+      <li><a href="#sec-7-4"><span class="num">7.4</span> Información a Aeronaves</a></li>
+      <li><a href="#sec-7-5"><span class="num">7.5</span> Condiciones de Aeródromo</a></li>
+      <li><a href="#sec-7-6"><span class="num">7.6</span> Control de Tránsito (Circuito)</a></li>
+      <li><a href="#sec-7-7"><span class="num">7.7</span> Tránsito en el Circuito</a></li>
+      <li><a href="#sec-7-8"><span class="num">7.8</span> Prioridad Llegan / Salen</a></li>
+      <li><a href="#sec-7-9"><span class="num">7.9</span> Control de Salidas</a></li>
+      <li><a href="#sec-7-10"><span class="num">7.10</span> Control de Llegadas</a></li>
+      <li><a href="#sec-7-11"><span class="num">7.11</span> Separación Reducida</a></li>
+      <li><a href="#sec-7-12"><span class="num">7.12</span> Vigilancia Visual ATS</a></li>
+      <li><a href="#sec-7-13"><span class="num">7.13</span> Escasa Visibilidad (LVP)</a></li>
+      <li><a href="#sec-7-14"><span class="num">7.14</span> Suspensión VFR</a></li>
+      <li><a href="#sec-7-15"><span class="num">7.15</span> Vuelos VFR Especiales</a></li>
+      <li><a href="#sec-7-16"><span class="num">7.16</span> Luces Aeronáuticas</a></li>
+      <li><a href="#sec-7-17"><span class="num">7.17</span> Lugares Críticos (Hot Spots)</a></li>
+      
+      <li class="menu-cat-title">Herramientas & Dinámicas</li>
+      <li><a href="#sec-circuito-interactivo"><i class="fa-solid fa-plane-arrival text-primary"></i> Sim: Figura 7-1 Circuito</a></li>
+      <li><a href="#sec-calc-sep"><i class="fa-solid fa-calculator text-primary"></i> Calc: Separación 7.11</a></li>
+      <li><a href="#sec-sim-luces"><i class="fa-solid fa-traffic-light text-primary"></i> Sim: Pistola de Luces</a></li>
+      <li><a href="#sec-quiz"><i class="fa-solid fa-graduation-cap text-primary"></i> Evaluación de Aprendizaje</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="main-content">
+    
+    <!-- TOP BAR -->
+    <header class="top-header">
+      <div class="top-header-meta">
+        <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <span class="pill">Vigencia: <strong>JUNIO 2023</strong></span>
+        <span class="pill">Páginas: <strong>139 - 157</strong></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="startPresentation()"><i class="fa-solid fa-play"></i> Modo Diapositivas</button>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- BANNER INTRODUCTORIO -->
+      <section class="hero-banner">
+        <span class="badge-doc">Servicio de Tránsito Aéreo de México</span>
+        <h1 class="hero-title">CAPÍTULO 7: PROCEDIMIENTOS DEL SERVICIO DE CONTROL DE AERÓDROMO</h1>
+        <p class="hero-subtitle">
+          Disposiciones normativas del <strong>MGTAM</strong> para controladores de torre de control de aeródromo (TWR),
+          gestión en el área de maniobras, asignación de pistas, prioridades operacionales, separación reducida y ayudas visuales.
+        </p>
+      </section>
+
+      <!-- SECCIÓN 7.1 -->
+      <section id="sec-7-1" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.1</span>
+          <h2 class="section-title">FUNCIONES DE LAS TORRES DE CONTROL DE AERÓDROMO</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">7.1.1 <span class="doc-tag">Generalidades y Prevención de Colisiones</span></div>
+          <p style="margin-bottom:10px; font-size:0.92rem;">
+            <strong>7.1.1.1</strong> Las torres de control de aeródromo transmitirán información y expedirán permisos para conseguir un movimiento seguro, ordenado y rápido, con el fin de prevenir colisiones entre:
+          </p>
+          <ul class="rule-list">
+            <li><strong>a)</strong> Aeronaves que vuelan dentro del área de responsabilidad, incluidos los circuitos de tránsito.</li>
+            <li><strong>b)</strong> Aeronaves que operan en el área de maniobras.</li>
+            <li><strong>c)</strong> Aeronaves que aterrizan y despegan.</li>
+            <li><strong>d)</strong> Aeronaves y vehículos en el área de maniobras.</li>
+            <li><strong>e)</strong> Aeronaves en el área de maniobras y obstáculos existentes.</li>
+          </ul>
+
+          <div class="highlight-box">
+            <strong>7.1.1.2 y 7.1.1.2.1 Vigilancia Visual:</strong> Se mantendrá vigilancia constante mediante observación visual directa a través de la ventana o por observación indirecta (sistema de vigilancia visual específicamente aprobado). Se aumentará mediante sistemas de vigilancia ATS cuando estén disponibles.
+          </div>
+
+          <div style="margin-top:15px;">
+            <strong style="font-size:0.88rem; color:var(--text-muted); text-transform:uppercase;">7.1.1.3 Puestos de Control y Distribución de Funciones:</strong>
+            <ul class="rule-list" style="margin-top:6px;">
+              <li><strong>a) Controlador de Aeródromo (Local):</strong> Operaciones en la pista y aeronaves volando en el área de responsabilidad de la TWR.</li>
+              <li><strong>b) Controlador de Tierra (Ground):</strong> Tránsito en el área de maniobras, <em>a excepción de las pistas</em>.</li>
+              <li><strong>c) Puesto de Entrega de Autorizaciones (Clearance Delivery):</strong> Puesta en marcha y autorizaciones ATC para vuelos IFR de salida.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">7.1.2 <span class="doc-tag">Servicio de Alerta y Notificación a Servicios de Emergencia (CREI / SEI)</span></div>
+          <p style="font-size:0.92rem;"><strong>7.1.2.1</strong> Responsables de alertar inmediatamente a salvamento y extinción de incendios siempre que:</p>
+          <ul class="rule-list" style="margin-top:8px;">
+            <li><strong>a)</strong> Ocurra un accidente de aeronave en el aeródromo o cercanías.</li>
+            <li><strong>b)</strong> Se reciba información de peligro para la seguridad de una aeronave bajo su jurisdicción.</li>
+            <li><strong>c)</strong> Lo solicite la tripulación de vuelo.</li>
+            <li><strong>d)</strong> Se juzgue necesario o conveniente por otros motivos.</li>
+          </ul>
+          <div class="alert-box">
+            <strong>7.1.2.3 Alerta por falta de reporte:</strong> Se informará al APP, ACC o RCC/SAR sobre aeronaves que dejen de notificar tras ser transferidas o suspendan contacto radio y <strong>dejen de aterrizar 5 minutos después de la hora prevista</strong>.
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.2 -->
+      <section id="sec-7-2" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.2</span>
+          <h2 class="section-title">SELECCIÓN DE LA PISTA EN USO</h2>
+        </div>
+        <div class="card">
+          <div class="card-title-ref">7.2.1 - 7.2.5 <span class="doc-tag">Criterios de Determinación y Atenuación de Ruido</span></div>
+          <ul class="rule-list">
+            <li><strong>7.2.1:</strong> "Pista en uso" es la considerada más adecuada en un momento dado para el tipo de aeronaves.</li>
+            <li><strong>7.2.2:</strong> Normalmente se despega y aterriza <strong>contra el viento</strong>, salvo que la seguridad, configuración de pistas o procedimientos aconsejen otro sentido.</li>
+            <li><strong>7.2.5:</strong> El <em>Piloto al Mando</em> puede rechazar por motivos de seguridad operacional una pista asignada por atenuación de ruido.</li>
+          </ul>
+
+          <div class="warning-box">
+            <strong>7.2.6 Circunstancias donde la Atenuación del Ruido NO será determinante:</strong>
+            <ul class="rule-list" style="margin-top:6px;">
+              <li><strong>a)</strong> Pista contaminada (nieve, hielo, agua, caucho, etc.).</li>
+              <li><strong>b) Aterrizaje:</strong> Techo de nubes &lt; 150 m (500 ft) o Visibilidad &lt; 1 900 m.</li>
+              <li><strong>c) Despegue:</strong> Visibilidad &lt; 1 900 m.</li>
+              <li><strong>d)</strong> Presencia notificada/pronosticada de cortante de viento (windshear) o tormentas.</li>
+              <li><strong>e) Viento:</strong> Componente transversal con ráfagas &gt; 28 km/h (<strong>15 kt</strong>), o componente de cola &gt; 9 km/h (<strong>5 kt</strong>).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.3 -->
+      <section id="sec-7-3" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.3</span>
+          <h2 class="section-title">LLAMADA INICIAL A LA TORRE DE CONTROL</h2>
+        </div>
+        <div class="card">
+          <p style="font-size:0.92rem; margin-bottom:10px;">La llamada inicial a la TWR contendrá estrictamente:</p>
+          <ul class="rule-list">
+            <li><strong>a)</strong> Designación de la estación llamada (ej. <em>"Torre México"</em>).</li>
+            <li><strong>b)</strong> Distintivo de llamada y, si aplica categoría de estela turbulenta, la palabra <strong>"SÚPER"</strong> o <strong>"PESADA"</strong>.</li>
+            <li><strong>c)</strong> Posición de la aeronave.</li>
+            <li><strong>d)</strong> Elementos adicionales requeridos por la ATS competente.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.4 -->
+      <section id="sec-7-4" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.4</span>
+          <h2 class="section-title">INFORMACIÓN DE LAS TORRES A LAS AERONAVES</h2>
+        </div>
+        <div class="card">
+          <div class="card-title-ref">7.4.1.2 <span class="doc-tag">Información Meteorológica y de Aeródromo antes del Rodaje (Orden Obligatorio)</span></div>
+          <ol style="padding-left:20px; font-size:0.9rem; color:#cbd5e1; display:flex; flex-direction:column; gap:6px;">
+            <li><strong>a) Pista que ha de utilizarse.</strong></li>
+            <li><strong>b) Dirección y velocidad del viento en la superficie</strong> (incluyendo variaciones importantes).</li>
+            <li><strong>c) Reglaje QNH de altímetro</strong> (o QFE si se acuerda/solicita).</li>
+            <li><strong>d) Temperatura ambiente en la pista</strong> (para aeronaves con motor de turbina).</li>
+            <li><strong>e) Visibilidad representativa / RVR</strong> (si es inferior a 10 km o RVR aplicable).</li>
+            <li><strong>f) Hora exacta.</strong></li>
+          </ol>
+
+          <div class="alert-box" style="margin-top:16px;">
+            <strong>7.4.1.4 Incursión en Pista u Obstáculos (Medidas Inmediatas del ATC):</strong>
+            <ul class="rule-list" style="margin-top:6px;">
+              <li><strong>a) Salidas:</strong> Cancelar la autorización de despegue.</li>
+              <li><strong>b) Llegadas:</strong> Instruir inmediatamente a iniciar procedimiento de <strong>motor y al aire (go-around) / aproximación frustrada</strong>.</li>
+              <li><strong>c) Información:</strong> Informar inmediatamente a la aeronave sobre la incursión u obstáculo y su posición relativa en la pista.</li>
+            </ul>
+          </div>
+
+          <div class="highlight-box">
+            <strong>7.4.1.5 Incertidumbre de Posición en el Área de Maniobras:</strong>
+            <p>• Si el piloto duda de su posición: <strong>Detendrá la aeronave inmediatamente</strong> y notificará a ATS.</p>
+            <p>• Si duda pero <strong>reconoce que está en una pista</strong>: Notifica a ATS, <strong>desaloja la pista lo antes posible</strong> hacia una calle de rodaje y posteriormente se detiene.</p>
+            <p>• Vehículos: Notifican a ATS, <strong>desalojan a distancia segura</strong> y se detienen.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.5 -->
+      <section id="sec-7-5" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.5</span>
+          <h2 class="section-title">INFORMACIÓN ESENCIAL SOBRE CONDICIONES DEL AERÓDROMO</h2>
+        </div>
+        <div class="card">
+          <p style="font-size:0.9rem; margin-bottom:10px;">
+            <strong>7.5.2 Incluye:</strong> Obras en el área de movimiento, partes deterioradas, agua/nieve/hielo, sustancias descongelantes, bancos de nieve, peligros temporales (bandadas de aves, aeronaves estacionadas) y averías en iluminación.
+          </p>
+          <div class="warning-box">
+            <strong>7.5.4 Acción ante condiciones no notificadas:</strong> Cuando el controlador observe o reciba reporte de una condición anormal que comprometa la seguridad, notificará a la autoridad del aeródromo y <strong>suspenderá las operaciones en esa parte del área de maniobras</strong>.
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.6 CON SIMULADOR FIGURA 7-1 -->
+      <section id="sec-7-6" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.6</span>
+          <h2 class="section-title">CONTROL DEL TRÁNSITO DE AERÓDROMO</h2>
+        </div>
+
+        <!-- ACTIVIDAD INTERACTIVA 1: DIAGRAMA DEL CIRCUITO -->
+        <div class="interactive-card" id="sec-circuito-interactivo">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-compass-drafting text-primary"></i> Figura 7-1: Posiciones Designadas en el Circuito y Rodaje</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Haz clic en cada número para consultar las autorizaciones normalizadas según el numeral 7.6.2.</p>
+            </div>
+            <span class="interactive-badge">Interactivo</span>
+          </div>
+
+          <div class="diagram-container">
+            <svg class="svg-circuit" viewBox="0 0 650 330">
+              <!-- Fondo Pista y Calles -->
+              <rect x="220" y="130" width="260" height="40" fill="#24334a" stroke="#486581" stroke-width="2" rx="4"/>
+              <line x1="230" y1="150" x2="470" y2="150" stroke="#fff" stroke-dasharray="10,10" stroke-width="2"/>
+              <text x="350" y="145" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">PISTA EN USO</text>
+
+              <!-- Calles de Rodaje -->
+              <path d="M250,170 L250,240 L430,240 L430,170" fill="none" stroke="#334e68" stroke-width="22" stroke-linejoin="round"/>
+              <rect x="280" y="235" width="120" height="45" fill="#1b2a4a" stroke="#486581" stroke-width="1.5" rx="3"/>
+              <text x="340" y="262" fill="#94A3B8" font-size="11" text-anchor="middle">PLATAFORMA</text>
+
+              <!-- Circuito de Tránsito (Línea discontinua) -->
+              <rect x="140" y="40" width="410" height="180" fill="none" stroke="#00A3FF" stroke-width="2" stroke-dasharray="6,6" rx="10"/>
+              
+              <!-- Nombres de Tramos -->
+              <text x="350" y="30" fill="#00A3FF" font-size="11" font-weight="600" text-anchor="middle">Tramo a favor del viento (Downwind)</text>
+              <text x="110" y="100" fill="#00A3FF" font-size="11" font-weight="600" text-anchor="middle">Tramo básico</text>
+              <text x="145" y="165" fill="#00A3FF" font-size="11" font-weight="600" text-anchor="middle">Tramo final</text>
+
+              <!-- Posiciones 1 a 6 (Botones interactivos) -->
+              <!-- Pos 1: Plataforma -->
+              <g class="pos-btn" onclick="showPosInfo(1)" id="btn-pos-1">
+                <circle cx="310" cy="255" r="14" />
+                <text x="310" y="260" text-anchor="middle">1</text>
+              </g>
+
+              <!-- Pos 2: Punto de espera -->
+              <g class="pos-btn" onclick="showPosInfo(2)" id="btn-pos-2">
+                <circle cx="235" cy="205" r="14" />
+                <text x="235" y="210" text-anchor="middle">2</text>
+              </g>
+
+              <!-- Pos 3: Cabecera / Pista de salida -->
+              <g class="pos-btn" onclick="showPosInfo(3)" id="btn-pos-3">
+                <circle cx="250" cy="140" r="14" />
+                <text x="250" y="145" text-anchor="middle">3</text>
+              </g>
+
+              <!-- Pos 4: Tramo Final Aproximación -->
+              <g class="pos-btn" onclick="showPosInfo(4)" id="btn-pos-4">
+                <circle cx="140" cy="60" r="14" />
+                <text x="140" y="65" text-anchor="middle">4</text>
+              </g>
+
+              <!-- Pos 5: Desalojo de Pista -->
+              <g class="pos-btn" onclick="showPosInfo(5)" id="btn-pos-5">
+                <circle cx="430" cy="145" r="14" />
+                <text x="430" y="150" text-anchor="middle">5</text>
+              </g>
+
+              <!-- Pos 6: Llegada a Plataforma -->
+              <g class="pos-btn" onclick="showPosInfo(6)" id="btn-pos-6">
+                <circle cx="430" cy="255" r="14" />
+                <text x="430" y="260" text-anchor="middle">6</text>
+              </g>
+            </svg>
+
+            <div class="position-info-display" id="posInfoBox">
+              <strong style="color:var(--primary); font-size:1rem;"><i class="fa-solid fa-hand-pointer"></i> Selecciona una posición</strong>
+              <p style="font-size:0.88rem; color:#cbd5e1; margin-top:4px;">Haz clic en cualquiera de las posiciones numeradas (1 a 6) para ver la autorización estipulada en el <strong>MGTAM 7.6.2</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVIDAD INTERACTIVA 2: PISTOLA DE LUCES -->
+        <div class="interactive-card" id="sec-sim-luces">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-tower-broadcast text-primary"></i> 7.6.3.2.3 Señales Luminosas para Tráfico y Vehículos en Tierra</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Simulador interactivo de señales de pistola de luces de la Torre de Control.</p>
+            </div>
+            <span class="interactive-badge">Simulador</span>
+          </div>
+
+          <div class="light-gun-sim">
+            <div class="light-beamer">
+              <div class="light-bulb" id="lightBulb"></div>
+            </div>
+            <div class="light-controls">
+              <button class="btn-light" onclick="triggerLight('green-flash', 'Permiso para cruzar el área de aterrizaje o pasar a la calle de rodaje.')">
+                <span><i class="fa-solid fa-bolt text-success"></i> Destellos verdes</span>
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <button class="btn-light" onclick="triggerLight('red-steady', 'PARAR.')">
+                <span><i class="fa-solid fa-circle text-danger"></i> Señal roja fija</span>
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <button class="btn-light" onclick="triggerLight('red-flash', 'Apartarse del área de aterrizaje o calle de rodaje y tener cuidado con las aeronaves.')">
+                <span><i class="fa-solid fa-bolt text-danger"></i> Destellos rojos</span>
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <button class="btn-light" onclick="triggerLight('white-flash', 'Desalojar el área de maniobras de conformidad con las instrucciones locales.')">
+                <span><i class="fa-solid fa-bolt text-light"></i> Destellos blancos</span>
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <button class="btn-light" onclick="triggerLight('runway-flash', '7.6.3.2.3.3 Destellos en luces de pista/calle: Desalojar la pista y observar la torre en espera de señal luminosa.')">
+                <span><i class="fa-solid fa-road"></i> Luces de pista intermitentes</span>
+                <i class="fa-solid fa-play"></i>
+              </button>
+            </div>
+          </div>
+          <div id="lightMeaning" class="highlight-box" style="margin-top:15px; font-weight:600;">
+            Selecciona una señal luminosa para ver su animación y significado normativo oficial.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">7.6.3.1.4 <span class="doc-tag">Operaciones de Rodaje de Helicópteros</span></div>
+          <ul class="rule-list">
+            <li><strong>7.6.3.1.4.1:</strong> El rodaje en tierra consume menos combustible y reduce turbulencia; sin embargo, en terreno blando o irregular se autoriza <em>rodaje aéreo</em> para evitar riesgos como la <strong>resonancia de suelo</strong>.</li>
+            <li><strong>7.6.3.1.4.2 Rodaje Aéreo:</strong> Se efectúa a baja velocidad, normalmente a menos de <strong>37 km/h (20 kt)</strong> dentro del efecto de suelo.</li>
+            <li><strong>7.6.3.1.4.4 Seguridad:</strong> No deben expedirse cambios de frecuencia a helicópteros monoplaza en vuelo estacionario o rodaje aéreo para evitar pérdida de control durante la maniobra manual.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.7 Y 7.8 -->
+      <section id="sec-7-7" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.7 - 7.8</span>
+          <h2 class="section-title">CONTROL EN CIRCUITO Y PRIORIDADES OPERACIONALES</h2>
+        </div>
+        <div class="card">
+          <div class="card-title-ref">7.7.3 & 7.8 <span class="doc-tag">Orden de Prioridad para el Aterrizaje y Despegue</span></div>
+          <p style="font-size:0.92rem;"><strong>7.8 Regla General:</strong> Una aeronave que aterriza o está en las últimas fases de aproximación tendrá <strong>prioridad sobre una aeronave a punto de salir</strong> desde la misma pista o una intersecante.</p>
+          
+          <div class="highlight-box" style="margin-top:12px;">
+            <strong>7.7.3.3 Orden de Prioridad Absoluta:</strong>
+            <ol style="padding-left:18px; margin-top:6px;">
+              <li><strong>a) Emergencias:</strong> Toda aeronave obligada a aterrizar por fallas mecánicas, escasez de combustible, etc.</li>
+              <li><strong>b) Ambulancias:</strong> Aeronaves con enfermos o lesionados graves que requieran atención médica urgente.</li>
+              <li><strong>c) Búsqueda y Salvamento (SAR):</strong> Aeronaves en misiones de rescate.</li>
+              <li><strong>d)</strong> Otras según determine la autoridad.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.9 Y 7.10 -->
+      <section id="sec-7-9" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.9 - 7.10</span>
+          <h2 class="section-title">CONTROL DE SALIDAS Y LLEGADAS</h2>
+        </div>
+        <div class="card">
+          <div class="card-title-ref">7.9.2 & 7.10.1 <span class="doc-tag">Separación Longitudinal Estándar en la Misma Pista</span></div>
+          <p style="font-size:0.9rem;">No se permitirá despegar a una aeronave o cruzar el umbral a una aeronave que llega hasta que la precedente:</p>
+          <ul class="rule-list" style="margin-top:8px;">
+            <li>Haya <strong>cruzado el extremo</strong> de la pista en uso, o</li>
+            <li>Haya <strong>iniciado un viraje</strong>, o</li>
+            <li>Haya <strong>dejado la pista completamente libre</strong> (más allá del punto de espera).</li>
+          </ul>
+
+          <div class="alert-box">
+            <strong>7.9.3.3 Fraseología Crítica:</strong> La palabra <strong>"DESPEGUE" (TAKE-OFF)</strong> <em>sólo</em> se utilizará cuando se autorice o cancele el despegue. Para informar la pista disponible se utiliza <strong>"TORA"</strong>.
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.11 CON CALCULADORA -->
+      <section id="sec-7-11" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.11</span>
+          <h2 class="section-title">MÍNIMAS DE SEPARACIÓN REDUCIDAS EN LA MISMA PISTA</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">7.11.4 <span class="doc-tag">Clasificación de Categorías de Aeronaves para Separación Reducida</span></div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Categoría</th>
+                  <th>Definición de Aeronave (MGTAM 7.11.4)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color:var(--primary);">Categoría 1</strong></td>
+                  <td>Avión <strong>monomotor propulsado por hélice</strong> con MTOM ≤ 2 000 kg.</td>
+                </tr>
+                <tr>
+                  <td><strong style="color:var(--primary);">Categoría 2</strong></td>
+                  <td>Avión monomotor a hélice (2 000 a 7 000 kg) y avión <strong>turbohélice</strong> con MTOM &lt; 7 000 kg.</td>
+                </tr>
+                <tr>
+                  <td><strong style="color:var(--primary);">Categoría 3</strong></td>
+                  <td><strong>Todas las demás aeronaves</strong> (Reactores, jets pesados, etc.).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="warning-box">
+            <strong>7.11.3 & 7.11.6 Condiciones Obligatorias para aplicar Separación Reducida:</strong>
+            <p>• Solo de día: Desde 30 min después de la salida del sol hasta 30 min antes de la puesta.</p>
+            <p>• Visibilidad ≥ <strong>5 km</strong> y Techo de nubes ≥ <strong>300 m (1 000 ft)</strong>.</p>
+            <p>• Viento de cola ≤ <strong>5 kt</strong>. Pista sin contaminantes adversos.</p>
+            <p>• <strong>NO se aplica</strong> entre una aeronave que sale y una que aterriza previamente (7.11.5).</p>
+          </div>
+        </div>
+
+        <!-- ACTIVIDAD INTERACTIVA 3: CALCULADORA DE SEPARACIÓN REDUCIDA -->
+        <div class="interactive-card" id="sec-calc-sep">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-calculator text-primary"></i> Calculadora Normativa de Separación Reducida (7.11.7)</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Selecciona la maniobra y categorías de aeronaves para calcular la distancia mínima reglamentaria.</p>
+            </div>
+            <span class="interactive-badge">Herramienta ATC</span>
+          </div>
+
+          <div class="calc-grid">
+            <div class="form-group">
+              <label>Tipo de Maniobra</label>
+              <select id="calcOperation" class="form-control" onchange="calculateSeparation()">
+                <option value="landing">Aeronave que ATERRIZA (7.11.7.a)</option>
+                <option value="departure">Aeronave que SALE / DESPEGA (7.11.7.b)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Aeronave Sucesora (La que sigue)</label>
+              <select id="calcFollowing" class="form-control" onchange="calculateSeparation()">
+                <option value="cat1">Categoría 1 (Monomotor hélice ≤2t)</option>
+                <option value="cat2">Categoría 2 (Hélice 2-7t / Turbohélice)</option>
+                <option value="cat3">Categoría 3 (Demás / Jets)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Aeronave Precedente (La que va adelante)</label>
+              <select id="calcPreceding" class="form-control" onchange="calculateSeparation()">
+                <option value="cat1">Categoría 1 o 2</option>
+                <option value="cat3">Categoría 3</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="calc-result-box">
+            <span style="font-size:0.8rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Distancia Mínima Requerida en Pista</span>
+            <div class="calc-val" id="calcDistanceResult">600 m</div>
+            <div class="calc-condition-text" id="calcExplanation">
+              La aeronave precedente debe haber pasado por un punto ubicado a mínimo 600 m del umbral, estar en movimiento y abandonar sin dar marcha atrás (o estar en el aire habiendo pasado 600 m).
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.12 A 7.15 -->
+      <section id="sec-7-12" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.12 - 7.15</span>
+          <h2 class="section-title">SISTEMAS ATS, LVP Y REGLAS DE VUELO</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">7.13 <span class="doc-tag">Procedimientos para Escasa Visibilidad (LVP) y Cat II/III</span></div>
+          <p style="font-size:0.9rem;">
+            <strong>7.13.2.1:</strong> Aplica a operaciones de aproximación de precisión Cat II/III y a salidas con <strong>RVR inferior a 550 m</strong>.
+          </p>
+          <ul class="rule-list" style="margin-top:8px;">
+            <li><strong>7.13.1.1.1:</strong> En intersecciones de rodaje, ninguna aeronave o vehículo rebasará la barra de cruce, barra de parada o señal de posición de espera.</li>
+            <li><strong>7.13.6:</strong> TWR llevará y mantendrá un <strong>registro de vehículos y personal</strong> en el área de maniobras antes y durante los procedimientos LVP.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">7.14 & 7.15 <span class="doc-tag">Suspensión VFR y Autorización de Vuelos VFR Especiales</span></div>
+          <ul class="rule-list">
+            <li><strong>7.14.1 Autoridad para suspender VFR:</strong> Dependencia APP/ACC, la Torre de Control de aeródromo (TWR) o la Unidad ATS competente.</li>
+            <li><strong>7.15.1.3 VFR Especial:</strong> Podrá autorizarse a entrar, despegar, salir o volar localmente dentro de una zona de control cuando la visibilidad en tierra <strong>no sea inferior a 1 500 m</strong>.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 7.16 Y 7.17 -->
+      <section id="sec-7-16" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">7.16 - 7.17</span>
+          <h2 class="section-title">LUCES AERONÁUTICAS Y LUGARES CRÍTICOS</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">7.16 <span class="doc-tag">Operación de Luces Aeronáuticas de Superficie</span></div>
+          <ul class="rule-list">
+            <li><strong>7.16.2.1 Generalidades:</strong> Funcionarán continuamente durante horas de oscuridad o cuando el centro del disco solar esté a <strong>más de 6° por debajo del horizonte</strong>.</li>
+            <li><strong>7.16.3.2 PAPI / VASIS:</strong> Se encenderán <strong>tanto de día como de noche</strong>, independientemente de la visibilidad, mientras la pista esté en uso.</li>
+            <li><strong>7.16.4.2 Luces de Pista tras el despegue:</strong> En aeródromos sin control central, permanecerán encendidas durante al menos <strong>15 minutos</strong> después del despegue por posible retorno de emergencia.</li>
+            <li><strong>7.16.7 Barras de parada:</strong> Luces rojas transversales; encendidas para indicar alto y apagadas para autorizar avance.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">7.17 <span class="doc-tag">Designación de Lugares Críticos (Hot Spots)</span></div>
+          <p style="font-size:0.9rem;">
+            El explotador del aeródromo designará y representará en planos los lugares críticos en el área de movimiento (de acuerdo con la Circular CO AV-20.4/07 R4 y Doc 9870 de OACI) para la prevención de incursiones en pista.
+          </p>
+        </div>
+      </section>
+
+      <!-- ACTIVIDAD EVALUATIVA / QUIZ -->
+      <section id="sec-quiz" class="norm-section">
+        <div class="section-header">
+          <span class="section-num"><i class="fa-solid fa-graduation-cap"></i></span>
+          <h2 class="section-title">EVALUACIÓN INTERACTIVA DE CONOCIMIENTOS (MGTAM CAP. 7)</h2>
+        </div>
+
+        <div class="quiz-container">
+          <!-- Pregunta 1 -->
+          <div class="quiz-q" id="q1">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">1.</span>
+              <span>¿En qué circunstancias la atenuación del ruido NO será determinante para designar la pista en uso? (7.2.6)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(1, 0, false)">A) Cuando la temperatura supere los 30°C en plataforma.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 1, true)">B) Cuando la componente de cola exceda 5 kt o la cruzada exceda 15 kt.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 2, false)">C) Cuando exista un vuelo VFR en el circuito.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <!-- Pregunta 2 -->
+          <div class="quiz-q" id="q2">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">2.</span>
+              <span>Si el piloto duda de su posición pero reconoce que se encuentra dentro de una PISTA, ¿qué debe hacer de inmediato? (7.4.1.5.2)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(2, 0, false)">A) Apagar luces y esperar a que el controlador lo localice por radar.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 1, false)">B) Acelerar y despegar rápidamente si no hay tráfico visual.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 2, true)">C) Notificar a ATS, desalojar la pista lo antes posible a una calle de rodaje y después detenerse.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <!-- Pregunta 3 -->
+          <div class="quiz-q" id="q3">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">3.</span>
+              <span>¿Cuál es la visibilidad mínima en tierra requerida para autorizar un vuelo VFR Especial en zona de control? (7.15.1.3)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(3, 0, true)">A) No inferior a 1 500 m.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 1, false)">B) No inferior a 5 000 m.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 2, false)">C) No inferior a 800 m.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+
+          <!-- Pregunta 4 -->
+          <div class="quiz-q" id="q4">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">4.</span>
+              <span>¿Cuándo deben encenderse las luces de pendiente de aproximación visual (PAPI)? (7.16.3.2)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(4, 0, false)">A) Únicamente durante la noche y con niebla.</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 1, true)">B) Tanto de día como de noche, independientemente de la visibilidad, si la pista está en uso.</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 2, false)">C) Solo cuando una aeronave PESADA lo solicite expresamente.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-4"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+      <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM)</strong> — Dirección de Servicios Aeronáuticos / Dirección de Tránsito Aéreo</p>
+      <p style="margin-top:5px;">Plataforma interactiva de consulta normativa técnica y capacitación aeronáutica.</p>
+    </footer>
+  </main>
+
+  <!-- MODAL DE PRESENTACIÓN EN PANTALLA COMPLETA -->
+  <div class="presentation-modal" id="presentationModal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="badge-doc"><i class="fa-solid fa-tv"></i> Presentación Ejecutiva MGTAM</span>
+      <button class="btn btn-outline" onclick="closePresentation()"><i class="fa-solid fa-xmark"></i> Salir</button>
+    </div>
+
+    <div class="slide-body" id="slideContent">
+      <!-- Dinámico vía JS -->
+    </div>
+
+    <div class="slide-controls">
+      <button class="btn btn-outline" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+      <span id="slideCounter" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:var(--text-muted);">Diapositiva 1 / 6</span>
+      <button class="btn btn-primary" onclick="nextSlide()">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- SCRIPT DINÁMICO & INTERACTIVO -->
+  <script>
+    // 1. INFORMACIÓN DE POSICIONES FIGURA 7-1
+    const posData = {
+      1: {
+        title: "Posición 1: Inicio de Rodaje previo al despegue",
+        desc: "La aeronave solicita autorización para iniciar el rodaje. La Torre expide las autorizaciones correspondientes al rodaje y la pista en uso (MGTAM 7.6.2)."
+      },
+      2: {
+        title: "Posición 2: Punto de Espera de la Pista",
+        desc: "Si existe tránsito que interfiera, la aeronave se mantendrá en esta posición. Aquí se efectúa normalmente el calentamiento y prueba de motores cuando sea necesario (MGTAM 7.6.2)."
+      },
+      3: {
+        title: "Posición 3: Autorización de Despegue",
+        desc: "Se da en este punto la autorización de despegue con el designador de pista, si no ha sido posible autorizarla previamente en la posición 2 (MGTAM 7.6.2 & 7.9.3)."
+      },
+      4: {
+        title: "Posición 4: Autorización de Aterrizaje",
+        desc: "Aquí se otorga la autorización para aterrizar, de ser factible, una vez que la precedente haya cruzado el umbral o completado la separación (MGTAM 7.6.2 & 7.10.2)."
+      },
+      5: {
+        title: "Posición 5: Desalojo de Pista y Rodaje a Plataforma",
+        desc: "Aquí se otorga la autorización para rodar hacia la plataforma o área de estacionamiento una vez que la aeronave desocupa la pista activa (MGTAM 7.6.2)."
+      },
+      6: {
+        title: "Posición 6: Información de Estacionamiento",
+        desc: "Cuando sea necesario, se proporciona en esta posición la información e instrucciones finales para el estacionamiento en puesto de contacto o posición remota (MGTAM 7.6.2)."
+      }
+    };
+
+    function showPosInfo(num) {
+      document.querySelectorAll('.pos-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-pos-${num}`);
+      if(activeBtn) activeBtn.classList.add('active');
+
+      const info = posData[num];
+      const box = document.getElementById('posInfoBox');
+      box.innerHTML = `
+        <strong style="color:var(--primary); font-size:1.05rem;"><i class="fa-solid fa-location-dot"></i> ${info.title}</strong>
+        <p style="font-size:0.92rem; color:#f1f5f9; margin-top:6px;">${info.desc}</p>
+      `;
+    }
+
+    // 2. SIMULADOR DE PISTOLA DE LUCES (7.6.3.2.3)
+    let lightInterval = null;
+    function triggerLight(type, meaning) {
+      clearInterval(lightInterval);
+      const bulb = document.getElementById('lightBulb');
+      const box = document.getElementById('lightMeaning');
+      
+      bulb.style.animation = 'none';
+      bulb.style.boxShadow = 'none';
+      bulb.style.background = '#222';
+
+      if (type === 'green-flash') {
+        let on = false;
+        lightInterval = setInterval(() => {
+          on = !on;
+          bulb.style.background = on ? '#10B981' : '#064e3b';
+          bulb.style.boxShadow = on ? '0 0 35px #10B981' : 'none';
+        }, 300);
+      } else if (type === 'red-steady') {
+        bulb.style.background = '#EF4444';
+        bulb.style.boxShadow = '0 0 40px #EF4444';
+      } else if (type === 'red-flash') {
+        let on = false;
+        lightInterval = setInterval(() => {
+          on = !on;
+          bulb.style.background = on ? '#EF4444' : '#450a0a';
+          bulb.style.boxShadow = on ? '0 0 35px #EF4444' : 'none';
+        }, 300);
+      } else if (type === 'white-flash') {
+        let on = false;
+        lightInterval = setInterval(() => {
+          on = !on;
+          bulb.style.background = on ? '#FFFFFF' : '#334155';
+          bulb.style.boxShadow = on ? '0 0 40px #FFFFFF' : 'none';
+        }, 300);
+      } else if (type === 'runway-flash') {
+        let on = false;
+        lightInterval = setInterval(() => {
+          on = !on;
+          bulb.style.background = on ? '#F59E0B' : '#451a03';
+          bulb.style.boxShadow = on ? '0 0 35px #F59E0B' : 'none';
+        }, 200);
+      }
+
+      box.innerHTML = `<strong>Significado Operacional:</strong> ${meaning}`;
+    }
+
+    // 3. CALCULADORA DE SEPARACIÓN REDUCIDA (7.11.7)
+    function calculateSeparation() {
+      const op = document.getElementById('calcOperation').value;
+      const following = document.getElementById('calcFollowing').value;
+      const preceding = document.getElementById('calcPreceding').value;
+      
+      const resVal = document.getElementById('calcDistanceResult');
+      const resExp = document.getElementById('calcExplanation');
+
+      let distance = "600 m";
+      let exp = "";
+
+      if (op === 'landing') {
+        if (preceding === 'cat3') {
+          distance = "2 400 m";
+          exp = "7.11.7.a.3: Cuando la aeronave precedente sea de Categoría 3, debe haber aterrizado y pasado por un punto a mínimo 2 400 m del umbral (en movimiento y sin dar marcha atrás) o estar en el aire habiendo pasado dicho punto.";
+        } else if (following === 'cat2') {
+          distance = "1 500 m";
+          exp = "7.11.7.a.2: Aeronave sucesora Cat 2 tras Cat 1 o 2. Requiere mínimo 1 500 m desde el umbral.";
+        } else if (following === 'cat1') {
+          distance = "600 m";
+          exp = "7.11.7.a.1: Aeronave sucesora Cat 1 tras Cat 1 o 2. Requiere mínimo 600 m desde el umbral.";
+        } else {
+          distance = "2 400 m";
+          exp = "7.11.7.a: Separación estándar reducida para aeronaves sucesoras pesadas o de mayor categoría.";
+        }
+      } else {
+        // Salidas
+        if (preceding === 'cat3') {
+          distance = "2 400 m";
+          exp = "7.11.7.b.3: Precedente Cat 3 en salida. Debe estar en vuelo y haber pasado por un punto ubicado a mínimo 2 400 m de la posición de la aeronave que le sigue.";
+        } else if (following === 'cat2') {
+          distance = "1 500 m";
+          exp = "7.11.7.b.2: Salida Cat 2 tras Cat 1 o 2. La precedente debe estar en vuelo a mínimo 1 500 m de distancia.";
+        } else {
+          distance = "600 m";
+          exp = "7.11.7.b.1: Salida Cat 1 tras Cat 1 o 2. La precedente debe estar en el aire a mínimo 600 m.";
+        }
+      }
+
+      resVal.innerText = distance;
+      resExp.innerText = exp;
+    }
+
+    // 4. QUIZ DE AUTOEVALUACIÓN
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      const parent = document.getElementById(`q${qNum}`);
+      const opts = parent.querySelectorAll('.quiz-opt');
+      const fb = document.getElementById(`fb-${qNum}`);
+
+      opts.forEach(o => {
+        o.classList.remove('correct', 'incorrect');
+        o.style.pointerEvents = 'none';
+      });
+
+      if(isCorrect) {
+        opts[optIdx].classList.add('correct');
+        fb.innerHTML = '<span style="color:var(--accent-success);"><i class="fa-solid fa-circle-check"></i> ¡Correcto según el MGTAM!</span>';
+      } else {
+        opts[optIdx].classList.add('incorrect');
+        fb.innerHTML = '<span style="color:var(--accent-danger);"><i class="fa-solid fa-circle-xmark"></i> Incorrecto. Revisa el numeral referenciado en la pregunta.</span>';
+      }
+      fb.style.display = 'block';
+    }
+
+    // 5. FILTRADO RÁPIDO DE SECCIONES
+    function filterSections() {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('#menuList li a');
+      items.forEach(a => {
+        const text = a.textContent.toLowerCase();
+        a.parentElement.style.display = text.includes(val) ? 'block' : 'none';
+      });
+    }
+
+    // 6. MODO PRESENTACIÓN (SLIDESHOW)
+    const slides = [
+      {
+        title: "Capítulo 7: Procedimientos del Servicio de Control de Aeródromo",
+        content: `
+          <div class="highlight-box" style="font-size:1.1rem; line-height:1.8;">
+            <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM)</strong></p>
+            <p>• <strong>Objetivo Principal:</strong> Prevenir colisiones entre aeronaves, vehículos y obstáculos en el área de maniobras y circuito de tránsito (7.1.1.1).</p>
+            <p>• <strong>División del Trabajo (7.1.1.3):</strong> Torre Local (Pistas y Espacio Aéreo), Control de Tierra (Área de Maniobras salvo pistas) y Entrega de Autorizaciones.</p>
+          </div>
+        `
+      },
+      {
+        title: "7.2 Selección de la Pista en Uso & Atenuación de Ruido",
+        content: `
+          <ul class="rule-list" style="font-size:1.1rem; line-height:2;">
+            <li>Operación normal: Aterrizaje y despegue <strong>contra el viento</strong> (7.2.2).</li>
+            <li>El Piloto al Mando puede rechazar una pista de atenuación por seguridad (7.2.5).</li>
+            <li><strong>Límites meteorológicos (7.2.6):</strong> Viento de cola máx 5 kt, viento cruzado máx 15 kt, visibilidad mínima 1 900 m.</li>
+          </ul>
+        `
+      },
+      {
+        title: "7.4 Información Meteorológica Obligatoria Previa al Rodaje",
+        content: `
+          <div class="card" style="font-size:1.05rem;">
+            <p><strong>Orden estricto de notificación antes de rodar (7.4.1.2.1):</strong></p>
+            <ol style="padding-left:25px; margin-top:10px; line-height:1.8;">
+              <li>Pista en uso.</li>
+              <li>Dirección y velocidad del viento.</li>
+              <li>Reglaje de altímetro QNH (o QFE).</li>
+              <li>Temperatura ambiente (turbinas).</li>
+              <li>Visibilidad o RVR si es &lt; 10 km.</li>
+              <li>Hora exacta.</li>
+            </ol>
+          </div>
+        `
+      },
+      {
+        title: "7.6 Circuito de Tránsito y Señales Luminosas",
+        content: `
+          <div class="highlight-box" style="font-size:1.05rem; line-height:1.8;">
+            <p>• <strong>Posiciones 1 a 6:</strong> Puntos predeterminados para entrega oportuna de autorizaciones sin demora.</p>
+            <p>• <strong>Pistola de Luces (7.6.3.2.3):</strong> Destellos verdes (autorizado cruce/rodaje), Rojo fijo (Parar), Destellos rojos (Apartarse), Destellos blancos (Desalojar área de maniobras).</p>
+            <p>• <strong>Helicópteros:</strong> Rodaje aéreo a &lt; 37 km/h (20 kt) en efecto de suelo para evitar resonancia de suelo.</p>
+          </div>
+        `
+      },
+      {
+        title: "7.11 Separación Reducida en la Misma Pista",
+        content: `
+          <div class="table-responsive">
+            <table class="custom-table" style="font-size:1rem;">
+              <tr><th>Categoría 1</th><td>Monomotor hélice ≤ 2 000 kg (Distancia mín: 600 m)</td></tr>
+              <tr><th>Categoría 2</th><td>Monomotor hélice 2-7t / Turbohélice &lt; 7t (Distancia mín: 1 500 m)</td></tr>
+              <tr><th>Categoría 3</th><td>Demás aeronaves / Reactores (Distancia mín: 2 400 m)</td></tr>
+            </table>
+          </div>
+          <p style="margin-top:10px; color:var(--accent);">Condiciones: Solo diurno (+30 min amanecer / -30 min atardecer), Vis ≥ 5 km, Techo ≥ 1 000 ft.</p>
+        `
+      },
+      {
+        title: "7.13 a 7.17 Procedimientos Especiales, Luces y Hot Spots",
+        content: `
+          <ul class="rule-list" style="font-size:1.05rem; line-height:1.8;">
+            <li><strong>LVP (7.13):</strong> Visibilidad reducida con RVR &lt; 550 m. Control estricto con registro de vehículos.</li>
+            <li><strong>VFR Especial (7.15):</strong> Permitido en zona de control con visibilidad en tierra ≥ 1 500 m.</li>
+            <li><strong>PAPI (7.16.3.2):</strong> Encendido continuo día y noche mientras la pista esté activa.</li>
+            <li><strong>Lugares Críticos (7.17):</strong> Puntos calientes identificados en planos para mitigar incursiones en pista.</li>
+          </ul>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+
+    function startPresentation() {
+      currentSlide = 0;
+      updateSlide();
+      document.getElementById('presentationModal').classList.add('active');
+    }
+
+    function closePresentation() {
+      document.getElementById('presentationModal').classList.remove('active');
+    }
+
+    function updateSlide() {
+      const data = slides[currentSlide];
+      document.getElementById('slideContent').innerHTML = `
+        <h2 style="font-size:1.8rem; color:#fff; margin-bottom:20px; font-weight:800;">${data.title}</h2>
+        <div>${data.content}</div>
+      `;
+      document.getElementById('slideCounter').innerText = `Diapositiva ${currentSlide + 1} / ${slides.length}`;
+    }
+
+    function nextSlide() {
+      if(currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if(currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
