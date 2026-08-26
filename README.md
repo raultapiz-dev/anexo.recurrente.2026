@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema Integral de Capacitación ATC | SENEAM</title>
+  <title>Portal Maestro de Capacitación ATC | SENEAM - SICT</title>
   
   <!-- Tipografías Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,13 +20,17 @@
       --bg-card-hover: #152640;
       --primary: #00A3FF;
       --primary-glow: rgba(0, 163, 255, 0.25);
+      --accent-twr: #38BDF8;
+      --accent-app: #00F0FF;
       --accent-green: #10B981;
       --accent-green-glow: rgba(16, 185, 129, 0.25);
       --accent-gold: #F59E0B;
       --accent-danger: #EF4444;
+      --accent-purple: #8B5CF6;
       --text-main: #F1F5F9;
       --text-muted: #94A3B8;
       --border-color: #1E3250;
+      --nav-width: 330px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,14 +42,15 @@
       display: flex;
       flex-direction: column;
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
     /* HEADER */
     .top-header {
-      background: rgba(11, 22, 38, 0.9);
+      background: rgba(11, 22, 38, 0.92);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border-color);
-      padding: 16px 35px;
+      padding: 14px 35px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -103,27 +109,27 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 35px 20px 80px 20px;
+      padding: 30px 20px 80px 20px;
       width: 100%;
       flex: 1;
     }
 
-    /* HERO BANNER & PROGRESO */
+    /* HERO BANNER */
     .hero-banner {
       background: linear-gradient(135deg, #0A2246 0%, #0F1B2E 55%, #080D1A 100%);
       border: 1px solid var(--border-color);
       border-radius: 14px;
-      padding: 30px;
-      margin-bottom: 35px;
+      padding: 28px;
+      margin-bottom: 30px;
       display: grid;
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 1.35fr 1fr;
       gap: 25px;
       align-items: center;
       box-shadow: 0 12px 35px rgba(0,0,0,0.5);
     }
 
     .hero-text h2 {
-      font-size: 1.8rem;
+      font-size: 1.75rem;
       font-weight: 800;
       color: #fff;
       line-height: 1.2;
@@ -131,18 +137,83 @@
     }
 
     .hero-text p {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
     }
 
+    /* SELECTOR DE ESPECIALIDAD (TWR / APP) */
+    .profile-selector-wrap {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .profile-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .profile-btn-group {
+      display: inline-flex;
+      background: #060E1A;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .btn-profile {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-profile:hover {
+      color: #fff;
+    }
+
+    .btn-profile.active-twr {
+      background: var(--accent-twr);
+      color: #000;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+
+    .btn-profile.active-app {
+      background: var(--accent-app);
+      color: #000;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    }
+
+    .btn-profile.active-all {
+      background: var(--primary);
+      color: #000;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    /* PROGRESS CARD */
     .progress-card {
-      background: rgba(6, 13, 26, 0.8);
+      background: rgba(6, 13, 26, 0.85);
       border: 1px solid var(--border-color);
       border-radius: 10px;
       padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .progress-header {
@@ -152,7 +223,7 @@
     }
 
     .progress-title {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -186,12 +257,12 @@
       color: var(--text-muted);
     }
 
-    /* FILTRO DE BÚSQUEDA */
+    /* BARRA DE CONTROLES Y FILTRO */
     .controls-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
+      margin-bottom: 22px;
       flex-wrap: wrap;
       gap: 15px;
     }
@@ -199,7 +270,7 @@
     .search-input-wrap {
       position: relative;
       flex: 1;
-      max-width: 400px;
+      max-width: 420px;
     }
 
     .search-input-wrap input {
@@ -207,7 +278,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       color: #fff;
-      padding: 10px 14px 10px 38px;
+      padding: 9px 14px 9px 38px;
       border-radius: 8px;
       font-size: 0.88rem;
       outline: none;
@@ -231,7 +302,7 @@
       background: transparent;
       border: 1px solid rgba(239, 68, 68, 0.4);
       color: var(--accent-danger);
-      padding: 8px 14px;
+      padding: 7px 13px;
       border-radius: 6px;
       font-size: 0.82rem;
       font-weight: 600;
@@ -274,14 +345,22 @@
 
     .module-card.completed {
       border-color: rgba(16, 185, 129, 0.4);
-      background: linear-gradient(180deg, #102334 0%, #0F1B2E 100%);
+      background: linear-gradient(180deg, #0f2438 0%, #0F1B2E 100%);
+    }
+
+    .module-card.track-twr {
+      border-top: 3px solid var(--accent-twr);
+    }
+
+    .module-card.track-app {
+      border-top: 3px solid var(--accent-app);
     }
 
     .module-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .module-num {
@@ -289,8 +368,8 @@
       color: var(--primary);
       font-family: 'JetBrains Mono', monospace;
       font-weight: 800;
-      font-size: 0.85rem;
-      padding: 4px 10px;
+      font-size: 0.82rem;
+      padding: 3px 9px;
       border-radius: 6px;
       border: 1px solid rgba(0, 163, 255, 0.3);
     }
@@ -299,6 +378,33 @@
       background: rgba(16, 185, 129, 0.12);
       color: var(--accent-green);
       border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-track {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-track.twr {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-twr);
+      border: 1px solid var(--accent-twr);
+    }
+
+    .badge-track.app {
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--accent-app);
+      border: 1px solid var(--accent-app);
+    }
+
+    .badge-track.common {
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--text-muted);
+      border: 1px solid #334155;
     }
 
     .module-title {
@@ -312,7 +418,7 @@
     .module-desc {
       font-size: 0.84rem;
       color: var(--text-muted);
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       line-height: 1.5;
     }
 
@@ -320,7 +426,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .module-tag {
@@ -372,9 +478,7 @@
       font-weight: 600;
     }
 
-    .checkbox-wrap input {
-      display: none;
-    }
+    .checkbox-wrap input { display: none; }
 
     .custom-check {
       width: 20px;
@@ -400,9 +504,7 @@
       font-weight: 900;
     }
 
-    .checkbox-wrap input:checked + .custom-check i {
-      display: block;
-    }
+    .checkbox-wrap input:checked + .custom-check i { display: block; }
 
     /* FOOTER */
     footer {
@@ -428,31 +530,48 @@
     <div class="brand-wrap">
       <div class="brand-logo-icon"><i class="fa-solid fa-plane-departure"></i></div>
       <div class="brand-title">
-        <h1>PORTAL DE CAPACITACIÓN MMLP <span class="badge-doc">SENEAM</span></h1>
-        <p>Servicios a la Navegación en el Espacio Aéreo Mexicano</p>
+        <h1>PORTAL DE CAPACITACIÓN ATC <span class="badge-doc">SENEAM</span></h1>
+        <p>Servicios a la Navegación en el Espacio Aéreo Mexicano | SICT - AFAC</p>
       </div>
     </div>
     <div>
       <span class="badge-doc" style="background:rgba(16,185,129,0.15); color:var(--accent-green); border-color:var(--accent-green);">
-        <i class="fa-solid fa-shield-halved"></i> Programa 2026
+        <i class="fa-solid fa-shield-halved"></i> Programa de Especialización TWR / APP
       </span>
     </div>
   </header>
 
   <div class="container">
 
-    <!-- HERO & PROGRESO GLOBAL -->
+    <!-- HERO BANNER, PROGRESO Y SELECTOR DE PERFIL -->
     <section class="hero-banner">
       <div class="hero-text">
-        <h2>Anexo Curso Recurrente 2026</h2>
+        <h2>PROGRAMA DE ADIESTRAMIENTO TÉCNICO Y NORMATIVO</h2>
         <p>
-          Selecciona cualquiera de los 9 módulos interactivos para acceder a su contenido completo, simuladores, normatividad técnica y evaluaciones. Tu progreso se guardará automáticamente en este dispositivo.
+          Selecciona tu especialidad operativa para cursar el programa correspondiente. Los controladores de Torre cursarán el <strong>Módulo 1.1 TWR</strong> y los de Aproximación el <strong>Módulo 1.1 APP</strong>, compartiendo los módulos comunes de la estación.
         </p>
+
+        <!-- SELECTOR DINÁMICO DE ESPECIALIDAD -->
+        <div class="profile-selector-wrap">
+          <span class="profile-label"><i class="fa-solid fa-user-gear"></i> Perfil Operativo:</span>
+          <div class="profile-btn-group">
+            <button class="btn-profile active-twr" id="btnProfileTWR" onclick="setProfile('TWR')">
+              <i class="fa-solid fa-tower-control"></i> Torre (TWR)
+            </button>
+            <button class="btn-profile" id="btnProfileAPP" onclick="setProfile('APP')">
+              <i class="fa-solid fa-radar"></i> Aproximación (APP)
+            </button>
+            <button class="btn-profile" id="btnProfileALL" onclick="setProfile('ALL')">
+              <i class="fa-solid fa-layer-group"></i> Ver Todo (Ambos)
+            </button>
+          </div>
+        </div>
       </div>
 
+      <!-- CARD DE PROGRESO -->
       <div class="progress-card">
         <div class="progress-header">
-          <span class="progress-title">Progreso General</span>
+          <span class="progress-title" id="progressTrackTitle">Progreso Especialidad TWR</span>
           <span class="progress-pct" id="globalPctText">0%</span>
         </div>
         <div class="progress-track">
@@ -460,32 +579,32 @@
         </div>
         <div class="progress-meta">
           <span id="modulesCompletedText">0 de 9 Módulos Finalizados</span>
-          <span><i class="fa-solid fa-cloud-arrow-up"></i> Guardado local activo</span>
+          <span><i class="fa-solid fa-cloud-arrow-up"></i> Guardado automático</span>
         </div>
       </div>
     </section>
 
-    <!-- BARRA DE BÚSQUEDA Y RESET -->
+    <!-- BARRA DE BÚSQUEDA Y REINICIO -->
     <div class="controls-bar">
       <div class="search-input-wrap">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="moduleSearchInput" placeholder="Buscar por tema, norma o palabra clave..." onkeyup="filterModules()" />
+        <input type="text" id="moduleSearchInput" placeholder="Buscar temas, normas o circulares..." onkeyup="filterModules()" />
       </div>
-      <button class="btn-reset" onclick="resetProgress()"><i class="fa-solid fa-arrow-rotate-left"></i> Reiniciar Mi Progreso</button>
+      <button class="btn-reset" onclick="resetProgress()"><i class="fa-solid fa-arrow-rotate-left"></i> Reiniciar Progreso</button>
     </div>
 
-    <!-- GRID DE LOS 9 MÓDULOS -->
+    <!-- GRID DE MÓDULOS -->
     <div class="modules-grid" id="modulesContainer">
 
-      <!-- MÓDULO 1.1 TWR-->
-      <div class="module-card" id="card-tema_1_1_APP" data-title="1.1 mgtam capitulo 7 control de aerodromo torre pista separacion reducida">
+      <!-- ================= MÓDULO 1.1 TWR ================= -->
+      <div class="module-card track-twr" id="card-tema_1_1" data-track="TWR" data-title="1.1 twr mgtam capitulo 7 control de aerodromo torre pista separacion reducida">
         <div>
           <div class="module-top">
-            <span class="module-num">TEMA 1.1 - TWR</span>
-            <span class="badge-doc" style="font-size:0.65rem;">MGTAM</span>
+            <span class="module-num">TEMA 1.1 (TWR)</span>
+            <span class="badge-track twr"><i class="fa-solid fa-tower-control"></i> Torre de Control</span>
           </div>
-          <h3 class="module-title">MGTAM Capítulo 7: Control de Aeródromo</h3>
-          <p class="module-desc">Procedimientos del servicio de control de aeródromo, puestos de control (Local, Tierra, Del), asignación de pistas, prioridades, diagrama Fig. 7-1, pistola de luces y separación reducida (7.11).</p>
+          <h3 class="module-title">MGTAM Cap. 7: Control de Aeródromo (TWR)</h3>
+          <p class="module-desc">Procedimientos del servicio de control de aeródromo, puestos de trabajo (Local, Tierra, Del), asignación de pistas, prioridades, diagrama interactivo Fig. 7-1, pistola de luces y separación reducida en pista (7.11).</p>
           <div class="module-tags">
             <span class="module-tag">MGTAM 7.1 - 7.17</span>
             <span class="module-tag">Figura 7-1</span>
@@ -501,38 +620,38 @@
           <a href="tema_1_1.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
-      
- <!-- MÓDULO 1.1 APP-->
-      <div class="module-card" id="card-tema_1_1_APP" data-title="1.1 REPASO DE SECCIONES IMPORTANTES DEL MGTAM PARA APP">
+
+      <!-- ================= MÓDULO 1.1 APP ================= -->
+      <div class="module-card track-app" id="card-tema_1_1_app" data-track="APP" data-title="1.1 app mgtam aproximacion velocidad horizontal separacion lateral longitudinal esperas rvsm estela">
         <div>
           <div class="module-top">
-            <span class="module-num">TEMA 1.1 - APP</span>
-            <span class="badge-doc" style="font-size:0.65rem;">MGTAM</span>
+            <span class="module-num">TEMA 1.1 (APP)</span>
+            <span class="badge-track app"><i class="fa-solid fa-radar"></i> Aproximación</span>
           </div>
-          <h3 class="module-title">Repaso de secciones importantes del MGTAM para APP</h3>
-          <p class="module-desc">Procedimientos reglamentarios para el control de aproximación (APP La Paz / MMLP): Control de velocidad horizontal, separaciones convencionales y radar, protección de esperas, turbulencia de estela y verificación altimétrica RVSM.</p>
+          <h3 class="module-title">MGTAM para Control de Aproximación (APP)</h3>
+          <p class="module-desc">Control de velocidad horizontal (4.6), separaciones laterales y longitudinales GNSS/DME (5.4), tabla de protección de esperas 2k-20k (5.5), estela turbulenta en tiempo (5.8), verificación altimétrica RVSM y vectorización a final (8.9).</p>
           <div class="module-tags">
-            <span class="module-tag">MGTAM 4.6</span>
-            <span class="module-tag">MGTAM 5.3</span>
-            <span class="module-tag">MGTMAM 8.5</span>
+            <span class="module-tag">MGTAM 4.6 / 5.4 / 5.5</span>
+            <span class="module-tag">RVSM 8.5</span>
+            <span class="module-tag">Vectores 8.9</span>
           </div>
         </div>
         <div class="module-bottom">
           <label class="checkbox-wrap">
-            <input type="checkbox" id="chk-tema_1_1" onchange="toggleModuleCheck('tema_1_1')" />
+            <input type="checkbox" id="chk-tema_1_1_app" onchange="toggleModuleCheck('tema_1_1_app')" />
             <div class="custom-check"><i class="fa-solid fa-check"></i></div>
             <span>Completado</span>
           </label>
-          <a href="tema_1_1.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+          <a href="tema_1_1_app.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
 
-      <!-- MÓDULO 1.2 -->
-      <div class="module-card" id="card-tema_1_2" data-title="1.2 aip mexico notam capma normateca gen enr ad sup aic metar">
+      <!-- ================= MÓDULO 1.2 ================= -->
+      <div class="module-card" id="card-tema_1_2" data-track="COMMON" data-title="1.2 aip mexico notam capma normateca gen enr ad sup aic metar">
         <div>
           <div class="module-top">
             <span class="module-num">TEMA 1.2</span>
-            <span class="badge-doc" style="font-size:0.65rem;">Sistemas Web</span>
+            <span class="badge-track common">Común TWR/APP</span>
           </div>
           <h3 class="module-title">Acceso a Páginas Web: AIP, NOTAM, CAPMA & Normateca</h3>
           <p class="module-desc">Estructura OACI del AIP de México (GEN, ENR 1.1-1.14, ENR 2-6, AD 2), decodificador interactivo de NOTAMs de las FIR mexicanas, simulador meteorológico CAPMA y repositorio de la Normateca.</p>
@@ -552,15 +671,15 @@
         </div>
       </div>
 
-      <!-- MÓDULO 1.3 -->
-      <div class="module-card" id="card-tema_1_3" data-title="1.3 operaciones vfr crepusculo civil salida puesta sol gen 2.7 gen 2.1-4 horario estandar svfr">
+      <!-- ================= MÓDULO 1.3 ================= -->
+      <div class="module-card" id="card-tema_1_3" data-track="COMMON" data-title="1.3 operaciones vfr crepusculo civil salida puesta sol gen 2.7 gen 2.1-4 horario estandar svfr">
         <div>
           <div class="module-top">
             <span class="module-num">TEMA 1.3</span>
-            <span class="badge-doc" style="font-size:0.65rem;">AIP VFR</span>
+            <span class="badge-track common">Común TWR/APP</span>
           </div>
           <h3 class="module-title">Operaciones VFR: Sol, Crepúsculo Civil & Husos Horarios</h3>
-          <p class="module-desc">Regla de oro de crepúsculo civil para operaciones diurnas (±20 min), carta de horario estándar de México (GEN 2.1-4), calculadora solar en UTC/Hora Local y validador de VFR Especial (SVFR).</p>
+          <p class="module-desc">Regla de oro del crepúsculo civil para operaciones diurnas (±20 min), visor oficial de la carta de horario estándar (GEN 2.1-4), calculadora solar en UTC/Hora Local y validador de VFR Especial (SVFR).</p>
           <div class="module-tags">
             <span class="module-tag">GEN 2.7 / GEN 2.1-4</span>
             <span class="module-tag">Calculadora Solar</span>
@@ -577,15 +696,15 @@
         </div>
       </div>
 
-      <!-- MÓDULO 1.4 -->
-      <div class="module-card" id="card-tema_1_4" data-title="1.4 operaciones militares confidenciales cenavi fam semar traza de interes codigos ssr misiones aa">
+      <!-- ================= MÓDULO 1.4 ================= -->
+      <div class="module-card" id="card-tema_1_4" data-track="COMMON" data-title="1.4 operaciones militares confidenciales cenavi fam semar traza de interes codigos ssr misiones aa">
         <div>
           <div class="module-top">
             <span class="module-num">TEMA 1.4</span>
-            <span class="badge-doc" style="font-size:0.65rem;">Defensa Aérea</span>
+            <span class="badge-track common">Común TWR/APP</span>
           </div>
           <h3 class="module-title">Operaciones Militares Confidenciales (CENAVI)</h3>
-          <p class="module-desc">Circular ATS-01/23, 9 conductas de traza de interés, buscador de códigos transponder SSR de misiones tácticas "AA", procedimientos SEMAR (Circular IA-07/93) y MGTAM 16.1.</p>
+          <p class="module-desc">Circular ATS-01/23, las 9 conductas de traza de interés, buscador de códigos transponder SSR de misiones tácticas "AA", procedimientos de no divulgación SEMAR (Circular IA-07/93) y MGTAM 16.1.</p>
           <div class="module-tags">
             <span class="module-tag">CENAVI 01/23</span>
             <span class="module-tag">Códigos SSR FAM</span>
@@ -602,12 +721,12 @@
         </div>
       </div>
 
-      <!-- MÓDULO 1.5 -->
-      <section class="module-card" id="card-tema_1_5" data-title="1.5 operaciones militares nocturnas articulo 170 rlac nvg luces tacticas adiestramiento">
+      <!-- ================= MÓDULO 1.5 ================= -->
+      <div class="module-card" id="card-tema_1_5" data-track="COMMON" data-title="1.5 operaciones militares nocturnas articulo 170 rlac nvg luces tacticas adiestramiento">
         <div>
           <div class="module-top">
             <span class="module-num">TEMA 1.5</span>
-            <span class="badge-doc" style="font-size:0.65rem;">Operaciones Tácticas</span>
+            <span class="badge-track common">Común TWR/APP</span>
           </div>
           <h3 class="module-title">Operaciones Militares Nocturnas & Art. 170 RLAC</h3>
           <p class="module-desc">Amparo legal del Artículo 170 del RLAC para vuelos militares nocturnos, visores NVG, luces en modo táctico/infrarrojo y adiestramientos nocturnos autorizados hasta las 0600 UTC.</p>
@@ -625,17 +744,17 @@
           </label>
           <a href="tema_1_5.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
         </div>
-      </section>
+      </div>
 
-      <!-- MÓDULO 1.6 -->
-      <div class="module-card" id="card-tema_1_6" data-title="1.6 gestion de vuelos visuales durante operaciones ifr aproximacion visual por contacto mgtam 5.9 loa mmlp">
+      <!-- ================= MÓDULO 1.6 ================= -->
+      <div class="module-card" id="card-tema_1_6" data-track="COMMON" data-title="1.6 gestion de vuelos visuales durante operaciones ifr aproximacion visual por contacto mgtam 5.9 loa mmlp">
         <div>
           <div class="module-top">
             <span class="module-num">TEMA 1.6</span>
-            <span class="badge-doc" style="font-size:0.65rem;">Control Mixto</span>
+            <span class="badge-track common">Común TWR/APP</span>
           </div>
           <h3 class="module-title">Gestión de Vuelos Visuales en Operaciones IFR</h3>
-          <p class="module-desc">AIP ENR 1.3 Secciones 5 a 7: Ascenso/descenso visual en IFR, condiciones para aproximación visual vs por contacto, MGTAM 5.9 cuidando propia separación y Carta de Acuerdo MMLP TWR-APP 2024.</p>
+          <p class="module-desc">AIP ENR 1.3 Secciones 5 a 7: Ascenso/descenso visual en IFR, condiciones para aproximación visual vs por contacto, MGTAM 5.9 cuidando propia separación y Carta de Acuerdo MMLP TWR-APP 2024 (transferencias a 15 DME / 8 DME).</p>
           <div class="module-tags">
             <span class="module-tag">ENR 1.3 (5 & 6)</span>
             <span class="module-tag">Aprox. Visual vs Contacto</span>
@@ -652,12 +771,12 @@
         </div>
       </div>
 
-      <!-- MÓDULO 1.8 -->
-      <div class="module-card" id="card-tema_1_8" data-title="1.8 carta visual mmlp vac sobrevuelos vfr 28 puntos pr 13 rutas los cabos sar ctay 122.50">
+      <!-- ================= MÓDULO 1.8 ================= -->
+      <div class="module-card" id="card-tema_1_8" data-track="COMMON" data-title="1.8 carta visual mmlp vac sobrevuelos vfr 28 puntos pr 13 rutas los cabos sar ctay 122.50">
         <div>
           <div class="module-top">
             <span class="module-num">TEMA 1.8</span>
-            <span class="badge-doc" style="font-size:0.65rem;">Navegación Visual</span>
+            <span class="badge-track common">Común TWR/APP</span>
           </div>
           <h3 class="module-title">Carta Visual MMLP VAC para Sobrevuelos</h3>
           <p class="module-desc">AIP MMLP VAC-0 a VAC-7: Visor de carta visual, buscador de los 28 puntos de reporte PR, generador de las 13 rutas VFR, restricción de cruce a 12 500 ft a Los Cabos y área SAR (122.50 MHz).</p>
@@ -677,12 +796,12 @@
         </div>
       </div>
 
-      <!-- MÓDULO 1.9 -->
-      <div class="module-card" id="card-tema_1_9" data-title="1.9 operaciones con drones rpas nom-107-sct3-2019 rlac aerodromos espacio controlado">
+      <!-- ================= MÓDULO 1.9 ================= -->
+      <div class="module-card" id="card-tema_1_9" data-track="COMMON" data-title="1.9 operaciones con drones rpas nom-107-sct3-2019 rlac aerodromos espacio controlado">
         <div>
           <div class="module-top">
             <span class="module-num">TEMA 1.9</span>
-            <span class="badge-doc" style="font-size:0.65rem;">Drones & RPAS</span>
+            <span class="badge-track common">Común TWR/APP</span>
           </div>
           <h3 class="module-title">Operaciones con Drones (RPAS) — NOM-107</h3>
           <p class="module-desc">NOM-107-SCT3-2019 y Arts. 92 Bis-Septies del RLAC: Clasificación de drones, escalonamiento de alturas en aeródromos/helipuertos, coordinación en espacio aéreo controlado y reporte de avistamientos.</p>
@@ -702,12 +821,12 @@
         </div>
       </div>
 
-      <!-- MÓDULO 1.10 -->
-      <div class="module-card" id="card-tema_1_10" data-title="1.10 loa mmlp twr ssei cco cf frequentis runway incursion circular ats-02/26 oficios 2026">
+      <!-- ================= MÓDULO 1.10 ================= -->
+      <div class="module-card" id="card-tema_1_10" data-track="COMMON" data-title="1.10 loa mmlp twr ssei cco cf frequentis runway incursion circular ats-02/26 oficios 2026">
         <div>
           <div class="module-top">
             <span class="module-num">TEMA 1.10</span>
-            <span class="badge-doc" style="font-size:0.65rem;">Seguridad en Pista</span>
+            <span class="badge-track common">Común TWR/APP</span>
           </div>
           <h3 class="module-title">LOA MMLP TWR – SSEI & FREQUENTIS 2026</h3>
           <p class="module-desc">Carta Operacional MMLP Mayo 2026 (call outs «[Libre izquierda, libre derecha]»), Circular ATS-02/26 con simulador de tecla RUNWAY INCURSION en FREQUENTIS, tiempo de respuesta SSEI y directivas 2026.</p>
@@ -734,20 +853,86 @@
   <!-- FOOTER -->
   <footer>
     <p><strong>Servicios a la Navegación en el Espacio Aéreo Mexicano (SENEAM)</strong> — Dirección de Tránsito Aéreo</p>
-    <p style="margin-top:4px;">Portal Maestro de Capacitación y Adiestramiento para Controladores de Tránsito Aéreo.</p>
+    <p style="margin-top:4px;">Portal Maestro de Capacitación ATC — Torre de Control (TWR) & Control de Aproximación (APP)</p>
   </footer>
 
-  <!-- SCRIPT MAESTRO DE CONTROL DE PROGRESO -->
+  <!-- SCRIPT MAESTRO DE PERFILES Y PROGRESO -->
   <script>
-    const allModules = ['tema_1_1', 'tema_1_2', 'tema_1_3', 'tema_1_4', 'tema_1_5', 'tema_1_6', 'tema_1_8', 'tema_1_9', 'tema_1_10'];
+    // Catálogo maestro de módulos
+    const allModules = [
+      'tema_1_1',      // MGTAM TWR
+      'tema_1_1_app',  // MGTAM APP
+      'tema_1_2', 
+      'tema_1_3', 
+      'tema_1_4', 
+      'tema_1_5', 
+      'tema_1_6', 
+      'tema_1_8', 
+      'tema_1_9', 
+      'tema_1_10'
+    ];
+
+    let currentProfile = localStorage.getItem('atc_user_profile') || 'TWR';
+
+    function setProfile(profile) {
+      currentProfile = profile;
+      localStorage.setItem('atc_user_profile', profile);
+
+      const btnTWR = document.getElementById('btnProfileTWR');
+      const btnAPP = document.getElementById('btnProfileAPP');
+      const btnALL = document.getElementById('btnProfileALL');
+
+      btnTWR.className = 'btn-profile' + (profile === 'TWR' ? ' active-twr' : '');
+      btnAPP.className = 'btn-profile' + (profile === 'APP' ? ' active-app' : '');
+      btnALL.className = 'btn-profile' + (profile === 'ALL' ? ' active-all' : '');
+
+      renderModulesForProfile();
+    }
+
+    function getActiveModuleList() {
+      if (currentProfile === 'TWR') {
+        return allModules.filter(m => m !== 'tema_1_1_app'); // Excluye 1.1 APP
+      } else if (currentProfile === 'APP') {
+        return allModules.filter(m => m !== 'tema_1_1'); // Excluye 1.1 TWR
+      } else {
+        return allModules; // Muestra ambos
+      }
+    }
+
+    function renderModulesForProfile() {
+      const activeList = getActiveModuleList();
+
+      allModules.forEach(modId => {
+        const card = document.getElementById(`card-${modId}`);
+        if (card) {
+          if (activeList.includes(modId)) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        }
+      });
+
+      const trackTitle = document.getElementById('progressTrackTitle');
+      if (currentProfile === 'TWR') {
+        trackTitle.innerText = 'Progreso Especialidad TWR (Torre)';
+      } else if (currentProfile === 'APP') {
+        trackTitle.innerText = 'Progreso Especialidad APP (Aproximación)';
+      } else {
+        trackTitle.innerText = 'Progreso General Completo (TWR + APP)';
+      }
+
+      loadProgress();
+    }
 
     function loadProgress() {
       const saved = JSON.parse(localStorage.getItem('atc_hub_progress') || '[]');
-      
+      const activeList = getActiveModuleList();
+
       allModules.forEach(modId => {
         const chk = document.getElementById(`chk-${modId}`);
         const card = document.getElementById(`card-${modId}`);
-        
+
         if (saved.includes(modId)) {
           if (chk) chk.checked = true;
           if (card) card.classList.add('completed');
@@ -757,7 +942,14 @@
         }
       });
 
-      updateProgressStats(saved);
+      // Cálculo de progreso basado en los módulos activos del perfil
+      const totalActive = activeList.length;
+      const completedActiveCount = activeList.filter(m => saved.includes(m)).length;
+      const pct = totalActive > 0 ? Math.round((completedActiveCount / totalActive) * 100) : 0;
+
+      document.getElementById('globalPctText').innerText = `${pct}%`;
+      document.getElementById('globalProgressFill').style.width = `${pct}%`;
+      document.getElementById('modulesCompletedText').innerText = `${completedActiveCount} de ${totalActive} Módulos Finalizados`;
     }
 
     function toggleModuleCheck(modId) {
@@ -774,21 +966,11 @@
       }
 
       localStorage.setItem('atc_hub_progress', JSON.stringify(saved));
-      updateProgressStats(saved);
-    }
-
-    function updateProgressStats(savedArray) {
-      const total = allModules.length;
-      const count = savedArray.length;
-      const pct = Math.round((count / total) * 100);
-
-      document.getElementById('globalPctText').innerText = `${pct}%`;
-      document.getElementById('globalProgressFill').style.width = `${pct}%`;
-      document.getElementById('modulesCompletedText').innerText = `${count} de ${total} Módulos Finalizados`;
+      loadProgress();
     }
 
     function resetProgress() {
-      if (confirm('¿Estás seguro de que deseas reiniciar el registro de módulos completados?')) {
+      if (confirm('¿Estás seguro de que deseas reiniciar tu progreso de capacitación?')) {
         localStorage.removeItem('atc_hub_progress');
         loadProgress();
       }
@@ -796,16 +978,19 @@
 
     function filterModules() {
       const query = document.getElementById('moduleSearchInput').value.toLowerCase();
-      const cards = document.querySelectorAll('.module-card');
+      const activeList = getActiveModuleList();
 
-      cards.forEach(card => {
-        const text = (card.getAttribute('data-title') + " " + card.textContent).toLowerCase();
-        card.style.display = text.includes(query) ? 'flex' : 'none';
+      activeList.forEach(modId => {
+        const card = document.getElementById(`card-${modId}`);
+        if (card) {
+          const text = (card.getAttribute('data-title') + " " + card.textContent).toLowerCase();
+          card.style.display = text.includes(query) ? 'flex' : 'none';
+        }
       });
     }
 
     window.onload = () => {
-      loadProgress();
+      setProfile(currentProfile);
     };
   </script>
 </body>
