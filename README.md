@@ -478,10 +478,10 @@
     <div class="modules-grid" id="modulesContainer">
 
       <!-- MÓDULO 1.1 TWR-->
-      <div class="module-card" id="card-tema_1_1" data-title="1.1 mgtam capitulo 7 control de aerodromo torre pista separacion reducida">
+      <div class="module-card" id="card-tema_1_1_APP" data-title="1.1 mgtam capitulo 7 control de aerodromo torre pista separacion reducida">
         <div>
           <div class="module-top">
-            <span class="module-num">TEMA 1.1</span>
+            <span class="module-num">TEMA 1.1 - TWR</span>
             <span class="badge-doc" style="font-size:0.65rem;">MGTAM</span>
           </div>
           <h3 class="module-title">MGTAM Capítulo 7: Control de Aeródromo</h3>
@@ -501,6 +501,7 @@
           <a href="tema_1_1.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
+      
  <!-- MÓDULO 1.1 APP-->
       <div class="module-card" id="card-tema_1_1_APP" data-title="1.1 REPASO DE SECCIONES IMPORTANTES DEL MGTAM PARA APP">
         <div>
