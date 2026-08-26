@@ -1,1 +1,787 @@
-# anexo.recurrente.2026
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema Integral de Capacitación ATC | SENEAM</title>
+  
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-main: #060B14;
+      --bg-card: #0F1B2E;
+      --bg-card-hover: #152640;
+      --primary: #00A3FF;
+      --primary-glow: rgba(0, 163, 255, 0.25);
+      --accent-green: #10B981;
+      --accent-green-glow: rgba(16, 185, 129, 0.25);
+      --accent-gold: #F59E0B;
+      --accent-danger: #EF4444;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-color: #1E3250;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    .top-header {
+      background: rgba(11, 22, 38, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #00A3FF, #0284C7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #000;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .brand-title h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .badge-doc {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(0, 163, 255, 0.15);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 35px 20px 80px 20px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* HERO BANNER & PROGRESO */
+    .hero-banner {
+      background: linear-gradient(135deg, #0A2246 0%, #0F1B2E 55%, #080D1A 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 30px;
+      margin-bottom: 35px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 25px;
+      align-items: center;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+    }
+
+    .hero-text h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-text p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .progress-card {
+      background: rgba(6, 13, 26, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .progress-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .progress-pct {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--accent-green);
+    }
+
+    .progress-track {
+      height: 10px;
+      background: #1A283E;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-green));
+      transition: width 0.5s ease;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    /* FILTRO DE BÚSQUEDA */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 400px;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 10px 14px 10px 38px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .btn-reset {
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: var(--accent-danger);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-reset:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: var(--accent-danger);
+    }
+
+    /* GRID DE MÓDULOS */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+
+    .module-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 163, 255, 0.15);
+    }
+
+    .module-card.completed {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: linear-gradient(180deg, #102334 0%, #0F1B2E 100%);
+    }
+
+    .module-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .module-num {
+      background: rgba(0, 163, 255, 0.12);
+      color: var(--primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 163, 255, 0.3);
+    }
+
+    .module-card.completed .module-num {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--accent-green);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .module-title {
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .module-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .module-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .module-tag {
+      background: #09121F;
+      border: 1px solid var(--border-color);
+      color: #cbd5e1;
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .module-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn-launch {
+      background: var(--primary);
+      color: #000;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-launch:hover {
+      background: #38bdf8;
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    /* CHECKBOX PERSONALIZADO */
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .checkbox-wrap input {
+      display: none;
+    }
+
+    .custom-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      border: 2px solid #334155;
+      background: #09121F;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .checkbox-wrap input:checked + .custom-check {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      color: #000;
+    }
+
+    .custom-check i {
+      display: none;
+      font-size: 0.75rem;
+      font-weight: 900;
+    }
+
+    .checkbox-wrap input:checked + .custom-check i {
+      display: block;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #040810;
+      border-top: 1px solid var(--border-color);
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    @media (max-width: 900px) {
+      .hero-banner { grid-template-columns: 1fr; }
+      .modules-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="top-header">
+    <div class="brand-wrap">
+      <div class="brand-logo-icon"><i class="fa-solid fa-plane-departure"></i></div>
+      <div class="brand-title">
+        <h1>PORTAL DE CAPACITACIÓN ATC <span class="badge-doc">SENEAM</span></h1>
+        <p>Servicios a la Navegación en el Espacio Aéreo Mexicano | SICT - AFAC</p>
+      </div>
+    </div>
+    <div>
+      <span class="badge-doc" style="background:rgba(16,185,129,0.15); color:var(--accent-green); border-color:var(--accent-green);">
+        <i class="fa-solid fa-shield-halved"></i> Programa Oficial 2024 - 2026
+      </span>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- HERO & PROGRESO GLOBAL -->
+    <section class="hero-banner">
+      <div class="hero-text">
+        <h2>PROGRAMA DE ADIESTRAMIENTO TÉCNICO Y NORMATIVO</h2>
+        <p>
+          Selecciona cualquiera de los 9 módulos interactivos para acceder a su contenido completo, simuladores, normatividad técnica y evaluaciones. Tu progreso se guardará automáticamente en este dispositivo.
+        </p>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-header">
+          <span class="progress-title">Progreso General</span>
+          <span class="progress-pct" id="globalPctText">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="globalProgressFill"></div>
+        </div>
+        <div class="progress-meta">
+          <span id="modulesCompletedText">0 de 9 Módulos Finalizados</span>
+          <span><i class="fa-solid fa-cloud-arrow-up"></i> Guardado local activo</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- BARRA DE BÚSQUEDA Y RESET -->
+    <div class="controls-bar">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="moduleSearchInput" placeholder="Buscar por tema, norma o palabra clave..." onkeyup="filterModules()" />
+      </div>
+      <button class="btn-reset" onclick="resetProgress()"><i class="fa-solid fa-arrow-rotate-left"></i> Reiniciar Mi Progreso</button>
+    </div>
+
+    <!-- GRID DE LOS 9 MÓDULOS -->
+    <div class="modules-grid" id="modulesContainer">
+
+      <!-- MÓDULO 1.1 -->
+      <div class="module-card" id="card-tema_1_1" data-title="1.1 mgtam capitulo 7 control de aerodromo torre pista separacion reducida">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.1</span>
+            <span class="badge-doc" style="font-size:0.65rem;">MGTAM</span>
+          </div>
+          <h3 class="module-title">MGTAM Capítulo 7: Control de Aeródromo</h3>
+          <p class="module-desc">Procedimientos del servicio de control de aeródromo, puestos de control (Local, Tierra, Del), asignación de pistas, prioridades, diagrama Fig. 7-1, pistola de luces y separación reducida (7.11).</p>
+          <div class="module-tags">
+            <span class="module-tag">MGTAM 7.1 - 7.17</span>
+            <span class="module-tag">Figura 7-1</span>
+            <span class="module-tag">Separación 7.11</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_1" onchange="toggleModuleCheck('tema_1_1')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_1.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- MÓDULO 1.2 -->
+      <div class="module-card" id="card-tema_1_2" data-title="1.2 aip mexico notam capma normateca gen enr ad sup aic metar">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.2</span>
+            <span class="badge-doc" style="font-size:0.65rem;">Sistemas Web</span>
+          </div>
+          <h3 class="module-title">Acceso a Páginas Web: AIP, NOTAM, CAPMA & Normateca</h3>
+          <p class="module-desc">Estructura OACI del AIP de México (GEN, ENR 1.1-1.14, ENR 2-6, AD 2), decodificador interactivo de NOTAMs de las FIR mexicanas, simulador meteorológico CAPMA y repositorio de la Normateca.</p>
+          <div class="module-tags">
+            <span class="module-tag">AIP GEN / ENR / AD</span>
+            <span class="module-tag">NOTAM Web</span>
+            <span class="module-tag">CAPMA METAR</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_2" onchange="toggleModuleCheck('tema_1_2')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_2.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- MÓDULO 1.3 -->
+      <div class="module-card" id="card-tema_1_3" data-title="1.3 operaciones vfr crepusculo civil salida puesta sol gen 2.7 gen 2.1-4 horario estandar svfr">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.3</span>
+            <span class="badge-doc" style="font-size:0.65rem;">AIP VFR</span>
+          </div>
+          <h3 class="module-title">Operaciones VFR: Sol, Crepúsculo Civil & Husos Horarios</h3>
+          <p class="module-desc">Regla de oro de crepúsculo civil para operaciones diurnas (±20 min), carta de horario estándar de México (GEN 2.1-4), calculadora solar en UTC/Hora Local y validador de VFR Especial (SVFR).</p>
+          <div class="module-tags">
+            <span class="module-tag">GEN 2.7 / GEN 2.1-4</span>
+            <span class="module-tag">Calculadora Solar</span>
+            <span class="module-tag">SVFR Validador</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_3" onchange="toggleModuleCheck('tema_1_3')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_3.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- MÓDULO 1.4 -->
+      <div class="module-card" id="card-tema_1_4" data-title="1.4 operaciones militares confidenciales cenavi fam semar traza de interes codigos ssr misiones aa">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.4</span>
+            <span class="badge-doc" style="font-size:0.65rem;">Defensa Aérea</span>
+          </div>
+          <h3 class="module-title">Operaciones Militares Confidenciales (CENAVI)</h3>
+          <p class="module-desc">Circular ATS-01/23, 9 conductas de traza de interés, buscador de códigos transponder SSR de misiones tácticas "AA", procedimientos SEMAR (Circular IA-07/93) y MGTAM 16.1.</p>
+          <div class="module-tags">
+            <span class="module-tag">CENAVI 01/23</span>
+            <span class="module-tag">Códigos SSR FAM</span>
+            <span class="module-tag">SEMAR IA-07/93</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_4" onchange="toggleModuleCheck('tema_1_4')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_4.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- MÓDULO 1.5 -->
+      <section class="module-card" id="card-tema_1_5" data-title="1.5 operaciones militares nocturnas articulo 170 rlac nvg luces tacticas adiestramiento">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.5</span>
+            <span class="badge-doc" style="font-size:0.65rem;">Operaciones Tácticas</span>
+          </div>
+          <h3 class="module-title">Operaciones Militares Nocturnas & Art. 170 RLAC</h3>
+          <p class="module-desc">Amparo legal del Artículo 170 del RLAC para vuelos militares nocturnos, visores NVG, luces en modo táctico/infrarrojo y adiestramientos nocturnos autorizados hasta las 0600 UTC.</p>
+          <div class="module-tags">
+            <span class="module-tag">Art. 170 RLAC</span>
+            <span class="module-tag">Vuelos NVG</span>
+            <span class="module-tag">Matriz Excepciones</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_5" onchange="toggleModuleCheck('tema_1_5')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_5.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </section>
+
+      <!-- MÓDULO 1.6 -->
+      <div class="module-card" id="card-tema_1_6" data-title="1.6 gestion de vuelos visuales durante operaciones ifr aproximacion visual por contacto mgtam 5.9 loa mmlp">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.6</span>
+            <span class="badge-doc" style="font-size:0.65rem;">Control Mixto</span>
+          </div>
+          <h3 class="module-title">Gestión de Vuelos Visuales en Operaciones IFR</h3>
+          <p class="module-desc">AIP ENR 1.3 Secciones 5 a 7: Ascenso/descenso visual en IFR, condiciones para aproximación visual vs por contacto, MGTAM 5.9 cuidando propia separación y Carta de Acuerdo MMLP TWR-APP 2024.</p>
+          <div class="module-tags">
+            <span class="module-tag">ENR 1.3 (5 & 6)</span>
+            <span class="module-tag">Aprox. Visual vs Contacto</span>
+            <span class="module-tag">LOA MMLP 2024</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_6" onchange="toggleModuleCheck('tema_1_6')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_6.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- MÓDULO 1.8 -->
+      <div class="module-card" id="card-tema_1_8" data-title="1.8 carta visual mmlp vac sobrevuelos vfr 28 puntos pr 13 rutas los cabos sar ctay 122.50">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.8</span>
+            <span class="badge-doc" style="font-size:0.65rem;">Navegación Visual</span>
+          </div>
+          <h3 class="module-title">Carta Visual MMLP VAC para Sobrevuelos</h3>
+          <p class="module-desc">AIP MMLP VAC-0 a VAC-7: Visor de carta visual, buscador de los 28 puntos de reporte PR, generador de las 13 rutas VFR, restricción de cruce a 12 500 ft a Los Cabos y área SAR (122.50 MHz).</p>
+          <div class="module-tags">
+            <span class="module-tag">Carta MMLP VAC-7</span>
+            <span class="module-tag">28 Puntos PR</span>
+            <span class="module-tag">13 Rutas VFR</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_8" onchange="toggleModuleCheck('tema_1_8')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_8.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- MÓDULO 1.9 -->
+      <div class="module-card" id="card-tema_1_9" data-title="1.9 operaciones con drones rpas nom-107-sct3-2019 rlac aerodromos espacio controlado">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.9</span>
+            <span class="badge-doc" style="font-size:0.65rem;">Drones & RPAS</span>
+          </div>
+          <h3 class="module-title">Operaciones con Drones (RPAS) — NOM-107</h3>
+          <p class="module-desc">NOM-107-SCT3-2019 y Arts. 92 Bis-Septies del RLAC: Clasificación de drones, escalonamiento de alturas en aeródromos/helipuertos, coordinación en espacio aéreo controlado y reporte de avistamientos.</p>
+          <div class="module-tags">
+            <span class="module-tag">NOM-107-SCT3-2019</span>
+            <span class="module-tag">Zonas Aeropuertos</span>
+            <span class="module-tag">Espacio Controlado 8.4</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_9" onchange="toggleModuleCheck('tema_1_9')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_9.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- MÓDULO 1.10 -->
+      <div class="module-card" id="card-tema_1_10" data-title="1.10 loa mmlp twr ssei cco cf frequentis runway incursion circular ats-02/26 oficios 2026">
+        <div>
+          <div class="module-top">
+            <span class="module-num">TEMA 1.10</span>
+            <span class="badge-doc" style="font-size:0.65rem;">Seguridad en Pista</span>
+          </div>
+          <h3 class="module-title">LOA MMLP TWR – SSEI & FREQUENTIS 2026</h3>
+          <p class="module-desc">Carta Operacional MMLP Mayo 2026 (call outs «[Libre izquierda, libre derecha]»), Circular ATS-02/26 con simulador de tecla RUNWAY INCURSION en FREQUENTIS, tiempo de respuesta SSEI y directivas 2026.</p>
+          <div class="module-tags">
+            <span class="module-tag">Circular ATS-02/26</span>
+            <span class="module-tag">LOA MMLP 2026</span>
+            <span class="module-tag">Simulador FREQUENTIS</span>
+          </div>
+        </div>
+        <div class="module-bottom">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="chk-tema_1_10" onchange="toggleModuleCheck('tema_1_10')" />
+            <div class="custom-check"><i class="fa-solid fa-check"></i></div>
+            <span>Completado</span>
+          </label>
+          <a href="tema_1_10.html" class="btn-launch">Abrir Módulo <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>Servicios a la Navegación en el Espacio Aéreo Mexicano (SENEAM)</strong> — Dirección de Tránsito Aéreo</p>
+    <p style="margin-top:4px;">Portal Maestro de Capacitación y Adiestramiento para Controladores de Tránsito Aéreo.</p>
+  </footer>
+
+  <!-- SCRIPT MAESTRO DE CONTROL DE PROGRESO -->
+  <script>
+    const allModules = ['tema_1_1', 'tema_1_2', 'tema_1_3', 'tema_1_4', 'tema_1_5', 'tema_1_6', 'tema_1_8', 'tema_1_9', 'tema_1_10'];
+
+    function loadProgress() {
+      const saved = JSON.parse(localStorage.getItem('atc_hub_progress') || '[]');
+      
+      allModules.forEach(modId => {
+        const chk = document.getElementById(`chk-${modId}`);
+        const card = document.getElementById(`card-${modId}`);
+        
+        if (saved.includes(modId)) {
+          if (chk) chk.checked = true;
+          if (card) card.classList.add('completed');
+        } else {
+          if (chk) chk.checked = false;
+          if (card) card.classList.remove('completed');
+        }
+      });
+
+      updateProgressStats(saved);
+    }
+
+    function toggleModuleCheck(modId) {
+      let saved = JSON.parse(localStorage.getItem('atc_hub_progress') || '[]');
+      const chk = document.getElementById(`chk-${modId}`);
+      const card = document.getElementById(`card-${modId}`);
+
+      if (chk.checked) {
+        if (!saved.includes(modId)) saved.push(modId);
+        if (card) card.classList.add('completed');
+      } else {
+        saved = saved.filter(id => id !== modId);
+        if (card) card.classList.remove('completed');
+      }
+
+      localStorage.setItem('atc_hub_progress', JSON.stringify(saved));
+      updateProgressStats(saved);
+    }
+
+    function updateProgressStats(savedArray) {
+      const total = allModules.length;
+      const count = savedArray.length;
+      const pct = Math.round((count / total) * 100);
+
+      document.getElementById('globalPctText').innerText = `${pct}%`;
+      document.getElementById('globalProgressFill').style.width = `${pct}%`;
+      document.getElementById('modulesCompletedText').innerText = `${count} de ${total} Módulos Finalizados`;
+    }
+
+    function resetProgress() {
+      if (confirm('¿Estás seguro de que deseas reiniciar el registro de módulos completados?')) {
+        localStorage.removeItem('atc_hub_progress');
+        loadProgress();
+      }
+    }
+
+    function filterModules() {
+      const query = document.getElementById('moduleSearchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.module-card');
+
+      cards.forEach(card => {
+        const text = (card.getAttribute('data-title') + " " + card.textContent).toLowerCase();
+        card.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+    }
+
+    window.onload = () => {
+      loadProgress();
+    };
+  </script>
+</body>
+</html>
