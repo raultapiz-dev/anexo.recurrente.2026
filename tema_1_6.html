@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 1.6 | Gestión de Vuelos Visuales durante Operaciones IFR (SENEAM)</title>
+  
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-main: #060D19;
+      --bg-card: #0F1B2E;
+      --bg-card-hover: #162742;
+      --primary: #00A3FF;
+      --primary-glow: rgba(0, 163, 255, 0.25);
+      --accent-vis: #38BDF8;
+      --accent-ifr: #818CF8;
+      --accent-contact: #F59E0B;
+      --accent-success: #10B981;
+      --accent-danger: #EF4444;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-color: #1D2E49;
+      --nav-width: 310px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA LATERAL */
+    #sidebar {
+      width: var(--nav-width);
+      background: #091322;
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, #11213A 0%, #091322 100%);
+    }
+
+    .badge-doc {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(0, 163, 255, 0.15);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .search-box {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 12px 8px 34px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 10px;
+      list-style: none;
+    }
+
+    .sidebar-menu::-webkit-scrollbar { width: 5px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+    .menu-cat-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 10px 4px 10px;
+      letter-spacing: 0.8px;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(0, 163, 255, 0.12);
+      color: #fff;
+      border-left: 3px solid var(--primary);
+    }
+
+    .sidebar-menu a span.num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--primary);
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    #main-content {
+      margin-left: var(--nav-width);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-header {
+      background: rgba(9, 19, 34, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .pill strong { color: #fff; }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #000;
+    }
+    .btn-primary:hover {
+      background: #33b5ff;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: #fff;
+    }
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 80px 20px;
+      width: 100%;
+    }
+
+    /* HERO */
+    .hero-banner {
+      background: linear-gradient(135deg, #0A1E3B 0%, #101B2E 55%, #080D1A 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 35px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .hero-banner::after {
+      content: '\f5b0';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 25px;
+      top: -20px;
+      font-size: 9.5rem;
+      color: rgba(0, 163, 255, 0.04);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 820px;
+    }
+
+    /* SECCIONES Y TARJETAS */
+    .norm-section {
+      margin-bottom: 45px;
+      scroll-margin-top: 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .section-num {
+      background: var(--primary);
+      color: #031024;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 163, 255, 0.35);
+    }
+
+    .card-title-ref {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .card-title-ref span.doc-tag {
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .rule-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .rule-list > li {
+      position: relative;
+      padding-left: 22px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .rule-list > li::before {
+      content: "•";
+      position: absolute;
+      left: 6px;
+      top: 0;
+      color: var(--primary);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .highlight-box {
+      background: rgba(0, 163, 255, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .ifr-box {
+      background: rgba(129, 140, 248, 0.09);
+      border-left: 4px solid var(--accent-ifr);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .contact-box {
+      background: rgba(245, 158, 11, 0.09);
+      border-left: 4px solid var(--accent-contact);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .alert-box {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 4px solid var(--accent-danger);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    /* COMPONENTE INTERACTIVO */
+    .interactive-card {
+      background: #0b1526;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 25px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .interactive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .interactive-badge {
+      background: var(--primary);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* COMPARADOR DE PROCEDIMIENTOS */
+    .proc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin: 15px 0;
+    }
+
+    .proc-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+
+    .proc-card:hover, .proc-card.active {
+      border-color: var(--primary);
+      background: #14243d;
+      transform: translateY(-3px);
+    }
+
+    /* VALIDADOR DE APROXIMACIÓN VISUAL */
+    .val-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+    }
+
+    .status-verdict {
+      padding: 18px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 15px;
+      border: 2px dashed;
+      transition: all 0.3s;
+    }
+
+    /* FRASEOLOGÍA CARD */
+    .phraseology-box {
+      background: #050b14;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      color: #38bdf8;
+      margin-top: 10px;
+    }
+
+    /* TABLA RESPONSIVA */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .custom-table th {
+      background: #09121f;
+      padding: 12px 16px;
+      color: #fff;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .custom-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: #cbd5e1;
+    }
+
+    /* QUIZ */
+    .quiz-container {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 25px;
+    }
+
+    .quiz-q {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .quiz-q-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt {
+      background: #08111e;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt:hover {
+      background: #132239;
+      border-color: var(--primary);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: var(--accent-success) !important;
+      color: #34d399 !important;
+      font-weight: 600;
+    }
+
+    .quiz-opt.incorrect {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: var(--accent-danger) !important;
+      color: #f87171 !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-style: italic;
+      display: none;
+    }
+
+    /* MODAL DE PRESENTACIÓN */
+    .presentation-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #040810;
+      z-index: 2000;
+      padding: 40px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .presentation-modal.active {
+      display: flex;
+    }
+
+    .slide-body {
+      max-width: 1000px;
+      margin: auto;
+      width: 100%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .slide-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      background: #040810;
+      border-top: 1px solid var(--border-color);
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .menu-toggle-btn {
+      display: none;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main-content { margin-left: 0; }
+      .menu-toggle-btn { display: block; }
+      .val-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="badge-doc">SENEAM | TEMA 1.6</span>
+      <h1><i class="fa-solid fa-plane-arrival text-primary"></i> Vuelos Visuales en IFR</h1>
+      <p>Aproximaciones Visuales, Contacto & LOA MMLP</p>
+    </div>
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Buscar regla o procedimiento..." onkeyup="filterSections()" />
+      </div>
+    </div>
+    <ul class="sidebar-menu" id="menuList">
+      <li class="menu-cat-title">Marco Técnico ENR 1.3</li>
+      <li><a href="#sec-vuelo-visual-ifr"><span class="num">5.1-5.4</span> Vuelo Visual bajo IFR</a></li>
+      <li><a href="#sec-aprox-visual"><span class="num">5.5</span> Aproximación Visual</a></li>
+      <li><a href="#sec-aprox-contacto"><span class="num">6.1-6.3</span> Aproximación por Contacto</a></li>
+      <li><a href="#sec-cancelacion-ifr"><span class="num">7.1</span> Cancelación IFR a VFR</a></li>
+      
+      <li class="menu-cat-title">MGTAM & Separaciones</li>
+      <li><a href="#sec-mgtam-59"><span class="num">5.9</span> Cuidando Propia Separación</a></li>
+      <li><a href="#sec-transito-esencial"><span class="num">5.10 / 6.2</span> Tránsito Esencial</a></li>
+      <li><a href="#sec-loa-lap"><span class="num">LOA 2024</span> Carta MMLP TWR – APP</a></li>
+      
+      <li class="menu-cat-title">Herramientas & Quiz</li>
+      <li><a href="#sec-validador-aprox"><i class="fa-solid fa-shield-halved text-primary"></i> Validador de Aproximación</a></li>
+      <li><a href="#sec-quiz"><i class="fa-solid fa-graduation-cap text-primary"></i> Quiz de Evaluación</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="main-content">
+
+    <!-- TOP BAR -->
+    <header class="top-header">
+      <div class="top-header-meta">
+        <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <span class="pill">Módulo: <strong>1.6 Gestión de Vuelos Visuales en Operaciones IFR</strong></span>
+        <span class="pill">Normativa: <strong>AIP ENR 1.3 / MGTAM Cap. 5 & 6</strong></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="startPresentation()"><i class="fa-solid fa-play"></i> Modo Diapositivas</button>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- BANNER HERO -->
+      <section class="hero-banner">
+        <span class="badge-doc">Operación Mixta y Eficiencia del Flujo Aéreo</span>
+        <h1 class="hero-title">GESTIÓN DE VUELOS VISUALES DURANTE OPERACIONES IFR</h1>
+        <p class="hero-subtitle">
+          Criterios reglamentarios para el ascenso/descenso visual bajo plan IFR, aproximaciones visuales, aproximaciones por contacto, provisión de información de tránsito esencial y coordinación local TWR-APP según la Carta de Acuerdo MMLP 2024.
+        </p>
+      </section>
+
+      <!-- 1. VUELO VISUAL BAJO IFR -->
+      <section id="sec-vuelo-visual-ifr" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">ENR 1.3 (5)</span>
+          <h2 class="section-title">PROCEDIMIENTOS VISUALES PARA AERONAVES CON PLAN DE VUELO IFR</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">5.1 a 5.4 <span class="doc-tag">Ascenso o Descenso Visual sin Cancelar Plan IFR</span></div>
+          <p style="font-size:0.92rem; margin-bottom:10px;">
+            <strong>5.1 Definición:</strong> Es una parte del vuelo IFR durante la cual existen condiciones meteorológicas visuales (VMC) que permiten a la aeronave ascender o descender hasta una altitud o punto determinado manteniendo comunicación directa con el ATC.
+          </p>
+
+          <div class="highlight-box">
+            <strong>5.2 Responsabilidad del Piloto:</strong> El piloto que acepta operar como vuelo visual es responsable de mantener su propia separación respecto a <strong>otras aeronaves, el terreno y la turbulencia de estela</strong>.
+          </div>
+
+          <p style="font-size:0.9rem; margin-top:10px;">
+            <strong>5.3 Distinción Crítica:</strong> El término <em>«Vuelo Visual»</em> <strong>NO significa la cancelación del plan de vuelo IFR</strong>. Si el piloto desea cancelar, debe utilizar la frase explícita: <strong style="color:#fff;">«Cancelo Plan de Vuelo por Instrumentos»</strong>.
+          </p>
+
+          <div class="ifr-box" style="margin-top:12px;">
+            <strong>5.4 Condiciones para Aprobar Vuelo Visual (Ascenso / Descenso):</strong>
+            <ul class="rule-list" style="margin-top:6px;">
+              <li><strong>a)</strong> Ventaja operacional a solicitud del piloto.</li>
+              <li><strong>b)</strong> Por debajo de <strong>FL200</strong> dentro de espacio aéreo controlado.</li>
+              <li><strong>c)</strong> Condiciones meteorológicas visuales (VMC).</li>
+              <li><strong>d)</strong> En horas nocturnas: Únicamente dentro de <strong>10 MN de un aeródromo controlado</strong>.</li>
+            </ul>
+          </div>
+
+          <div class="phraseology-box">
+            <i class="fa-solid fa-microphone text-primary"></i> <strong>Fraseología Obligatoria del Piloto:</strong><br>
+            <em>«...Solicito ascenso/descenso visual hasta (nivel/punto)...»</em>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. APROXIMACIÓN VISUAL Y POR CONTACTO -->
+      <section id="sec-aprox-visual" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">ENR 1.3 (5.5 & 6)</span>
+          <h2 class="section-title">APROXIMACIÓN VISUAL Y APROXIMACIÓN POR CONTACTO</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">5.5 <span class="doc-tag">Aproximación Visual (Visual Approach)</span></div>
+          <ul class="rule-list">
+            <li><strong>5.5.1 Ámbito:</strong> Aeronave IFR en VMC dentro de <strong>10 MN del aeródromo de destino</strong> que prosigue en visual para aterrizar.</li>
+            <li><strong>5.5.3 Ida al Aire:</strong> <strong>NO tiene segmento de aproximación frustrada publicado</strong>. Si efectúa ida al aire, se le instruye a incorporarse al <em>circuito de tránsito</em> para aterrizar lo antes posible.</li>
+            <li><strong>5.5.4 Radar:</strong> El servicio radar concluye automáticamente al transferir a la frecuencia de Torre (TWR).</li>
+          </ul>
+
+          <div class="highlight-box">
+            <strong>5.5.5 Requisitos Meteorológicos y de Secuencia para Autorizar:</strong>
+            <p>• Techo de nubes &ge; <strong>1 500 ft (457 m)</strong> y Visibilidad &ge; <strong>3 SM (5 km)</strong>.</p>
+            <p>• Aeronaves vectoreadas por radar: Techo mínimo <strong>500 ft por arriba de la MVA</strong> más baja del aeródromo.</p>
+            <p>• Secuencia: Ser la <strong>Número 1</strong> o, si es número subsecuente, tener a la <strong>aeronave precedente a la vista</strong> manteniendo propia separación y precauciones por estela turbulenta.</p>
+          </div>
+        </div>
+
+        <!-- APROXIMACIÓN POR CONTACTO -->
+        <div class="card" id="sec-aprox-contacto">
+          <div class="card-title-ref">6.1 a 6.3 <span class="doc-tag">Aproximación por Contacto (Contact Approach)</span></div>
+          <div class="contact-box">
+            <p>• <strong>Definición:</strong> Maniobra donde una aeronave IFR se desvía del procedimiento por instrumentos y prosigue visual al aeródromo cuidando su propia separación de obstáculos.</p>
+            <p>• <strong>Condiciones Obligatorias (6.3):</strong></p>
+            <ul class="rule-list" style="margin-top:6px;">
+              <li>1. En aeródromos controlados con aproximaciones IFR publicadas.</li>
+              <li>2. A solicitud del piloto para <strong>aeronaves Categoría A y B únicamente</strong>.</li>
+              <li>3. Visibilidad en el aeródromo no menor a <strong>1 milla estatuta (1 600 m)</strong> y libre de nubes.</li>
+              <li>4. <strong>El ATC aplica separación reglamentaria IFR</strong> entre la aeronave en aproximación por contacto y las demás aeronaves controladas.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CANCELACIÓN IFR A VFR -->
+        <div class="card" id="sec-cancelacion-ifr">
+          <div class="card-title-ref">7.1 <span class="doc-tag">Cambio de IFR a VFR en Vuelo</span></div>
+          <ul class="rule-list">
+            <li>No cancelar a menos que existan condiciones VMC <strong>constantes y/o en aumento</strong>.</li>
+            <li>Fraseología formal requerida: <strong style="color:var(--primary);">«...cancelo mi plan de vuelo IFR»</strong>.</li>
+            <li>El piloto se ajusta a las reglas VFR y cartas VAC publicadas del aeródromo.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 3. MGTAM CAP. 5 Y 6: SEPARACIÓN Y TRÁNSITO ESENCIAL -->
+      <section id="sec-mgtam-59" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">MGTAM 5.9 / 6.1</span>
+          <h2 class="section-title">AUTORIZACIONES VMC, TRÁNSITO ESENCIAL Y SEPARACIÓN EN AERÓDROMO</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">MGTAM 5.9 <span class="doc-tag">Vuelo Cuidando su Propia Separación en VMC</span></div>
+          <ul class="rule-list">
+            <li>Aplica a vuelos controlados en espacio aéreo <strong>Clases D y E</strong> durante horas <strong>diurnas</strong> a <strong>10 000 ft (3 050 m) o por debajo</strong> en subida o descenso.</li>
+            <li>Requiere solicitud de la aeronave y <strong>consentimiento del piloto de la otra aeronave</strong> con respecto a la cual se cuidará la separación.</li>
+            <li>El ATC debe proveer <em>instrucciones de alternativa IFR</em> en caso de que las condiciones VMC se degraden a IMC antes de completar la maniobra.</li>
+          </ul>
+        </div>
+
+        <div class="card" id="sec-transito-esencial">
+          <div class="card-title-ref">MGTAM 5.10 & 6.2 <span class="doc-tag">Información de Tránsito Esencial y Reducción en Proximidad (6.1)</span></div>
+          <p style="font-size:0.9rem;">
+            <strong>MGTAM 6.1:</strong> Las mínimas de separación reglamentarias pueden reducirse en la proximidad del aeródromo si:
+          </p>
+          <ul class="rule-list" style="margin-top:6px;">
+            <li><strong>a)</strong> El controlador de aeródromo tiene a todas las aeronaves constantemente a su vista; o</li>
+            <li><strong>b)</strong> Cada aeronave está constantemente a la vista de la otra y notifican mantener propia separación; o</li>
+            <li><strong>c)</strong> La aeronave seguidora tiene a la vista a la precedente y notifica que puede mantener su propia separación.</li>
+          </ul>
+
+          <div class="highlight-box" style="margin-top:12px;">
+            <strong>Contenido Obligatorio de Información de Tránsito Esencial (5.10.2):</strong>
+            <p>1. Dirección del vuelo | 2. Tipo y categoría de estela turbulenta | 3. Nivel de crucero | 4. Marcación relativa (reloj de 12 horas) y distancia, o posición estimada.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. CARTA DE ACUERDO MMLP TWR – MMLP APP (2024) -->
+      <section id="sec-loa-lap" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">LOA 2024</span>
+          <h2 class="section-title">CARTA DE ACUERDO OPERACIONAL MMLP TWR – MMLP APP</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">VIGENCIA 01 DE MARZO 2024 <span class="doc-tag">Procedimientos Específicos para Gestión Mixta VFR / IFR</span></div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Fase Operacional</th>
+                  <th>Procedimiento Acordado MMLP TWR &harr; MMLP APP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Llegadas VFR y Aproximaciones Visuales IFR</strong></td>
+                  <td>
+                    MMLP APP transferirá las comunicaciones a MMLP TWR (118.10 MHz) <strong style="color:var(--primary);">libre de conflicto a 15 DME</strong> (a menos que se coordine diferente).
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Llegadas en Aproximación IFR</strong></td>
+                  <td>
+                    Transferencia en el <strong>FAF</strong> (Fijo de Aproximación Final) o finalizando el viraje de procedimiento.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Salidas IFR y Restricciones</strong></td>
+                  <td>
+                    TWR transfiere inmediatamente tras el despegue o libre de tráfico visual en CTR.<br>
+                    Restricción de ascenso estándar: <strong>17 000 ft (UJ8), 18 000 ft o FL190 UFA</strong> según tabla semicircular.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Salidas VFR</strong></td>
+                  <td>
+                    TWR transfiere a APP (120.60 MHz) <strong style="color:var(--primary);">libre de conflicto a 8 DME o cruzando 2 500 ft</strong>. Planes VFR arriba de 3 000 ft se coordinan antes del despegue.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Separación Longitudinal</strong></td>
+                  <td>
+                    Separación mínima de <strong style="color:var(--accent-contact);">tres (3) minutos</strong> entre aeronaves que vuelen a la misma altitud por la misma ruta ATS.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Vuelos Locales y Prácticas</strong></td>
+                  <td>
+                    Áreas de trabajo fuera de 16 NM (ala fija) y al SW fuera de 20 NM.<br>
+                    APP transfiere vuelos locales a TWR a <strong>12 DME libre de conflicto</strong>.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- HERRAMIENTA INTERACTIVA: VALIDADOR DE APROXIMACIONES -->
+      <section id="sec-validador-aprox" class="norm-section">
+        <div class="interactive-card">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-calculator text-primary"></i> Validador ATC: Aproximación Visual vs Por Contacto</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Comprobación de parámetros de AIP ENR 1.3 (5.5 y 6) y MGTAM 6.5.3.</p>
+            </div>
+            <span class="interactive-badge">Simulador ATC</span>
+          </div>
+
+          <div class="val-grid">
+            <div class="form-group">
+              <label>Tipo de Aproximación Solicitada</label>
+              <select id="appType" class="form-control" onchange="evaluateApproach()">
+                <option value="visual">Aproximación Visual (Visual Approach - ENR 1.3 Sec. 5.5)</option>
+                <option value="contact">Aproximación por Contacto (Contact Approach - ENR 1.3 Sec. 6)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Categoría de Aeronave</label>
+              <select id="acftCat" class="form-control" onchange="evaluateApproach()">
+                <option value="AB">Categoría A o B (Ligeras / Turbohélices)</option>
+                <option value="CDE">Categoría C, D o E (Jets / Reactores comerciales)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Condiciones Meteorológicas en Aeródromo</label>
+              <select id="metCond" class="form-control" onchange="evaluateApproach()">
+                <option value="optima">Techo &ge; 1 500 ft y Visibilidad &ge; 3 SM (VMC pleno)</option>
+                <option value="marginal">Visibilidad 1.5 SM y Techo 1 000 ft (Libre de nubes)</option>
+                <option value="baja">Visibilidad &lt; 1 SM o Techo &lt; 500 ft</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Posición y Referencia Visual</label>
+              <select id="refCond" class="form-control" onchange="evaluateApproach()">
+                <option value="ok_ad">Dentro de 10 NM y Aeródromo a la vista</option>
+                <option value="ok_preceding">Dentro de 10 NM y Tránsito Precedente a la vista</option>
+                <option value="outside">Más allá de 10 NM del aeródromo</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="appVerdictBox" class="status-verdict">
+            <!-- Dinámico vía JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="sec-quiz" class="norm-section">
+        <div class="section-header">
+          <span class="section-num"><i class="fa-solid fa-graduation-cap"></i></span>
+          <h2 class="section-title">EVALUACIÓN INTERACTIVA DE CONOCIMIENTOS (TEMA 1.6)</h2>
+        </div>
+
+        <div class="quiz-container">
+          <div class="quiz-q" id="q1">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">1.</span>
+              <span>Si un piloto con plan de vuelo IFR solicita y recibe autorización para efectuar un «descenso visual», ¿significa que su plan IFR queda cancelado?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(1, 0, false)">A) Sí, automáticamente se convierte en vuelo VFR no controlado.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 1, true)">B) No. Continúa siendo un vuelo IFR; sólo cancela si utiliza la frase explícita «Cancelo plan de vuelo por instrumentos».</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 2, false)">C) Sí, pero únicamente si desciende por debajo de 10 000 ft.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <div class="quiz-q" id="q2">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">2.</span>
+              <span>¿Qué categoría de aeronaves puede solicitar y recibir autorización para una «Aproximación por Contacto»? (AIP ENR 1.3 numeral 6.3)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(2, 0, true)">A) Únicamente aeronaves de Categoría A y B.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 1, false)">B) Todas las aeronaves incluyendo reactores pesados Cat D y E.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 2, false)">C) Solamente aeronaves militares en misión táctica.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <div class="quiz-q" id="q3">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">3.</span>
+              <span>De acuerdo con la Carta de Acuerdo MMLP TWR – APP (2024), ¿a qué distancia transfiere APP las llegadas VFR y aproximaciones visuales a la Torre?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(3, 0, false)">A) En el FAF (Fijo de Aproximación Final).</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 1, true)">B) A 15 DME libre de conflicto.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 2, false)">C) A 5 DME en el viraje a final.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+
+          <div class="quiz-q" id="q4">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">4.</span>
+              <span>Si una aeronave autorizada a Aproximación Visual efectúa una ida al aire (go-around), ¿cuál es el procedimiento a seguir? (ENR 1.3 numeral 5.5.3)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(4, 0, false)">A) Ejecutar el procedimiento de aproximación frustrada publicado en la carta IAC.</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 1, true)">B) No tiene frustrada publicada; el ATC la instruye a integrarse al circuito de tránsito para aterrizar lo antes posible en visual.</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 2, false)">C) Ascender inmediatamente a FL200 en espera no publicada.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-4"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM) — Tema 1.6: Gestión de Vuelos Visuales en IFR</strong></p>
+      <p style="margin-top:4px;">SENEAM — Dirección de Tránsito Aéreo | AIP ENR 1.3 & Carta de Acuerdo MMLP 2024</p>
+    </footer>
+  </main>
+
+  <!-- MODAL DE PRESENTACIÓN DIAPOSITIVAS -->
+  <div class="presentation-modal" id="presentationModal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="badge-doc"><i class="fa-solid fa-tv"></i> Diapositivas Ejecutivas Tema 1.6</span>
+      <button class="btn btn-outline" onclick="closePresentation()"><i class="fa-solid fa-xmark"></i> Salir</button>
+    </div>
+
+    <div class="slide-body" id="slideContent"></div>
+
+    <div class="slide-controls">
+      <button class="btn btn-outline" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+      <span id="slideCounter" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:var(--text-muted);">Diapositiva 1 / 5</span>
+      <button class="btn btn-primary" onclick="nextSlide()">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // 1. VALIDADOR INTERACTIVO DE APROXIMACIONES
+    function evaluateApproach() {
+      const appType = document.getElementById('appType').value;
+      const acftCat = document.getElementById('acftCat').value;
+      const metCond = document.getElementById('metCond').value;
+      const refCond = document.getElementById('refCond').value;
+
+      const box = document.getElementById('appVerdictBox');
+
+      if (appType === 'visual') {
+        // Reglas de Aproximación Visual
+        if (metCond === 'optima' && refCond !== 'outside') {
+          box.style.borderColor = "var(--accent-success)";
+          box.style.background = "rgba(16, 185, 129, 0.1)";
+          box.innerHTML = `
+            <h4 style="color:var(--accent-success); font-size:1.05rem;"><i class="fa-solid fa-circle-check"></i> AUTORIZACIÓN DE APROXIMACIÓN VISUAL PROCEDENTE</h4>
+            <p style="font-size:0.86rem; color:#cbd5e1; margin-top:4px;">
+              Cumple con <strong>ENR 1.3 Sec. 5.5</strong>: Dentro de 10 NM, VMC ($\ge$ 3 SM y 1 500 ft techo), aeródromo o precedente a la vista. El piloto mantiene propia separación con el terreno y estela.
+            </p>
+          `;
+        } else {
+          box.style.borderColor = "var(--accent-danger)";
+          box.style.background = "rgba(239, 68, 68, 0.1)";
+          let reasons = [];
+          if (metCond !== 'optima') reasons.push("Meteorología inferior a mínimos VMC de aproximación visual (3 SM / 1 500 ft techo).");
+          if (refCond === 'outside') reasons.push("Aeronave fuera de 10 NM del aeródromo.");
+          box.innerHTML = `
+            <h4 style="color:var(--accent-danger); font-size:1.05rem;"><i class="fa-solid fa-circle-xmark"></i> APROXIMACIÓN VISUAL DENEGADA</h4>
+            <p style="font-size:0.86rem; color:#cbd5e1; margin-top:4px;"><strong>Causas:</strong> ${reasons.join(" | ")}</p>
+          `;
+        }
+      } else {
+        // Reglas de Aproximación por Contacto
+        if (acftCat === 'AB' && metCond !== 'baja') {
+          box.style.borderColor = "var(--accent-contact)";
+          box.style.background = "rgba(245, 158, 11, 0.1)";
+          box.innerHTML = `
+            <h4 style="color:var(--accent-contact); font-size:1.05rem;"><i class="fa-solid fa-circle-check"></i> APROXIMACIÓN POR CONTACTO PROCEDENTE</h4>
+            <p style="font-size:0.86rem; color:#cbd5e1; margin-top:4px;">
+              Cumple con <strong>ENR 1.3 Sec. 6</strong>: Categoría A/B, visibilidad $\ge$ 1 SM y libre de nubes. El ATC <strong>debe proveer separación IFR reglamentaria</strong> con otros tránsitos.
+            </p>
+          `;
+        } else {
+          box.style.borderColor = "var(--accent-danger)";
+          box.style.background = "rgba(239, 68, 68, 0.1)";
+          let reasons = [];
+          if (acftCat !== 'AB') reasons.push("Prohibido para aeronaves Categoría C, D o E (sólo Cat A y B).");
+          if (metCond === 'baja') reasons.push("Visibilidad inferior a 1 SM en el aeródromo.");
+          box.innerHTML = `
+            <h4 style="color:var(--accent-danger); font-size:1.05rem;"><i class="fa-solid fa-circle-xmark"></i> APROXIMACIÓN POR CONTACTO NO PERMITIDA</h4>
+            <p style="font-size:0.86rem; color:#cbd5e1; margin-top:4px;"><strong>Causas:</strong> ${reasons.join(" | ")}</p>
+          `;
+        }
+      }
+    }
+
+    // 2. QUIZ
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      const parent = document.getElementById(`q${qNum}`);
+      const opts = parent.querySelectorAll('.quiz-opt');
+      const fb = document.getElementById(`fb-${qNum}`);
+
+      opts.forEach(o => {
+        o.classList.remove('correct', 'incorrect');
+        o.style.pointerEvents = 'none';
+      });
+
+      if (isCorrect) {
+        opts[optIdx].classList.add('correct');
+        fb.innerHTML = '<span style="color:var(--accent-success);"><i class="fa-solid fa-circle-check"></i> ¡Correcto según el AIP ENR 1.3 y la Carta de Acuerdo MMLP!</span>';
+      } else {
+        opts[optIdx].classList.add('incorrect');
+        fb.innerHTML = '<span style="color:var(--accent-danger);"><i class="fa-solid fa-circle-xmark"></i> Incorrecto. Consulta la sección reglamentaria correspondiente.</span>';
+      }
+      fb.style.display = 'block';
+    }
+
+    // 3. BUSCADOR LATERAL
+    function filterSections() {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('#menuList li a');
+      items.forEach(a => {
+        const text = a.textContent.toLowerCase();
+        a.parentElement.style.display = text.includes(val) ? 'block' : 'none';
+      });
+    }
+
+    // 4. DIAPOSITIVAS MODO PRESENTACIÓN
+    const slides = [
+      {
+        title: "Tema 1.6: Gestión de Vuelos Visuales en IFR",
+        content: `
+          <div class="highlight-box" style="font-size:1.1rem; line-height:1.8;">
+            <p><strong>Diferenciación Conceptual (AIP ENR 1.3):</strong></p>
+            <p>• <strong>Vuelo Visual en IFR (5.1):</strong> Ascenso/descenso visual en VMC por debajo de FL200 sin cancelar el plan IFR.</p>
+            <p>• <strong>Aproximación Visual (5.5):</strong> Dentro de 10 NM con aeropuerto a la vista; sin procedimiento frustrado publicado.</p>
+            <p>• <strong>Aproximación por Contacto (6):</strong> Para Cat A/B con visibilidad $\ge$ 1 SM y separación IFR provista por el ATC.</p>
+            <p>• <strong>Cancelación IFR (7):</strong> Requiere frase expresa «Cancelo mi plan de vuelo IFR».</p>
+          </div>
+        `
+      },
+      {
+        title: "Condiciones para la Aproximación Visual (ENR 1.3 Sec. 5.5)",
+        content: `
+          <ul class="rule-list" style="font-size:1.05rem; line-height:1.8;">
+            <li><strong>Límite:</strong> Dentro de 10 MN del aeródromo y mantener referencia visual con el terreno.</li>
+            <li><strong>Mínimos WX:</strong> Visibilidad $\ge$ 3 SM (5 km) y techo $\ge$ 1 500 ft (o MVA + 500 ft si es vectorizado).</li>
+            <li><strong>Secuencia:</strong> Número 1 o número subsecuente con la aeronave precedente a la vista.</li>
+            <li><strong>Ida al aire:</strong> Instrucción inmediata a integrarse al circuito de tránsito para aterrizar lo antes posible.</li>
+          </ul>
+        `
+      },
+      {
+        title: "MGTAM 5.9: Cuidando Propia Separación en VMC",
+        content: `
+          <div class="card" style="font-size:1rem; line-height:1.8;">
+            <p>• <strong>Espacio Aéreo:</strong> Clases D y E en horas diurnas a 10 000 ft o por debajo.</p>
+            <p>• <strong>Requisito:</strong> Solicitud de la aeronave y <strong>consentimiento de la otra aeronave</strong> involucrada.</p>
+            <p>• <strong>Contingencia:</strong> El ATC debe proporcionar instrucciones de alternativa IFR en caso de degradación meteorológica a IMC.</p>
+          </div>
+        `
+      },
+      {
+        title: "Carta de Acuerdo MMLP TWR – MMLP APP (2024)",
+        content: `
+          <div class="highlight-box" style="font-size:1.05rem; line-height:1.8;">
+            <p>• <strong>Llegadas Visuales:</strong> Transferencia de comunicaciones a Torre a <strong>15 DME libre de conflicto</strong>.</p>
+            <p>• <strong>Llegadas IFR por instrumentos:</strong> Transferencia en el FAF o terminando viraje de procedimiento.</p>
+            <p>• <strong>Salidas VFR:</strong> Transferencia a APP a <strong>8 DME o 2 500 ft</strong>.</p>
+            <p>• <strong>Salidas IFR:</strong> Ascenso estándar 17 000 ft (UJ8), 18 000 ft o FL190 UFA.</p>
+          </div>
+        `
+      },
+      {
+        title: "Tránsito Esencial y Reducción de Mínimas (MGTAM 6.1)",
+        content: `
+          <ul class="rule-list" style="font-size:1.05rem; line-height:1.8;">
+            <li>Reducción en aeródromo permitida si el controlador tiene a las aeronaves constantemente a la vista.</li>
+            <li>O si los pilotos notifican tenerse mutuamente a la vista y mantener su propia separación.</li>
+            <li>Información de tránsito esencial obligatoria entre vuelos IFR y VFR en espacio aéreo Clases B y C.</li>
+          </ul>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+    function startPresentation() {
+      currentSlide = 0;
+      updateSlide();
+      document.getElementById('presentationModal').classList.add('active');
+    }
+    function closePresentation() {
+      document.getElementById('presentationModal').classList.remove('active');
+    }
+    function updateSlide() {
+      const data = slides[currentSlide];
+      document.getElementById('slideContent').innerHTML = `
+        <h2 style="font-size:1.8rem; color:#fff; margin-bottom:20px; font-weight:800;">${data.title}</h2>
+        <div>${data.content}</div>
+      `;
+      document.getElementById('slideCounter').innerText = `Diapositiva ${currentSlide + 1} / ${slides.length}`;
+    }
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    window.onload = () => {
+      evaluateApproach();
+    };
+  </script>
+</body>
+</html>

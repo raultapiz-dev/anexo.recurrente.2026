@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 1.5 | Operaciones Militares Nocturnas & Amparo del Art. 170 RLAC</title>
+  
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-main: #060B14;
+      --bg-card: #0E1726;
+      --bg-card-hover: #152238;
+      --primary: #00A3FF;
+      --primary-glow: rgba(0, 163, 255, 0.25);
+      --accent-nvg: #22C55E;
+      --accent-nvg-glow: rgba(34, 197, 94, 0.35);
+      --accent-night: #818CF8;
+      --accent-gold: #F59E0B;
+      --accent-danger: #EF4444;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-color: #1E2D44;
+      --nav-width: 310px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA LATERAL */
+    #sidebar {
+      width: var(--nav-width);
+      background: #08101D;
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, #0F1D33 0%, #08101D 100%);
+    }
+
+    .badge-doc {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent-nvg);
+      border: 1px solid var(--accent-nvg);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .search-box {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 12px 8px 34px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--accent-nvg);
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 10px;
+      list-style: none;
+    }
+
+    .sidebar-menu::-webkit-scrollbar { width: 5px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+    .menu-cat-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 10px 4px 10px;
+      letter-spacing: 0.8px;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(34, 197, 94, 0.12);
+      color: #fff;
+      border-left: 3px solid var(--accent-nvg);
+    }
+
+    .sidebar-menu a span.num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent-nvg);
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    #main-content {
+      margin-left: var(--nav-width);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-header {
+      background: rgba(8, 16, 29, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .pill strong { color: #fff; }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nvg {
+      background: var(--accent-nvg);
+      color: #000;
+    }
+    .btn-nvg:hover {
+      background: #4ade80;
+      box-shadow: 0 0 15px var(--accent-nvg-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: #fff;
+    }
+    .btn-outline:hover {
+      border-color: var(--accent-nvg);
+      color: var(--accent-nvg);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 80px 20px;
+      width: 100%;
+    }
+
+    /* HERO */
+    .hero-banner {
+      background: linear-gradient(135deg, #091C15 0%, #0E1726 50%, #080D1A 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 35px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .hero-banner::after {
+      content: '\f186';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 25px;
+      top: -20px;
+      font-size: 9.5rem;
+      color: rgba(34, 197, 94, 0.04);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 820px;
+    }
+
+    /* SECCIONES Y TARJETAS */
+    .norm-section {
+      margin-bottom: 45px;
+      scroll-margin-top: 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .section-num {
+      background: var(--accent-nvg);
+      color: #031024;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(34, 197, 94, 0.35);
+    }
+
+    .card-title-ref {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent-nvg);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .card-title-ref span.doc-tag {
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .rule-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .rule-list > li {
+      position: relative;
+      padding-left: 22px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .rule-list > li::before {
+      content: "•";
+      position: absolute;
+      left: 6px;
+      top: 0;
+      color: var(--accent-nvg);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .legal-callout {
+      background: linear-gradient(90deg, rgba(34, 197, 94, 0.15) 0%, rgba(14, 23, 38, 0.9) 100%);
+      border: 2px solid var(--accent-nvg);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin: 15px 0;
+    }
+
+    .legal-callout-title {
+      color: #86efac;
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legal-quote {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px 16px;
+      border-radius: 6px;
+      border-left: 4px solid var(--accent-nvg);
+      line-height: 1.6;
+    }
+
+    .highlight-box {
+      background: rgba(0, 163, 255, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .night-box {
+      background: rgba(129, 140, 248, 0.09);
+      border-left: 4px solid var(--accent-night);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .alert-box {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 4px solid var(--accent-danger);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    /* MATRIZ DE AMPARO INTERACTIVA */
+    .interactive-card {
+      background: #0a1322;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 25px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .interactive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .interactive-badge {
+      background: var(--accent-nvg);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+    }
+
+    .matrix-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+
+    .matrix-item:hover, .matrix-item.active {
+      border-color: var(--accent-nvg);
+      background: #122238;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(34, 197, 94, 0.15);
+    }
+
+    .matrix-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .matrix-tag.civil { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .matrix-tag.mil { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+
+    /* TABLA RESPONSIVA */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .custom-table th {
+      background: #08101d;
+      padding: 12px 16px;
+      color: #fff;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .custom-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: #cbd5e1;
+    }
+
+    /* QUIZ */
+    .quiz-container {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 25px;
+    }
+
+    .quiz-q {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .quiz-q-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt {
+      background: #070d18;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt:hover {
+      background: #101d31;
+      border-color: var(--accent-nvg);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(34, 197, 94, 0.2) !important;
+      border-color: var(--accent-nvg) !important;
+      color: #4ade80 !important;
+      font-weight: 600;
+    }
+
+    .quiz-opt.incorrect {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: var(--accent-danger) !important;
+      color: #f87171 !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-style: italic;
+      display: none;
+    }
+
+    /* MODAL PRESENTACIÓN */
+    .presentation-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #04070e;
+      z-index: 2000;
+      padding: 40px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .presentation-modal.active {
+      display: flex;
+    }
+
+    .slide-body {
+      max-width: 1000px;
+      margin: auto;
+      width: 100%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .slide-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      background: #04070e;
+      border-top: 1px solid var(--border-color);
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .menu-toggle-btn {
+      display: none;
+      background: var(--accent-nvg);
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main-content { margin-left: 0; }
+      .menu-toggle-btn { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="badge-doc">SENEAM | TEMA 1.5</span>
+      <h1><i class="fa-solid fa-moon text-success"></i> Ops. Nocturnas</h1>
+      <p>Operaciones Militares Nocturnas & Art. 170 RLAC</p>
+    </div>
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Buscar concepto o numeral..." onkeyup="filterSections()" />
+      </div>
+    </div>
+    <ul class="sidebar-menu" id="menuList">
+      <li class="menu-cat-title">Fundamentación Legal</li>
+      <li><a href="#sec-art170-amparo"><span class="num">Art. 170</span> Amparo del Art. 170 RLAC</a></li>
+      <li><a href="#sec-lac-legal"><span class="num">LAC 31/37</span> Ley de Aviación Civil</a></li>
+      <li><a href="#sec-vfr-nocturno"><span class="num">NVG/WX</span> VFR Nocturno Táctico</a></li>
+      <li><a href="#sec-luces-tacticas"><span class="num">7.16</span> Luces Tácticas & Infrarrojas</a></li>
+      
+      <li class="menu-cat-title">Procedimientos & Acuerdos</li>
+      <li><a href="#sec-adiestramiento-noc"><span class="num">LOA</span> Adiestramiento Nocturno MMLP</a></li>
+      <li><a href="#sec-matrix-tool"><i class="fa-solid fa-scale-balanced text-success"></i> Matriz Comparativa Art. 170</a></li>
+      <li><a href="#sec-quiz"><i class="fa-solid fa-graduation-cap text-success"></i> Quiz de Evaluación</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="main-content">
+
+    <!-- TOP BAR -->
+    <header class="top-header">
+      <div class="top-header-meta">
+        <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <span class="pill">Módulo: <strong>1.5 Operaciones Militares Nocturnas</strong></span>
+        <span class="pill">Amparo Legal: <strong>Art. 170 RLAC / SEDENA / SEMAR</strong></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-nvg" onclick="startPresentation()"><i class="fa-solid fa-play"></i> Modo Diapositivas</button>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- BANNER HERO -->
+      <section class="hero-banner">
+        <span class="badge-doc">Operaciones Aéreas Tácticas & Vuelo con Visión Nocturna</span>
+        <h1 class="hero-title">OPERACIONES MILITARES NOCTURNAS Y EL ARTÍCULO 170 DEL RLAC</h1>
+        <p class="hero-subtitle">
+          Fundamento legal, procedimientos de control de tránsito aéreo y mecanismos de coordinación para operaciones militares nocturnas, vuelos con visores NVG, luces atenuadas y misiones tácticas exentas de las restricciones civiles ordinarias.
+        </p>
+      </section>
+
+      <!-- 1. EL ARTÍCULO 170 DEL RLAC -->
+      <section id="sec-art170-amparo" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">RLAC 170</span>
+          <h2 class="section-title">EL AMPARO JURÍDICO DEL ARTÍCULO 170 DEL REGLAMENTO</h2>
+        </div>
+
+        <div class="legal-callout">
+          <div class="legal-callout-title">
+            <i class="fa-solid fa-shield-halved text-success"></i> TEXTO OFICIAL DEL ARTÍCULO 170 (RLAC)
+          </div>
+          <div class="legal-quote">
+            «ARTÍCULO 170. Las personas pilotos de aeronaves militares o navales pueden apartarse del cumplimiento de este reglamento cuando realicen operaciones dentro del ámbito de sus atribuciones o cuando operen en áreas reservadas a sus operaciones, previa coordinación con la Agencia Federal de Aviación Civil o los servicios de tránsito aéreo.»
+          </div>
+          <p style="font-size:0.86rem; color:#cbd5e1; margin-top:10px;">
+            <em>* Reformado en el Diario Oficial de la Federación el 31-05-2023.</em>
+          </p>
+        </div>
+
+        <div class="card" id="sec-lac-legal">
+          <div class="card-title-ref">LEY DE AVIACIÓN CIVIL (ARTS. 31 & 37) <span class="doc-tag">Concordancia con la Ley Reglamentaria</span></div>
+          <ul class="rule-list">
+            <li>
+              <strong>Artículo 31:</strong> La operación de aeronaves de Estado no requerirá permiso; las aeronaves militares se regirán por las disposiciones aplicables en específico a las mismas.
+            </li>
+            <li>
+              <strong>Artículo 37:</strong> Las operaciones militares en cualquier parte del espacio aéreo nacional se sujetarán a las reglas de tránsito aéreo, <em>a excepción de las áreas reservadas para su operación exclusiva</em> (como la MMR-400 FOCAS). Por razones de seguridad nacional o de orden público, se ejercerá la coordinación plena con el ATC.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2. VFR NOCTURNO MILITAR VS PROHIBICIÓN CIVIL -->
+      <section id="sec-vfr-nocturno" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">VFR NOCTURNO</span>
+          <h2 class="section-title">OPERACIONES VFR NOCTURNAS Y VUELOS TÁCTICOS NVG</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">ENR 1.2 (6.1.b) vs ART. 170 RLAC <span class="doc-tag">Contraste Operativo entre Aviación Civil y Militar</span></div>
+          <p style="font-size:0.92rem; margin-bottom:12px;">
+            Mientras que para la aviación civil los vuelos VFR nocturnos están estrictamente prohibidos entre la puesta y salida del sol (AIP ENR 1.2 numeral 6.1.b), las Fuerzas Armadas operan vuelos visuales nocturnos bajo el siguiente régimen:
+          </p>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+            <div class="alert-box">
+              <strong style="color:#fff;"><i class="fa-solid fa-ban"></i> Régimen Civil Ordinario:</strong>
+              <p style="font-size:0.85rem; margin-top:4px;">
+                Prohibido volar VFR de noche. Concluido el crepúsculo civil (SS + 20 min), toda aeronave civil debe aterrizar o cambiar a plan IFR.
+              </p>
+            </div>
+            <div class="mil-box">
+              <strong style="color:#fff;"><i class="fa-solid fa-check-double"></i> Régimen Militar / Naval (Art. 170):</strong>
+              <p style="font-size:0.85rem; margin-top:4px;">
+                Facultados para operar en <strong>VFR Nocturno</strong> en misiones tácticas, adiestramiento de pilotos, vuelos con visores <strong>NVG</strong> e intercepción aérea previa coordinación con SENEAM.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LUCES TÁCTICAS Y NVG -->
+        <div class="card" id="sec-luces-tacticas">
+          <div class="card-title-ref">MGTAM 7.16 & RLAC 172.VI <span class="doc-tag">Vuelos con Luces Tácticas, Infrarrojas (IR) y Visión Nocturna</span></div>
+          <div class="night-box">
+            <p>• <strong>Operaciones NVG (Night Vision Goggles):</strong> Los pilotos militares emplean visores nocturnos que requieren condiciones lumínicas especiales en cabina y cabecera de pista.</p>
+            <p>• <strong>Luces Externas Atenuadas o Apagadas:</strong> En misiones tácticas de intercepción (CENAVI) o patrullaje naval (SEMAR), las aeronaves pueden operar con luces anticolisión y de posición en modo táctico / infrarrojo, apartándose de la regla civil ordinaria del Art. 172 fracción VI del RLAC.</p>
+            <p>• <strong>Coordinación con Torre (TWR):</strong> La Torre mantendrá segregación reforzada con los tránsitos civiles IFR y de aeródromo circundantes.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. MATRIZ INTERACTIVA DE EXCEPCIONES -->
+      <section id="sec-matrix-tool" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">MATRIZ ART. 170</span>
+          <h2 class="section-title">MATRIZ INTERACTIVA DE EXCEPCIONES MILITARES AL REGLAMENTO</h2>
+        </div>
+
+        <div class="interactive-card">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-scale-balanced text-success"></i> Comparador de Reglas Civiles vs Excepciones Militares (Art. 170 RLAC)</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Haz clic en cada categoría para analizar cómo opera la excepción en el servicio de control de tránsito aéreo.</p>
+            </div>
+            <span class="interactive-badge">Herramienta ATC</span>
+          </div>
+
+          <div class="matrix-grid">
+            <div class="matrix-item active" onclick="showMatrixDetail(0)">
+              <span class="matrix-tag civil">Regla Civil</span>
+              <strong style="display:block; color:#fff; font-size:0.92rem;">Prohibición VFR Nocturno</strong>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">ENR 1.2 (6.1.b): Prohibido operar VFR entre puesta y salida del sol.</p>
+            </div>
+
+            <div class="matrix-item" onclick="showMatrixDetail(1)">
+              <span class="matrix-tag civil">Regla Civil</span>
+              <strong style="display:block; color:#fff; font-size:0.92rem;">Operación Continua de Luces</strong>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">RLAC Art. 172.VI & MGTAM 7.16: Luces encendidas de noche.</p>
+            </div>
+
+            <div class="matrix-item" onclick="showMatrixDetail(2)">
+              <span class="matrix-tag civil">Regla Civil</span>
+              <strong style="display:block; color:#fff; font-size:0.92rem;">Separación Longitudinal Estándar</strong>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">MGTAM 7.9.2: Separación reglamentaria de pista y aproximación.</p>
+            </div>
+
+            <div class="matrix-item" onclick="showMatrixDetail(3)">
+              <span class="matrix-tag civil">Regla Civil</span>
+              <strong style="display:block; color:#fff; font-size:0.92rem;">Alturas Mínimas sobre Poblaciones</strong>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">RLAC Art. 171.I: Mínimo 1 000 ft sobre obstáculos / radio 2 000 ft.</p>
+            </div>
+          </div>
+
+          <div id="matrixDetailBox" class="mil-box" style="margin-top:18px; padding:18px; font-size:0.92rem;">
+            <!-- Dinámico por JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. ADIESTRAMIENTO NOCTURNO EN CARTAS DE ACUERDO -->
+      <section id="sec-adiestramiento-noc" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">CARTAS DE ACUERDO</span>
+          <h2 class="section-title">ADIESTRAMIENTO NOCTURNO EN AERÓDROMOS MIXTOS (EJEMPLO MMLP)</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">MMLP TWR – BASANPAZ / BAM-9 <span class="doc-tag">Procedimientos Específicos para Prácticas Nocturnas</span></div>
+          <ul class="rule-list">
+            <li>
+              <strong>Horario Oficial Autorizado:</strong> MMLP TWR autorizará vuelos de adiestramiento <strong>diurnos y nocturnos</strong> durante el horario oficial del aeropuerto (<strong style="color:var(--accent-gold);">1400/0600 UTC TSM – 1300/0600 UTC TVM</strong>). Solicitudes fuera de horario se tramitan conforme a la Ley de Aeropuertos.
+            </li>
+            <li>
+              <strong>Prácticas de Toques y Despegues Nocturnos:</strong> Autorizados a aeronaves militares sujetos al flujo de tráfico civil de llegada y salida.
+            </li>
+            <li>
+              <strong>Vuelos de Helicópteros en CTA:</strong> Autorizados de noche sin interferir con las trayectorias de aproximación o despegue de la pista activa 18/36.
+            </li>
+            <li>
+              <strong>Área Restringida MMR-400 FOCAS:</strong> Activación comunicada a Torre y rol enviado a OSIV antes de las <strong>18:50 L</strong>.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SECCIÓN QUIZ -->
+      <section id="sec-quiz" class="norm-section">
+        <div class="section-header">
+          <span class="section-num"><i class="fa-solid fa-graduation-cap"></i></span>
+          <h2 class="section-title">EVALUACIÓN INTERACTIVA DE CONOCIMIENTOS (TEMA 1.5)</h2>
+        </div>
+
+        <div class="quiz-container">
+          <div class="quiz-q" id="q1">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-nvg);">1.</span>
+              <span>¿Cuál es el fundamento reglamentario que faculta a los pilotos militares a apartarse del reglamento civil cuando operen en sus funciones o en áreas reservadas?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(1, 0, false)">A) Artículo 28 de la Ley de Aviación Civil.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 1, true)">B) Artículo 170 del Reglamento de la Ley de Aviación Civil (RLAC).</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 2, false)">C) Numeral 7.2.1 del MGTAM.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <div class="quiz-q" id="q2">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-nvg);">2.</span>
+              <span>¿Puede una aeronave militar operar en VFR nocturno o con visores NVG en el espacio aéreo mexicano?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(2, 0, true)">A) Sí, amparada en el Art. 170 del RLAC, en misiones oficiales o adiestramiento previa coordinación con el ATS.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 1, false)">B) No, el vuelo nocturno está prohibido para todas las aeronaves sin excepción.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 2, false)">C) Únicamente si cuenta con plan de vuelo comercial de pasajeros.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <div class="quiz-q" id="q3">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-nvg);">3.</span>
+              <span>De acuerdo con las Cartas de Acuerdo locales (como MMLP), ¿hasta qué hora UTC están autorizados los adiestramientos nocturnos durante el horario oficial?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(3, 0, false)">A) Hasta la puesta del sol (SS).</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 1, true)">B) Hasta las 0600 UTC (horario oficial de cierre del aeródromo).</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 2, false)">C) Únicamente hasta las 0000 UTC.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM) — Tema 1.5: Operaciones Militares Nocturnas</strong></p>
+      <p style="margin-top:4px;">SENEAM — Dirección de Tránsito Aéreo | Amparo Legal Art. 170 RLAC & Coordinación Cívico-Militar</p>
+    </footer>
+  </main>
+
+  <!-- MODAL DE PRESENTACIÓN DIAPOSITIVAS -->
+  <div class="presentation-modal" id="presentationModal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="badge-doc"><i class="fa-solid fa-tv"></i> Diapositivas Ejecutivas Tema 1.5</span>
+      <button class="btn btn-outline" onclick="closePresentation()"><i class="fa-solid fa-xmark"></i> Salir</button>
+    </div>
+
+    <div class="slide-body" id="slideContent"></div>
+
+    <div class="slide-controls">
+      <button class="btn btn-outline" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+      <span id="slideCounter" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:var(--text-muted);">Diapositiva 1 / 5</span>
+      <button class="btn btn-nvg" onclick="nextSlide()">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // DATOS DE LA MATRIZ DE AMPARO ART. 170
+    const matrixDetails = [
+      {
+        title: "1. VFR Nocturno Táctico (Art. 170 RLAC vs ENR 1.2-6.1.b)",
+        desc: "<strong>Excepción Aplicada:</strong> Mientras el tráfico civil tiene prohibido operar VFR entre la puesta y salida del sol, las aeronaves de las Fuerzas Armadas (FAM / SEMAR) pueden realizar operaciones VFR nocturnas en adiestramiento o misiones tácticas dentro del ámbito de sus funciones o en áreas reservadas (MMR-400), mediante la debida coordinación con la Torre de Control (MMLP TWR)."
+      },
+      {
+        title: "2. Operación con Luces Tácticas / Infrarrojas / NVG (Art. 170 vs Art. 172.VI)",
+        desc: "<strong>Excepción Aplicada:</strong> El piloto militar puede apagar o atenuar las luces de navegación/anticolisión exteriores para el empleo de Gafas de Visión Nocturna (NVG) o misiones encubiertas de intercepción aérea del CENAVI. El ATC garantiza la seguridad mediante segregación del espacio aéreo."
+      },
+      {
+        title: "3. Reducción de Separación Militar (MGTAM 16.1.2 & 7.7.1.1.c)",
+        desc: "<strong>Excepción Aplicada:</strong> Las mínimas de separación reglamentarias pueden reducirse entre aeronaves militares (vuelos en formación, toques y despegues consecutivos o rompimientos Pitch-out) siempre que exista solicitud expresa que deje constancia formal."
+      },
+      {
+        title: "4. Alturas Mínimas Tácticas (Art. 170 vs Art. 171.I)",
+        desc: "<strong>Excepción Aplicada:</strong> Para misiones de reconocimiento, búsqueda, rescate o intercepción a baja cota, las aeronaves del Estado pueden operar por debajo de las alturas mínimas civiles reglamentarias dentro de sus sectores tácticos asignados."
+      }
+    ];
+
+    function showMatrixDetail(idx) {
+      document.querySelectorAll('.matrix-item').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      const data = matrixDetails[idx];
+      document.getElementById('matrixDetailBox').innerHTML = `
+        <strong style="color:var(--accent-nvg); font-size:1rem;"><i class="fa-solid fa-shield-halved"></i> ${data.title}</strong>
+        <p style="margin-top:8px; line-height:1.7; color:#cbd5e1;">${data.desc}</p>
+      `;
+    }
+
+    // QUIZ
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      const parent = document.getElementById(`q${qNum}`);
+      const opts = parent.querySelectorAll('.quiz-opt');
+      const fb = document.getElementById(`fb-${qNum}`);
+
+      opts.forEach(o => {
+        o.classList.remove('correct', 'incorrect');
+        o.style.pointerEvents = 'none';
+      });
+
+      if (isCorrect) {
+        opts[optIdx].classList.add('correct');
+        fb.innerHTML = '<span style="color:var(--accent-nvg);"><i class="fa-solid fa-circle-check"></i> ¡Correcto según el Art. 170 del RLAC y Cartas de Acuerdo!</span>';
+      } else {
+        opts[optIdx].classList.add('incorrect');
+        fb.innerHTML = '<span style="color:var(--accent-danger);"><i class="fa-solid fa-circle-xmark"></i> Incorrecto. Revisa el texto del Artículo 170 del RLAC.</span>';
+      }
+      fb.style.display = 'block';
+    }
+
+    // BÚSQUEDA
+    function filterSections() {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('#menuList li a');
+      items.forEach(a => {
+        const text = a.textContent.toLowerCase();
+        a.parentElement.style.display = text.includes(val) ? 'block' : 'none';
+      });
+    }
+
+    // DIAPOSITIVAS
+    const slides = [
+      {
+        title: "Tema 1.5: Operaciones Militares Nocturnas",
+        content: `
+          <div class="legal-callout" style="font-size:1.1rem; line-height:1.8;">
+            <p><strong>Fundamento Jurídico Principal:</strong></p>
+            <p style="font-weight:700; color:#86efac; margin-top:8px;">
+              «Artículo 170 RLAC: Los pilotos militares o navales pueden apartarse del cumplimiento de este reglamento en el ámbito de sus atribuciones o en áreas reservadas previa coordinación con AFAC o ATS.»
+            </p>
+          </div>
+        `
+      },
+      {
+        title: "VFR Nocturno y Amparo del Art. 170 RLAC",
+        content: `
+          <ul class="rule-list" style="font-size:1.05rem; line-height:1.9;">
+            <li><strong>Aviación Civil:</strong> VFR prohibido estrictamente entre la puesta y salida del sol (ENR 1.2-6.1.b).</li>
+            <li><strong>Aviación Militar (Art. 170):</strong> Facultada para realizar vuelos VFR nocturnos en adiestramiento, misiones tácticas e intercepción.</li>
+            <li><strong>Vuelos NVG:</strong> Operaciones con visores nocturnos y luces atenuadas o apagadas en modo infrarrojo (IR).</li>
+          </ul>
+        `
+      },
+      {
+        title: "Cartas de Acuerdo y Adiestramiento Nocturno",
+        content: `
+          <div class="card" style="font-size:1rem; line-height:1.8;">
+            <p>• <strong>Horario Oficial:</strong> Torre autorizará vuelos diurnos y nocturnos durante horario oficial de aeropuerto (hasta las 0600 UTC).</p>
+            <p>• <strong>Maniobras:</strong> Toques y despegues nocturnos, circuitos de tránsito y operaciones en área restringida MMR-400 FOCAS.</p>
+            <p>• <strong>Helicópteros:</strong> Máximo 200 ft en rodaje aéreo/hovering sin contacto previo con Torre.</p>
+          </div>
+        `
+      },
+      {
+        title: "Responsabilidad y Segregación por el ATC",
+        content: `
+          <div class="night-box" style="font-size:1.05rem; line-height:1.8;">
+            <p>• SENEAM segrega el espacio aéreo para garantizar la separación de tránsitos civiles IFR.</p>
+            <p>• MGTAM 16.1.2: Reducción de separación militar admitida únicamente entre aeronaves militares bajo constancia formal.</p>
+          </div>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+    function startPresentation() {
+      currentSlide = 0;
+      updateSlide();
+      document.getElementById('presentationModal').classList.add('active');
+    }
+    function closePresentation() {
+      document.getElementById('presentationModal').classList.remove('active');
+    }
+    function updateSlide() {
+      const data = slides[currentSlide];
+      document.getElementById('slideContent').innerHTML = `
+        <h2 style="font-size:1.8rem; color:#fff; margin-bottom:20px; font-weight:800;">${data.title}</h2>
+        <div>${data.content}</div>
+      `;
+      document.getElementById('slideCounter').innerText = `Diapositiva ${currentSlide + 1} / ${slides.length}`;
+    }
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    window.onload = () => {
+      showMatrixDetail(0);
+    };
+  </script>
+</body>
+</html>

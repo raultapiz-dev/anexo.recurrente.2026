@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 1.8 | Uso y Respaldo de Carta Visual para Sobrevuelos VFR (MMLP VAC)</title>
+  
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-main: #060D19;
+      --bg-card: #0F1B2E;
+      --bg-card-hover: #162742;
+      --primary: #00A3FF;
+      --primary-glow: rgba(0, 163, 255, 0.25);
+      --accent-vac: #06B6D4;
+      --accent-vac-glow: rgba(6, 182, 212, 0.25);
+      --accent-alt: #F59E0B;
+      --accent-success: #10B981;
+      --accent-danger: #EF4444;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-color: #1D2E49;
+      --nav-width: 310px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA LATERAL */
+    #sidebar {
+      width: var(--nav-width);
+      background: #091322;
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, #11213A 0%, #091322 100%);
+    }
+
+    .badge-doc {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--accent-vac);
+      border: 1px solid var(--accent-vac);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .search-box {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 12px 8px 34px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--accent-vac);
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 10px;
+      list-style: none;
+    }
+
+    .sidebar-menu::-webkit-scrollbar { width: 5px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+    .menu-cat-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 10px 4px 10px;
+      letter-spacing: 0.8px;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(6, 182, 212, 0.12);
+      color: #fff;
+      border-left: 3px solid var(--accent-vac);
+    }
+
+    .sidebar-menu a span.num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent-vac);
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    #main-content {
+      margin-left: var(--nav-width);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-header {
+      background: rgba(9, 19, 34, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .pill strong { color: #fff; }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-vac {
+      background: var(--accent-vac);
+      color: #000;
+    }
+    .btn-vac:hover {
+      background: #22d3ee;
+      box-shadow: 0 0 15px var(--accent-vac-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: #fff;
+    }
+    .btn-outline:hover {
+      border-color: var(--accent-vac);
+      color: var(--accent-vac);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 80px 20px;
+      width: 100%;
+    }
+
+    /* HERO */
+    .hero-banner {
+      background: linear-gradient(135deg, #082F49 0%, #0F1B2E 55%, #060D19 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 35px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .hero-banner::after {
+      content: '\f279';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 25px;
+      top: -20px;
+      font-size: 9.5rem;
+      color: rgba(6, 182, 212, 0.04);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 820px;
+    }
+
+    /* SECCIONES Y TARJETAS */
+    .norm-section {
+      margin-bottom: 45px;
+      scroll-margin-top: 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .section-num {
+      background: var(--accent-vac);
+      color: #031024;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(6, 182, 212, 0.35);
+    }
+
+    .card-title-ref {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent-vac);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .card-title-ref span.doc-tag {
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .rule-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .rule-list > li {
+      position: relative;
+      padding-left: 22px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .rule-list > li::before {
+      content: "•";
+      position: absolute;
+      left: 6px;
+      top: 0;
+      color: var(--accent-vac);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .highlight-box {
+      background: rgba(6, 182, 212, 0.08);
+      border-left: 4px solid var(--accent-vac);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .alt-box {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--accent-alt);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .alert-box {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 4px solid var(--accent-danger);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    /* VISOR DE CARTA VAC-7 */
+    .chart-viewer-card {
+      background: #0B1424;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 22px 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .chart-display-container {
+      position: relative;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      overflow: hidden;
+      border: 1px solid #334155;
+    }
+
+    .chart-img {
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+      cursor: zoom-in;
+    }
+
+    .chart-img:hover {
+      transform: scale(1.01);
+    }
+
+    /* COMPONENTE INTERACTIVO DE RUTAS Y PUNTOS */
+    .interactive-card {
+      background: #0b1526;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 25px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .interactive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .interactive-badge {
+      background: var(--accent-vac);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* EXPLORADOR DE RUTAS VFR */
+    .route-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 20px;
+    }
+
+    .route-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.88rem;
+    }
+
+    .route-item:hover, .route-item.active {
+      border-color: var(--accent-vac);
+      background: #14253e;
+      color: #fff;
+      transform: translateX(4px);
+    }
+
+    .route-display-box {
+      background: #050b14;
+      border: 2px dashed var(--accent-vac);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .route-path-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 15px 0;
+    }
+
+    .path-node {
+      background: #10213d;
+      border: 1px solid var(--accent-vac);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .path-arrow {
+      color: var(--accent-alt);
+      font-size: 0.9rem;
+    }
+
+    /* TABLA RESPONSIVA */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .custom-table th {
+      background: #09121f;
+      padding: 12px 16px;
+      color: #fff;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .custom-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: #cbd5e1;
+    }
+
+    .custom-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* QUIZ */
+    .quiz-container {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 25px;
+    }
+
+    .quiz-q {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .quiz-q-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt {
+      background: #08111e;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt:hover {
+      background: #132239;
+      border-color: var(--accent-vac);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: var(--accent-success) !important;
+      color: #34d399 !important;
+      font-weight: 600;
+    }
+
+    .quiz-opt.incorrect {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: var(--accent-danger) !important;
+      color: #f87171 !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-style: italic;
+      display: none;
+    }
+
+    /* MODAL DE PRESENTACIÓN */
+    .presentation-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #040810;
+      z-index: 2000;
+      padding: 40px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .presentation-modal.active {
+      display: flex;
+    }
+
+    .slide-body {
+      max-width: 1000px;
+      margin: auto;
+      width: 100%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .slide-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      background: #040810;
+      border-top: 1px solid var(--border-color);
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .menu-toggle-btn {
+      display: none;
+      background: var(--accent-vac);
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main-content { margin-left: 0; }
+      .menu-toggle-btn { display: block; }
+      .route-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="badge-doc">SENEAM / AIP MÉXICO</span>
+      <h1><i class="fa-solid fa-map text-info"></i> Carta Visual VAC</h1>
+      <p>Tema 1.8 — Uso y Respaldo para Sobrevuelos VFR (MMLP)</p>
+    </div>
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Buscar punto o ruta..." onkeyup="filterSections()" />
+      </div>
+    </div>
+    <ul class="sidebar-menu" id="menuList">
+      <li class="menu-cat-title">Normativa MMLP VAC</li>
+      <li><a href="#sec-espacio-minimos"><span class="num">VAC 1-3</span> Espacio Aéreo & Mínimos WX</a></li>
+      <li><a href="#sec-carta-vac7"><i class="fa-solid fa-map-location-dot text-info"></i> Carta Oficial MMLP VAC-7</a></li>
+      <li><a href="#sec-sobrevuelos-los-cabos"><span class="num">8.5-8.6</span> Sobrevuelos a Los Cabos</a></li>
+      <li><a href="#sec-puntos-notificacion"><span class="num">Sec. 11</span> 28 Puntos de Reporte PR</a></li>
+      <li><a href="#sec-rutas-vfr"><span class="num">Sec. 13</span> 13 Rutas Bidireccionales</a></li>
+      <li><a href="#sec-sar-emergencias"><span class="num">Sec. 16</span> Área de Emergencia SAR</a></li>
+      
+      <li class="menu-cat-title">Herramientas & Quiz</li>
+      <li><a href="#sec-sim-rutas"><i class="fa-solid fa-route text-info"></i> Visualizador de Rutas</a></li>
+      <li><a href="#sec-quiz"><i class="fa-solid fa-graduation-cap text-info"></i> Quiz de Evaluación</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="main-content">
+
+    <!-- TOP BAR -->
+    <header class="top-header">
+      <div class="top-header-meta">
+        <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <span class="pill">Módulo: <strong>1.8 Uso y Respaldo de Carta Visual VFR</strong></span>
+        <span class="pill">Carta Oficial: <strong>MMLP VAC-0 a VAC-7</strong></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-vac" onclick="startPresentation()"><i class="fa-solid fa-play"></i> Modo Diapositivas</button>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- BANNER HERO -->
+      <section class="hero-banner">
+        <span class="badge-doc">Navegación Visual y Control de Área Terminal</span>
+        <h1 class="hero-title">USO Y RESPALDO DE CARTA VISUAL PARA SOBREVUELOS VFR</h1>
+        <p class="hero-subtitle">
+          Procedimientos mandatorios de la Carta de Aproximación Visual de La Paz (MMLP VAC), puntos de reporte obligatorios, altitudes máximas por sector, corredores visuales y restricciones de cruce hacia Los Cabos (MMSL/MMSD).
+        </p>
+      </section>
+
+      <!-- 1. ESPACIO AÉREO Y MÍNIMOS WX -->
+      <section id="sec-espacio-minimos" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">VAC 1-3</span>
+          <h2 class="section-title">ESPACIO AÉREO, RESTRICCIONES Y MÍNIMOS METEOROLÓGICOS</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">ESTRUCTURA DE ESPACIO AÉREO <span class="doc-tag">Clasificación ATS en La Paz</span></div>
+          <ul class="rule-list">
+            <li><strong>Área Terminal La Paz (MMLP TMA):</strong> Espacio Aéreo <strong>Clase D</strong> (70 NM al norte y 25 NM al sur). Frecuencia APP: <strong>120.60 MHz</strong>.</li>
+            <li><strong>Zona de Control (MMLP CTR):</strong> Espacio Aéreo <strong>Clase D</strong> (Radio de <strong>12 NM del ARP</strong>, desde el terreno hasta <strong>2 000 ft AMSL</strong>). Frecuencia TWR: <strong>118.10 MHz</strong>. VFR restringido sin autorización previa de Torre.</li>
+            <li><strong>Zona AFIZ:</strong> Espacio Aéreo <strong>Clase G</strong>.</li>
+          </ul>
+
+          <div class="highlight-box">
+            <strong>Mínimos Meteorológicos Oficiales en TMA/CTR (Sección 3):</strong>
+            <p>• <strong>En vuelo:</strong> Distancia de nubes (1 600 m horizontal / 305 m vertical). Visibilidad: 8 km (5 SM) a/o arriba de 10 000 ft AMSL; 5 km (3 SM) por debajo.</p>
+            <p>• <strong>En aeródromo:</strong> Techo de nubes &ge; <strong>457 m (1 500 ft)</strong> | Visibilidad &ge; <strong>5 km (3 SM)</strong>.</p>
+            <p>• <strong>Helicópteros (&le; 1 500 ft AGL):</strong> Visibilidad &ge; 1 600 m de día / 3 200 m de noche; libre de nubes y ref visual al terreno.</p>
+          </div>
+
+          <div class="alt-box">
+            <strong>Reglas Operativas Clave:</strong>
+            <p>• <strong>Alturas Mínimas (7.2):</strong> Sobrevolar o integrarse al circuito a una altura <strong>no menor de 500 ft AGL</strong>.</p>
+            <p>• <strong>Transpondedor:</strong> Ala Fija en <strong>1200</strong> Modo 3 A/C o Modo S; Helicópteros en <strong>1500</strong> (en <em>Standby</em> en plataforma).</p>
+            <p>• <strong>Vigencia FPL (17.2):</strong> <strong>1:30 horas (90 min)</strong> a partir del ETD antes de cancelación automática por ATS.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. VISUALIZADOR DE LA CARTA MMLP VAC-7 -->
+      <section id="sec-carta-vac7" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">MMLP VAC-7</span>
+          <h2 class="section-title">CARTA OFICIAL DE APROXIMACIÓN VISUAL (MMLP VAC-7)</h2>
+        </div>
+
+        <div class="chart-viewer-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <strong style="color:#fff; font-size:1rem;"><i class="fa-solid fa-map-location-dot text-info"></i> VISUAL APPROACH CHART (GRAL. MANUEL MÁRQUEZ DE LEÓN INTL)</strong>
+              <div style="font-size:0.78rem; color:var(--text-muted);">SICT / AFAC / SENEAM — AMDT AIRAC 09/25 | Elevación AD: 72 FT | Var 10° E</div>
+            </div>
+            <button class="btn btn-outline" onclick="openVacModal()"><i class="fa-solid fa-expand"></i> Pantalla Completa</button>
+          </div>
+
+          <div class="chart-display-container">
+            <img src="MMLP_VAC_7.png" id="vacChartImg" class="chart-img" alt="Carta MMLP VAC-7" onerror="handleVacFallback(this)" onclick="openVacModal()" />
+            
+            <div id="vacFallback" style="display:none; text-align:left; background:#fff; color:#000; padding:20px; border-radius:6px;">
+              <div style="display:flex; justify-content:space-between; border-bottom:2px solid #000; padding-bottom:5px; font-weight:700;">
+                <span>AIP DE MÉXICO</span>
+                <span>MMLP VAC-7</span>
+              </div>
+              <h3 style="text-align:center; margin:15px 0;">CARTA DE APROXIMACION VISUAL — LA PAZ (MMLP)</h3>
+              <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.82rem;">
+                <div style="border:1px solid #0284c7; padding:8px; background:#f0f9ff;">
+                  <strong>CTR LA PAZ (12 NM ARP):</strong><br>Clase D / Límite GND a 2 000 ft AMSL.
+                </div>
+                <div style="border:1px solid #dc2626; padding:8px; background:#fef2f2;">
+                  <strong>ÁREA RESTRINGIDA MMR-400:</strong><br>GND a 10 000 ft AMSL.
+                </div>
+                <div style="border:1px solid #dc2626; padding:8px; background:#fef2f2;">
+                  <strong>ÁREA RESTRINGIDA MMR-415:</strong><br>GND a 1 500 ft AMSL.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ALTITUDES MÁXIMAS POR SECTOR -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-top:15px;">
+            <div style="background:#070d18; border:1px solid var(--border-color); padding:10px; border-radius:6px; text-align:center;">
+              <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">SECTOR OESTE (INOCENTES)</span>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--accent-alt); font-family:'JetBrains Mono';">15 500 FT</div>
+            </div>
+            <div style="background:#070d18; border:1px solid var(--border-color); padding:10px; border-radius:6px; text-align:center;">
+              <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">SECTOR NOROESTE</span>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--accent-alt); font-family:'JetBrains Mono';">9 500 / 6 500 FT</div>
+            </div>
+            <div style="background:#070d18; border:1px solid var(--border-color); padding:10px; border-radius:6px; text-align:center;">
+              <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">SECTOR NORTE (ISLA S. JOSÉ)</span>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--accent-alt); font-family:'JetBrains Mono';">7 500 / 8 500 FT</div>
+            </div>
+            <div style="background:#070d18; border:1px solid var(--border-color); padding:10px; border-radius:6px; text-align:center;">
+              <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700;">SECTOR ESTE / SUR</span>
+              <div style="font-size:1.1rem; font-weight:800; color:var(--accent-alt); font-family:'JetBrains Mono';">6 500 / 4 500 FT</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. PROTOCOLO DE SOBREVUELOS HACIA LOS CABOS -->
+      <section id="sec-sobrevuelos-los-cabos" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">8.5 - 8.6</span>
+          <h2 class="section-title">SOBREVUELOS Y TRANSICIÓN DE VUELOS HACIA LOS CABOS (MMSL / MMSD)</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">RESTRICCIONES DE CRUCE OBLIGATORIAS <span class="doc-tag">Regulación de Corredor Sur</span></div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+            <div class="highlight-box">
+              <strong style="color:#fff;"><i class="fa-solid fa-plane-circle-check"></i> Cancelación IFR con destino MMSL (8.5):</strong>
+              <p style="font-size:0.86rem; margin-top:4px;">
+                Aeronaves IFR que sobrevuelen MMLP TMA y pretendan volar directo a Cabo San Lucas (MMSL) deberán cancelar IFR a más tardar sobre el <strong>VOR/DME/LAP debajo de FL200 en VMC</strong>, interceptando la ruta visual SAN MARTÍN UNO cruzando el punto <strong>SAN MARTÍN con 12 500 FT o inferior</strong>.
+              </p>
+            </div>
+
+            <div class="alt-box">
+              <strong style="color:#fff;"><i class="fa-solid fa-mountain"></i> Vuelos VFR hacia MMSL o MMSD (8.6):</strong>
+              <p style="font-size:0.86rem; margin-top:4px;">
+                Toda aeronave en vuelo VFR que pretenda volar hacia MMSL (Cabo San Lucas) o MMSD (San José del Cabo) debe cruzar obligatoriamente los puntos de reporte visual:
+                <br><strong style="color:#fff;">MELITÓN, SAN MARTÍN o EL TRIUNFO con 12 500 pies o inferior</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. PUNTOS DE NOTIFICACIÓN VISUAL (PR) -->
+      <section id="sec-puntos-notificacion" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">SECCIÓN 11</span>
+          <h2 class="section-title">PUNTOS DE NOTIFICACIÓN VISUAL (PR) DE LA PAZ</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">TABLA OFICIAL <span class="doc-tag">28 Puntos de Notificación VFR (MMLP VAC-2 a VAC-3)</span></div>
+          <input type="text" id="prSearchInput" placeholder="Filtrar por nombre de punto o radial..." onkeyup="filterPRTable()" class="form-control" style="margin-bottom:12px;" />
+
+          <div class="table-responsive" style="max-height:360px; overflow-y:auto;">
+            <table class="custom-table" id="prTable">
+              <thead>
+                <tr>
+                  <th>Denominación</th>
+                  <th>Azimut ARP/MMLP</th>
+                  <th>Distancia (NM)</th>
+                  <th>Coordenadas Geográficas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>AGUA ESCONDIDA</strong></td><td>306°</td><td>48.1 NM</td><td>24°38'45"N 110°58'45"W</td></tr>
+                <tr><td><strong>ALTARES</strong></td><td>204°</td><td>11.8 NM</td><td>23°54'30"N 110°28'52"W</td></tr>
+                <tr><td><strong>BAHÍA</strong></td><td>323°</td><td>10.6 NM</td><td>24°13'53"N 110°27'00"W</td></tr>
+                <tr><td><strong>BALANDRA</strong></td><td>357°</td><td>15.1 NM</td><td>24°19'22"N 110°19'36"W</td></tr>
+                <tr><td><strong>CAMINO REAL</strong></td><td>087°</td><td>5.0 NM</td><td>24°03'43"N 110°16'20"W</td></tr>
+                <tr><td><strong>CENTENARIO</strong></td><td>268°</td><td>5.0 NM</td><td>24°05'02"N 110°27'09"W</td></tr>
+                <tr><td><strong>CERRALVO</strong></td><td>057°</td><td>28.4 NM</td><td>24°15'23"N 109°53'07"W</td></tr>
+                <tr><td><strong>CHAMETLA</strong></td><td>318°</td><td>1.9 NM</td><td>24°05'02"N 110°22'23"W</td></tr>
+                <tr><td><strong>EL TRIUNFO</strong></td><td>129°</td><td>21.3 NM</td><td>23°48'14"N 110°06'31"W</td></tr>
+                <tr><td><strong>ESPÍRITU SANTO</strong></td><td>353°</td><td>25.4 NM</td><td>24°29'49"N 110°20'32"W</td></tr>
+                <tr><td><strong>INOCENTES</strong></td><td>215°</td><td>24.0 NM</td><td>23°47'11"N 110°40'05"W</td></tr>
+                <tr><td><strong>ISLA SAN JOSÉ</strong></td><td>338°</td><td>49.8 NM</td><td>24°53'17"N 110°33'05"W</td></tr>
+                <tr><td><strong>LAS CRUCES</strong></td><td>051°</td><td>17.4 NM</td><td>24°12'40"N 110°05'05"W</td></tr>
+                <tr><td><strong>LEÓN</strong></td><td>299°</td><td>14.2 NM</td><td>24°13'12"N 110°33'52"W</td></tr>
+                <tr><td><strong>LOS PLANES</strong></td><td>095°</td><td>24.2 NM</td><td>23°58'01"N 109°56'11"W</td></tr>
+                <tr><td><strong>MELITÓN</strong></td><td>177°</td><td>24.8 NM</td><td>23°39'39"N 110°25'10"W</td></tr>
+                <tr><td><strong>OLAS ALTAS</strong></td><td>137°</td><td>2.7 NM</td><td>24°02'03"N 110°20'09"W</td></tr>
+                <tr><td><strong>PARAÍSO</strong></td><td>049°</td><td>1.6 NM</td><td>24°05'11"N 110°20'17"W</td></tr>
+                <tr><td><strong>PICHILINGUE</strong></td><td>357°</td><td>12.2 NM</td><td>24°16'31"N 110°20'04"W</td></tr>
+                <tr><td><strong>PUNTA ARENA</strong></td><td>081°</td><td>29.3 NM</td><td>24°03'34"N 109°49'47"W</td></tr>
+                <tr><td><strong>PUNTA COYOTE</strong></td><td>324°</td><td>42.1 NM</td><td>24°42'24"N 110°41'47"W</td></tr>
+                <tr><td><strong>RANCHO</strong></td><td>292°</td><td>1.2 NM</td><td>24°05'01"N 110°22'53"W</td></tr>
+                <tr><td><strong>SAN MARTÍN</strong></td><td>158°</td><td>21.7 NM</td><td>23°43'03"N 110°16'49"W</td></tr>
+                <tr><td><strong>SAN JUAN DE LA COSTA</strong></td><td>305°</td><td>25.8 NM</td><td>24°22'40"N 110°41'44"W</td></tr>
+                <tr><td><strong>SAN PEDRO</strong></td><td>142°</td><td>12.7 NM</td><td>23°53'05"N 110°15'18"W</td></tr>
+                <tr><td><strong>TECNOLÓGICO</strong></td><td>044°</td><td>3.2 NM</td><td>24°06'16"N 110°18'57"W</td></tr>
+                <tr><td><strong>TERMOELÉCTRICA</strong></td><td>029°</td><td>9.7 NM</td><td>24°11'56"N 110°15'04"W</td></tr>
+                <tr><td><strong>VENTANA</strong></td><td>084°</td><td>20.6 NM</td><td>24°02'58"N 109°59'20"W</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. HERRAMIENTA INTERACTIVA: RUTAS VFR PUBLICADAS -->
+      <section id="sec-rutas-vfr" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">SECCIÓN 13</span>
+          <h2 class="section-title">RUTAS VFR BIDIRECCIONALES PUBLICADAS</h2>
+        </div>
+
+        <div class="interactive-card" id="sec-sim-rutas">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-route text-info"></i> Visualizador de Rutas VFR Bidireccionales (Ala Fija y Rotativa)</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Selecciona una ruta para desglosar su identificador reglamentario y secuencia de fijos visuales.</p>
+            </div>
+            <span class="interactive-badge">MMLP VAC-4</span>
+          </div>
+
+          <div class="route-grid">
+            <div style="max-height:360px; overflow-y:auto; padding-right:5px;">
+              <div class="route-item active" onclick="showRoute('SAN MARTÍN UNO', ['SAN MARTÍN', 'SAN PEDRO', 'CAMINO REAL', 'TERMOELÉCTRICA', 'BALANDRA'], 'Corredor Sur-Norte principal para vuelos procedentes o con destino a Los Cabos.')">
+                <strong>SAN MARTÍN UNO</strong>
+              </div>
+              <div class="route-item" onclick="showRoute('SAN MARTÍN DOS', ['SAN MARTÍN', 'ALTARES', 'LEÓN'], 'Corredor suroeste alterno para evitar el área restringida.')">
+                <strong>SAN MARTÍN DOS</strong>
+              </div>
+              <div class="route-item" onclick="showRoute('EL TRIUNFO UNO', ['EL TRIUNFO', 'SAN PEDRO', 'CAMINO REAL', 'TERMOELÉCTRICA', 'BALANDRA'], 'Ruta suroriental directa cruzando el fijo El Triunfo.')">
+                <strong>EL TRIUNFO UNO</strong>
+              </div>
+              <div class="route-item" onclick="showRoute('EL TRIUNFO DOS', ['EL TRIUNFO', 'ALTARES', 'LEÓN'], 'Ruta suroriental vía Altares hacia el sector oeste.')">
+                <strong>EL TRIUNFO DOS</strong>
+              </div>
+              <div class="route-item" onclick="showRoute('MELITÓN UNO', ['MELITÓN', 'ALTARES', 'LEÓN'], 'Corredor sur Pacífico hacia la zona de instrucción.')">
+                <strong>MELITÓN UNO</strong>
+              </div>
+              <div class="route-item" onclick="showRoute('CERRALVO UNO', ['CERRALVO', 'LOS PLANES'], 'Corredor insular sobre el Golfo de California.')">
+                <strong>CERRALVO UNO</strong>
+              </div>
+              <div class="route-item" onclick="showRoute('COSTERA UNO', ['PUNTA COYOTE', 'SAN JUAN DE LA COSTA', 'LEÓN', 'BAHÍA', 'BALANDRA', 'LAS CRUCES', 'LA VENTANA', 'PUNTA ARENA'], 'Ruta panorámica costera perimetral completa.')">
+                <strong>COSTERA UNO</strong>
+              </div>
+              <div class="route-item" onclick="showRoute('CENTENARIO UNO', ['AEROPUERTO LA PAZ', 'CENTENARIO', 'ALTARES'], 'Salida y llegada visual directa sector Suroeste.')">
+                <strong>CENTENARIO UNO</strong>
+              </div>
+              <div class="route-item" onclick="showRoute('CENTENARIO DOS', ['AEROPUERTO LA PAZ', 'CENTENARIO', 'BAHÍA'], 'Salida visual directa hacia la Bahía de La Paz.')">
+                <strong>CENTENARIO DOS</strong>
+              </div>
+              <div class="route-item" onclick="showRoute('CAMINO REAL UNO', ['AEROPUERTO LA PAZ', 'CAMINO REAL', 'TERMOELÉCTRICA', 'BALANDRA'], 'Salida visual sector Este conectando con la costa.')">
+                <strong>CAMINO REAL UNO</strong>
+              </div>
+            </div>
+
+            <div class="route-display-box" id="routeDisplayBox">
+              <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">IDENTIFICADOR EN RADIOTELEFONÍA</span>
+              <h3 style="color:var(--accent-vac); font-size:1.4rem; margin-top:2px;" id="routeNameDisplay">RUTA VISUAL SAN MARTÍN UNO</h3>
+              
+              <div class="route-path-flow" id="routeFlowContainer">
+                <span class="path-node">SAN MARTÍN</span>
+                <i class="fa-solid fa-arrow-right path-arrow"></i>
+                <span class="path-node">SAN PEDRO</span>
+                <i class="fa-solid fa-arrow-right path-arrow"></i>
+                <span class="path-node">CAMINO REAL</span>
+                <i class="fa-solid fa-arrow-right path-arrow"></i>
+                <span class="path-node">TERMOELÉCTRICA</span>
+                <i class="fa-solid fa-arrow-right path-arrow"></i>
+                <span class="path-node">BALANDRA</span>
+              </div>
+
+              <p style="font-size:0.86rem; color:#cbd5e1;" id="routeDescDisplay">
+                Corredor Sur-Norte principal para vuelos procedentes o con destino a Los Cabos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. ÁREA DE EMERGENCIA SAR Y PROCEDIMIENTOS -->
+      <section id="sec-sar-emergencias" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">SECCIÓN 16</span>
+          <h2 class="section-title">PROCEDIMIENTO PARA ÁREAS DE EMERGENCIA Y RESCATE (SAR)</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">MMLP VAC-5 <span class="doc-tag">Dimensiones y Reglas de Coordinación en Frecuencia CTAF</span></div>
+          <div class="alert-box">
+            <p>• <strong>Definición (16.1):</strong> Espacio aéreo para operaciones de búsqueda y salvamento desde la <strong>superficie del terreno hasta 500 ft AGL</strong> y un <strong>radio de 2 NM</strong> alrededor del punto de emergencia.</p>
+            <p>• <strong>Frecuencia CTAF:</strong> Coordinación obligatoria en <strong>122.50 MHz</strong>.</p>
+            <p>• <strong>Patrón de Vuelo (16.4):</strong> Círculos de 360° alrededor del punto con <strong>virajes a la derecha</strong> a una distancia no menor a <strong>1 NM</strong>.</p>
+            <p>• <strong>Sobrevuelos no relacionados (16.5):</strong> Tránsitos ajenos deberán volar con virajes a la derecha a una altura <strong>no menor de 800 ft</strong> con previa autorización de la AFAC.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="sec-quiz" class="norm-section">
+        <div class="section-header">
+          <span class="section-num"><i class="fa-solid fa-graduation-cap"></i></span>
+          <h2 class="section-title">EVALUACIÓN INTERACTIVA DE CONOCIMIENTOS (TEMA 1.8)</h2>
+        </div>
+
+        <div class="quiz-container">
+          <div class="quiz-q" id="q1">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-vac);">1.</span>
+              <span>¿Con qué altitud máxima obligatoria debe cruzar un vuelo VFR sobre Melitón, San Martín o El Triunfo al volar hacia MMSL o MMSD? (MMLP VAC-2 numeral 8.6)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(1, 0, false)">A) Con 15 500 ft o superior.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 1, true)">B) Con 12 500 pies o inferior.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 2, false)">C) Con 4 500 ft exactamente.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <div class="quiz-q" id="q2">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-vac);">2.</span>
+              <span>¿Cuáles son las dimensiones y frecuencia asignada para un Área de Emergencia SAR según MMLP VAC Sección 16?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(2, 0, true)">A) Superficie hasta 500 ft AGL, radio de 2 NM en frecuencia CTAF 122.50 MHz con virajes a la derecha.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 1, false)">B) GND a 3 000 ft AMSL, radio de 10 NM en frecuencia 118.10 MHz.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 2, false)">C) 1 000 ft a 5 000 ft en frecuencia de emergencia 121.50 MHz.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <div class="quiz-q" id="q3">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-vac);">3.</span>
+              <span>¿Qué código transpondedor deben activar las aeronaves de ala rotativa (helicópteros) en vuelo según MMLP VAC Sección 9?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(3, 0, false)">A) Código 1200.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 1, true)">B) Código 1500 en modo 3 A/C o modo S.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 2, false)">C) Código 7700.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- MODAL DE PANTALLA COMPLETA VAC-7 -->
+    <div id="vacModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:3000; padding:20px; align-items:center; justify-content:center; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; width:100%; max-width:1100px; margin-bottom:10px;">
+        <span style="color:#fff; font-weight:700; font-size:1rem;"><i class="fa-solid fa-map"></i> AIP DE MÉXICO — CARTA MMLP VAC-7</span>
+        <button class="btn btn-outline" onclick="closeVacModal()" style="color:#fff;"><i class="fa-solid fa-xmark"></i> Cerrar</button>
+      </div>
+      <div style="max-width:1100px; max-height:88vh; overflow:auto; text-align:center; background:#fff; border-radius:8px; padding:10px;">
+        <img src="MMLP_VAC_7.png" style="width:100%; height:auto;" alt="Carta VAC-7 Full" onerror="this.src=''; document.getElementById('vacFallback').style.display='block';" />
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM) — Tema 1.8: Carta Visual para Sobrevuelos VFR</strong></p>
+      <p style="margin-top:4px;">SENEAM — Servicios a la Navegación en el Espacio Aéreo Mexicano | AIP MMLP VAC</p>
+    </footer>
+  </main>
+
+  <!-- MODAL DE PRESENTACIÓN DIAPOSITIVAS -->
+  <div class="presentation-modal" id="presentationModal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="badge-doc"><i class="fa-solid fa-tv"></i> Diapositivas Ejecutivas Tema 1.8</span>
+      <button class="btn btn-outline" onclick="closePresentation()"><i class="fa-solid fa-xmark"></i> Salir</button>
+    </div>
+
+    <div class="slide-body" id="slideContent"></div>
+
+    <div class="slide-controls">
+      <button class="btn btn-outline" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+      <span id="slideCounter" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:var(--text-muted);">Diapositiva 1 / 5</span>
+      <button class="btn btn-vac" onclick="nextSlide()">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // 1. FALLBACK DE IMAGEN
+    function handleVacFallback(imgEl) {
+      imgEl.style.display = 'none';
+      document.getElementById('vacFallback').style.display = 'block';
+    }
+
+    function openVacModal() {
+      document.getElementById('vacModal').style.display = 'flex';
+    }
+
+    function closeVacModal() {
+      document.getElementById('vacModal').style.display = 'none';
+    }
+
+    // 2. FILTRADO DE TABLA DE PUNTOS PR
+    function filterPRTable() {
+      const val = document.getElementById('prSearchInput').value.toLowerCase();
+      const rows = document.querySelectorAll('#prTable tbody tr');
+      rows.forEach(tr => {
+        const txt = tr.textContent.toLowerCase();
+        tr.style.display = txt.includes(val) ? '' : 'none';
+      });
+    }
+
+    // 3. MOSTRAR RUTA SELECCIONADA
+    function showRoute(name, nodes, desc) {
+      document.querySelectorAll('.route-item').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.getElementById('routeNameDisplay').innerText = `RUTA VISUAL ${name}`;
+      document.getElementById('routeDescDisplay').innerText = desc;
+
+      const container = document.getElementById('routeFlowContainer');
+      container.innerHTML = '';
+
+      nodes.forEach((node, idx) => {
+        const nodeEl = document.createElement('span');
+        nodeEl.className = 'path-node';
+        nodeEl.innerText = node;
+        container.appendChild(nodeEl);
+
+        if (idx < nodes.length - 1) {
+          const arrowEl = document.createElement('i');
+          arrowEl.className = 'fa-solid fa-arrow-right path-arrow';
+          container.appendChild(arrowEl);
+        }
+      });
+    }
+
+    // 4. QUIZ
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      const parent = document.getElementById(`q${qNum}`);
+      const opts = parent.querySelectorAll('.quiz-opt');
+      const fb = document.getElementById(`fb-${qNum}`);
+
+      opts.forEach(o => {
+        o.classList.remove('correct', 'incorrect');
+        o.style.pointerEvents = 'none';
+      });
+
+      if (isCorrect) {
+        opts[optIdx].classList.add('correct');
+        fb.innerHTML = '<span style="color:var(--accent-success);"><i class="fa-solid fa-circle-check"></i> ¡Correcto según la carta MMLP VAC!</span>';
+      } else {
+        opts[optIdx].classList.add('incorrect');
+        fb.innerHTML = '<span style="color:var(--accent-danger);"><i class="fa-solid fa-circle-xmark"></i> Incorrecto. Consulta la sección reglamentaria de la VAC.</span>';
+      }
+      fb.style.display = 'block';
+    }
+
+    // 5. BUSCADOR LATERAL
+    function filterSections() {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('#menuList li a');
+      items.forEach(a => {
+        const text = a.textContent.toLowerCase();
+        a.parentElement.style.display = text.includes(val) ? 'block' : 'none';
+      });
+    }
+
+    // 6. DIAPOSITIVAS MODO PRESENTACIÓN
+    const slides = [
+      {
+        title: "Tema 1.8: Uso y Respaldo de Carta Visual (MMLP VAC)",
+        content: `
+          <div class="highlight-box" style="font-size:1.1rem; line-height:1.8;">
+            <p><strong>Estructura del Espacio Aéreo en La Paz (AIP MMLP VAC):</strong></p>
+            <p>• <strong>MMLP TMA:</strong> Clase D (70 NM al Norte, 25 NM al Sur) — Frecuencia 120.60 MHz.</p>
+            <p>• <strong>MMLP CTR:</strong> Clase D (12 NM del ARP, GND a 2 000 ft AMSL) — Frecuencia 118.10 MHz.</p>
+            <p>• <strong>Alturas Mínimas (7.2):</strong> Vuelos en rutas visuales o integración al circuito a no menos de <strong>500 ft AGL</strong>.</p>
+          </div>
+        `
+      },
+      {
+        title: "Restricciones de Altitud y Sobrevuelos hacia Los Cabos",
+        content: `
+          <ul class="rule-list" style="font-size:1.05rem; line-height:1.9;">
+            <li><strong>Cruce Obligatorio (8.6):</strong> Todo vuelo VFR hacia MMSL o MMSD debe cruzar <strong>MELITÓN, SAN MARTÍN o EL TRIUNFO con 12 500 ft o inferior</strong>.</li>
+            <li><strong>Cancelación IFR a MMSL (8.5):</strong> Cancelar a más tardar sobre VOR/DME/LAP debajo de FL200 en VMC, interceptando la ruta visual San Martín Uno con 12 500 ft o inferior.</li>
+            <li><strong>Transpondedor:</strong> Ala Fija <strong>1200</strong> | Helicópteros <strong>1500</strong>.</li>
+          </ul>
+        `
+      },
+      {
+        title: "28 Puntos de Notificación Visual y Rutas Publicadas",
+        content: `
+          <div class="card" style="font-size:1rem; line-height:1.8;">
+            <p>• <strong>Puntos Cardinales:</strong> Balandra (Norte 15.1 NM), San Martín (Sur 21.7 NM), Melitón (Sur 24.8 NM), El Triunfo (Sureste 21.3 NM), San Juan de la Costa (Noroeste 25.8 NM).</p>
+            <p>• <strong>13 Rutas Bidireccionales:</strong> Corredores normalizados para ala fija y rotativa que garantizan libramiento de terreno y separación de áreas restringidas (MMR-400 / MMR-415).</p>
+          </div>
+        `
+      },
+      {
+        title: "Áreas de Emergencia y Rescate SAR (Sección 16)",
+        content: `
+          <div class="alert-box" style="font-size:1.05rem; line-height:1.8;">
+            <p>• <strong>Dimensiones:</strong> Superficie hasta 500 ft AGL y radio de 2 NM alrededor del punto de emergencia.</p>
+            <p>• <strong>Frecuencia CTAF:</strong> <strong>122.50 MHz</strong> para coordinación cívico-militar.</p>
+            <p>• <strong>Patrón de Órbitas:</strong> Círculos de 360° con virajes a la derecha a no menos de 1 NM. Tránsitos ajenos sobrevolarán a mínimo 800 ft con permiso AFAC.</p>
+          </div>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+    function startPresentation() {
+      currentSlide = 0;
+      updateSlide();
+      document.getElementById('presentationModal').classList.add('active');
+    }
+    function closePresentation() {
+      document.getElementById('presentationModal').classList.remove('active');
+    }
+    function updateSlide() {
+      const data = slides[currentSlide];
+      document.getElementById('slideContent').innerHTML = `
+        <h2 style="font-size:1.8rem; color:#fff; margin-bottom:20px; font-weight:800;">${data.title}</h2>
+        <div>${data.content}</div>
+      `;
+      document.getElementById('slideCounter').innerText = `Diapositiva ${currentSlide + 1} / ${slides.length}`;
+    }
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

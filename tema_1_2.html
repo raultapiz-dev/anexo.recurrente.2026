@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 1.2 | Acceso a Páginas Web: AIP, NOTAM, CAPMA y Normateca (SENEAM)</title>
+  
+  <!-- Tipografía Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-main: #09101F;
+      --bg-card: #131F35;
+      --bg-card-hover: #1A2B49;
+      --primary: #00A3FF;
+      --primary-glow: rgba(0, 163, 255, 0.22);
+      --accent: #F59E0B;
+      --accent-danger: #EF4444;
+      --accent-success: #10B981;
+      --accent-purple: #8B5CF6;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-color: #22324E;
+      --nav-width: 310px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA LATERAL */
+    #sidebar {
+      width: var(--nav-width);
+      background: #0B1426;
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, #12203A 0%, #0B1426 100%);
+    }
+
+    .badge-doc {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(0, 163, 255, 0.15);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .search-box {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 12px 8px 34px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 10px;
+      list-style: none;
+    }
+
+    .sidebar-menu::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    .menu-cat-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 10px 4px 10px;
+      letter-spacing: 0.8px;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: var(--primary-glow);
+      color: #fff;
+      border-left: 3px solid var(--primary);
+    }
+
+    .sidebar-menu a span.num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--primary);
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    #main-content {
+      margin-left: var(--nav-width);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-header {
+      background: rgba(11, 20, 38, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .pill strong { color: #fff; }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #000;
+    }
+    .btn-primary:hover {
+      background: #33b5ff;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: #fff;
+    }
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 80px 20px;
+      width: 100%;
+    }
+
+    /* HERO */
+    .hero-banner {
+      background: linear-gradient(135deg, #0F2042 0%, #131F35 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 35px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .hero-banner::after {
+      content: '\f0ac';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 20px;
+      top: -15px;
+      font-size: 9.5rem;
+      color: rgba(255,255,255,0.03);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 820px;
+    }
+
+    /* QUICK ACCESS HUB */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin-bottom: 35px;
+    }
+
+    .hub-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .hub-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 20px rgba(0, 163, 255, 0.15);
+    }
+
+    .hub-icon {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .hub-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .hub-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .hub-url {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      word-break: break-all;
+      background: rgba(0,0,0,0.3);
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* SECCIONES Y TARJETAS */
+    .norm-section {
+      margin-bottom: 45px;
+      scroll-margin-top: 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .section-num {
+      background: var(--primary);
+      color: #031024;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 163, 255, 0.35);
+    }
+
+    .card-title-ref {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .card-title-ref span.doc-tag {
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .rule-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .rule-list > li {
+      position: relative;
+      padding-left: 22px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .rule-list > li::before {
+      content: "•";
+      position: absolute;
+      left: 6px;
+      top: 0;
+      color: var(--primary);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .highlight-box {
+      background: rgba(0, 163, 255, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .warning-box {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    /* TABLA RESPONSIVA */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .custom-table th {
+      background: #0d172a;
+      padding: 12px 16px;
+      color: #fff;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .custom-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: #cbd5e1;
+    }
+
+    .custom-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* COMPONENTE INTERACTIVO */
+    .interactive-card {
+      background: #0f1c33;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 25px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .interactive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .interactive-badge {
+      background: #10B981;
+      color: #000;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* PESTAÑAS (TABS) AIP */
+    .tabs-nav {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: #12213a;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* SIMULADOR DE DECODIFICACIÓN DE NOTAM */
+    .notam-box {
+      background: #060b14;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: #38bdf8;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .notam-chunk {
+      display: inline-block;
+      padding: 2px 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 1px;
+    }
+
+    .notam-chunk:hover, .notam-chunk.active {
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+    }
+
+    .notam-explainer {
+      background: var(--bg-card);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 70px;
+    }
+
+    /* SIMULADOR NORMATECA */
+    .normateca-mock {
+      background: #0a1324;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .norm-filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .norm-tag-btn {
+      background: #14223c;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      padding: 5px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .norm-tag-btn.active, .norm-tag-btn:hover {
+      background: var(--primary-glow);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .doc-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .doc-item:hover {
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+
+    .doc-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .doc-meta strong {
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .doc-meta span {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    /* QUIZ */
+    .quiz-container {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 25px;
+    }
+
+    .quiz-q {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .quiz-q-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt {
+      background: #0d172a;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt:hover {
+      background: #172744;
+      border-color: var(--primary);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: var(--accent-success) !important;
+      color: #34d399 !important;
+      font-weight: 600;
+    }
+
+    .quiz-opt.incorrect {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: var(--accent-danger) !important;
+      color: #f87171 !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-style: italic;
+      display: none;
+    }
+
+    /* MODAL DE PRESENTACIÓN */
+    .presentation-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #060b14;
+      z-index: 2000;
+      padding: 40px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .presentation-modal.active {
+      display: flex;
+    }
+
+    .slide-body {
+      max-width: 1000px;
+      margin: auto;
+      width: 100%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .slide-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* FOOTER */
+    footer {
+      background: #060c18;
+      border-top: 1px solid var(--border-color);
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .menu-toggle-btn {
+      display: none;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main-content { margin-left: 0; }
+      .menu-toggle-btn { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="badge-doc">SENEAM | CAPACITACIÓN ATC</span>
+      <h1><i class="fa-solid fa-globe text-primary"></i> Páginas Web ATS</h1>
+      <p>Tema 1.2 — AIP, NOTAM, CAPMA y Normateca</p>
+    </div>
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Buscar sección o código..." onkeyup="filterSections()" />
+      </div>
+    </div>
+    <ul class="sidebar-menu" id="menuList">
+      <li class="menu-cat-title">Recursos Principales</li>
+      <li><a href="#sec-hub"><span class="num">1.2.0</span> Enlaces a Portales</a></li>
+      <li><a href="#sec-aip-gen"><span class="num">GEN</span> Generalidades AIP</a></li>
+      <li><a href="#sec-aip-enr"><span class="num">ENR</span> En Ruta (1.1 - 1.14 / 2-6)</a></li>
+      <li><a href="#sec-aip-ad"><span class="num">AD</span> Aeródromos (AD 1 / AD 2)</a></li>
+      <li><a href="#sec-aip-sup-aic"><span class="num">SUP/AIC</span> Suplementos & Circulares</a></li>
+      
+      <li class="menu-cat-title">Herramientas Interactivas</li>
+      <li><a href="#sec-sim-notam"><i class="fa-solid fa-terminal text-primary"></i> Decodificador NOTAM</a></li>
+      <li><a href="#sec-sim-capma"><i class="fa-solid fa-cloud-sun-rain text-primary"></i> Simulador CAPMA (METAR)</a></li>
+      <li><a href="#sec-sim-normateca"><i class="fa-solid fa-book-bookmark text-primary"></i> Buscador Normateca</a></li>
+      <li><a href="#sec-gen27-tool"><i class="fa-solid fa-sun text-accent"></i> Tabla SR/SS (GEN 2.7)</a></li>
+      <li><a href="#sec-quiz"><i class="fa-solid fa-graduation-cap text-primary"></i> Quiz de Evaluación</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="main-content">
+
+    <!-- TOP BAR -->
+    <header class="top-header">
+      <div class="top-header-meta">
+        <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <span class="pill">Módulo: <strong>1.2 Fuentes de Información ATS</strong></span>
+        <span class="pill">Organismo: <strong>SENEAM / AFAC</strong></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="startPresentation()"><i class="fa-solid fa-play"></i> Modo Diapositivas</button>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- BANNER INTRODUCTORIO -->
+      <section class="hero-banner">
+        <span class="badge-doc">Publicaciones de Información Aeronáutica y Gestión Operacional</span>
+        <h1 class="hero-title">ACCESO A PÁGINAS WEB: AIP DE MÉXICO, NOTAM, CAPMA Y NORMATECA</h1>
+        <p class="hero-subtitle">
+          Guía técnica y operativa para el personal de Servicios de Tránsito Aéreo (ATS/TWR) sobre la estructura, consulta y decodificación de la información aeronáutica oficial de México.
+        </p>
+      </section>
+
+      <!-- 1.2.0 HUB DE ACCESOS RÁPIDOS DIRECTOS -->
+      <section id="sec-hub" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">1.2.0</span>
+          <h2 class="section-title">PORTALES Y PLATAFORMAS OFICIALES EN LÍNEA</h2>
+        </div>
+
+        <div class="hub-grid">
+          <div class="hub-card">
+            <div>
+              <i class="fa-solid fa-book-atlas hub-icon"></i>
+              <div class="hub-title">AIP de México</div>
+              <div class="hub-desc">Publicación de Información Aeronáutica oficial con estructura OACI (GEN, ENR, AD, SUP, AIC).</div>
+            </div>
+            <div class="hub-url"><i class="fa-solid fa-link"></i> Acceso vía portal SENEAM</div>
+          </div>
+
+          <div class="hub-card">
+            <div>
+              <i class="fa-solid fa-tower-broadcast hub-icon" style="color:var(--accent);"></i>
+              <div class="hub-title">Portal de NOTAM</div>
+              <div class="hub-desc">Buscador y visualizador de NOTAM/SNOWTAM vigentes para las FIR MMFR / MMFO y aeródromos nacionales.</div>
+            </div>
+            <div class="hub-url"><i class="fa-solid fa-link"></i> apps.seneam.gob.mx/notam/</div>
+          </div>
+
+          <div class="hub-card">
+            <div>
+              <i class="fa-solid fa-cloud-bolt hub-icon" style="color:var(--accent-success);"></i>
+              <div class="hub-title">Portal CAPMA</div>
+              <div class="hub-desc">Centro de Análisis y Pronósticos Meteorológicos Aeronáuticos (METAR, TAF, SIGMET, Cartas WX).</div>
+            </div>
+            <div class="hub-url"><i class="fa-solid fa-link"></i> capma.mx/capma/capma.html</div>
+          </div>
+
+          <div class="hub-card">
+            <div>
+              <i class="fa-solid fa-scale-balanced hub-icon" style="color:var(--accent-purple);"></i>
+              <div class="hub-title">Normateca SENEAM</div>
+              <div class="hub-desc">Repositorio oficial de manuales operativos, circulares, cartas de acuerdo y políticas vigentes e históricas.</div>
+            </div>
+            <div class="hub-url"><i class="fa-solid fa-link"></i> apps.seneam.gob.mx/Normateca/</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN AIP: GENERALIDADES (GEN) -->
+      <section id="sec-aip-gen" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">GEN</span>
+          <h2 class="section-title">AIP PARTE 1: GENERALIDADES (GEN 1 A GEN 4)</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">ESTRUCTURA <span class="doc-tag">Estructura General de la Parte GEN</span></div>
+          <ul class="rule-list">
+            <li><strong>GEN 1:</strong> Reglamentos y Requisitos Nacionales (Autoridades competentes, entrada/tránsito y salida de aeronaves, pasajeros y carga).</li>
+            <li><strong>GEN 2:</strong> Tablas y Códigos (Sistemas de medidas, abreviaturas, servicios de hora, cartas, indicadores de lugar y tablas de sol).</li>
+            <li><strong>GEN 3:</strong> Servicios (Servicios de información aeronáutica, cartas, telecomunicaciones, meteorología, SAR).</li>
+            <li><strong>GEN 4:</strong> Derechos por el Uso de Aeródromos y Servicios de Navegación Aérea.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">SECCIONES CLAVE <span class="doc-tag">Secciones de Mayor Importancia para el ATS en GEN</span></div>
+          
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Sección</th>
+                  <th>Denominación Oficial</th>
+                  <th>Aplicación Operacional para el Controlador</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color:var(--primary);">GEN 2.4</strong></td>
+                  <td><strong>Indicadores de Lugar (Doc 7910)</strong></td>
+                  <td>Códigos OACI de 4 letras para aeródromos y estaciones de comunicaciones AFS de la República Mexicana (ej. MMMX, MMGL, MMSD, MMUN).</td>
+                </tr>
+                <tr>
+                  <td><strong style="color:var(--primary);">GEN 2.7</strong></td>
+                  <td><strong>Tabla de Salida y Puesta del Sol (SR / SS)</strong></td>
+                  <td>Horarios oficiales en UTC para determinar los límites de operaciones visuales (VFR) diurnas, crepúsculo civil y encendido de ayudas visuales.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- HERRAMIENTA INTERACTIVA: GEN 2.7 SUNRISE / SUNSET -->
+        <div class="interactive-card" id="sec-gen27-tool">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-sun text-accent"></i> Consulta Rápida: Tabla de Salida y Puesta del Sol (GEN 2.7)</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Ejemplo interactivo con datos de la estación <strong>MMSD (San José del Cabo 23°09'N 109°43'W)</strong>.</p>
+            </div>
+            <span class="interactive-badge">GEN 2.7</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:15px;">
+            <div>
+              <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">MES DE CONSULTA</label>
+              <select id="srMonth" class="form-control" onchange="updateSRSS()" style="width:100%; background:var(--bg-main); color:#fff; border:1px solid var(--border-color); padding:8px 12px; border-radius:6px;">
+                <option value="ENE">Enero (ENE)</option>
+                <option value="FEB">Febrero (FEB)</option>
+                <option value="MAR">Marzo (MAR)</option>
+                <option value="ABR">Abril (ABR)</option>
+                <option value="MAY">Mayo (MAY)</option>
+                <option value="JUN" selected>Junio (JUN)</option>
+                <option value="JUL">Julio (JUL)</option>
+                <option value="AGO">Agosto (AGO)</option>
+                <option value="SEP">Septiembre (SEP)</option>
+                <option value="OCT">Octubre (OCT)</option>
+                <option value="NOV">Noviembre (NOV)</option>
+                <option value="DIC">Diciembre (DIC)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">DÍA DEL MES</label>
+              <select id="srDay" class="form-control" onchange="updateSRSS()" style="width:100%; background:var(--bg-main); color:#fff; border:1px solid var(--border-color); padding:8px 12px; border-radius:6px;">
+                <option value="01">Día 01</option>
+                <option value="04">Día 04</option>
+                <option value="07">Día 07</option>
+                <option value="10">Día 10</option>
+                <option value="13">Día 13</option>
+                <option value="16" selected>Día 16</option>
+                <option value="19">Día 19</option>
+                <option value="22">Día 22</option>
+                <option value="25">Día 25</option>
+                <option value="28">Día 28</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-around; background:#080f1d; border:1px solid var(--border-color); border-radius:8px; padding:15px; text-align:center;">
+            <div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Salida del Sol (Sunrise - SR)</div>
+              <div id="srValue" style="font-size:1.8rem; font-weight:800; font-family:'JetBrains Mono', monospace; color:var(--accent);">12:33 UTC</div>
+            </div>
+            <div style="border-left:1px solid var(--border-color);"></div>
+            <div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Puesta del Sol (Sunset - SS)</div>
+              <div id="ssValue" style="font-size:1.8rem; font-weight:800; font-family:'JetBrains Mono', monospace; color:var(--primary);">02:06 UTC</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN AIP: EN RUTA (ENR) -->
+      <section id="sec-aip-enr" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">ENR</span>
+          <h2 class="section-title">AIP PARTE 2: EN RUTA (ENR 1 A ENR 6)</h2>
+        </div>
+
+        <!-- PESTAÑAS PARA DESGLOSAR ENR -->
+        <div class="interactive-card">
+          <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('enr-1-tab')">ENR 1: Reglas y Procedimientos</button>
+            <button class="tab-btn" onclick="switchTab('enr-2-tab')">ENR 2: Espacio Aéreo ATS</button>
+            <button class="tab-btn" onclick="switchTab('enr-3-tab')">ENR 3: Rutas ATS & RNAV</button>
+            <button class="tab-btn" onclick="switchTab('enr-5-6-tab')">ENR 5 & 6: Alertas y Cartas</button>
+          </div>
+
+          <!-- PESTAÑA ENR 1 -->
+          <div id="enr-1-tab" class="tab-pane active">
+            <h4 style="color:var(--primary); margin-bottom:12px; font-size:1.05rem;">Secciones de ENR 1 Fundamentales para el Controlador de Torre:</h4>
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Subsección</th>
+                    <th>Contenido y Temas Específicos Reglamentarios</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>ENR 1.1</strong></td>
+                    <td>
+                      <strong>Reglas y Procedimientos Generales:</strong> Notificación de posición, restricciones de velocidad, ATIS, autorizaciones ATC, reglas en AD controlado, circuito de tránsito, falla de comunicación en AD, despegues de intersección, proximidad a trayectoria final IFR y mínimos meteorológicos.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>ENR 1.2</strong></td>
+                    <td>
+                      <strong>Reglas de Vuelo Visual (VFR):</strong> Mínimos meteorológicos VMC por clase de espacio aéreo (B, C, D, E, F, G), distancia de las nubes, visibilidad de vuelo y alturas mínimas para vuelos VFR sobre zonas pobladas (300 m / 1 000 ft) y otras áreas (150 m / 500 ft).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>ENR 1.3</strong></td>
+                    <td>
+                      <strong>Reglas de Vuelo por Instrumentos (IFR):</strong> Criterios de mínimos meteorológicos para despegue y aproximación, altitudes mínimas en ruta (MEA, MOCA) y niveles de crucero semicirculares IFR.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>ENR 1.4</strong></td>
+                    <td>
+                      <strong>Clasificación del Espacio Aéreo ATS:</strong> División vertical en Espacio Aéreo Inferior (EAI, hasta FL200) y Superior (EAS, arriba de FL200). Clasificación de clases A, B, C, D, E y G.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>ENR 1.5</strong></td>
+                    <td>
+                      <strong>Procedimientos de Espera, Aproximación y Salida IFR:</strong> Circuitos de espera reglamentarios (tiempos de alejamiento 1 min / 1.5 min), velocidades máximas (230 kt / 200 kt), virajes estándar (derecha, 3°/s o 25° banqueo) y sectores de entrada (1: Paralelo, 2: Gota/Compensado, 3: Directo).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>ENR 1.6 & 1.7</strong></td>
+                    <td>
+                      <strong>Radar y Reglaje de Altímetro:</strong> Servicios de vigilancia ATS, identificación, guía y vectorización. Capa de transición oficial en México (entre <strong>18 500 ft y 19 500 ft / FL195</strong>) y procedimientos QNH/QNE.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>ENR 1.10 & 1.11</strong></td>
+                    <td>
+                      <strong>Planificación de Vuelos y Mensajes FPL:</strong> Formatos de plan de vuelo, tiempos de presentación previa (30 min VFR / 45 min IFR), direccionamiento AFTN y tratamiento de demoras mayores a 30 min.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>ENR 1.12 & 1.14</strong></td>
+                    <td>
+                      <strong>Interceptación e Incidentes ATS:</strong> Procedimiento sistemático para interceptación civil (autoridad CENAVI), fases de alerta, formato DGAC de incidentes de tránsito aéreo y <strong>conservación de cintas de grabación (mínimo 30 días)</strong>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PESTAÑA ENR 2 -->
+          <div id="enr-2-tab" class="tab-pane">
+            <h4 style="color:var(--primary); margin-bottom:12px; font-size:1.05rem;">ENR 2: Delimitación de Espacios Aéreos ATS</h4>
+            <ul class="rule-list">
+              <li><strong>ENR 2.1 FIR, UIR, UTA, TMA:</strong> Límites laterales y verticales, clases de espacio aéreo, dependencias que proporcionan el servicio, frecuencias de control y horarios de servicio para las FIR México (MMFR) y Mazatlán Oceánica (MMFO), así como las TMA asociadas.</li>
+              <li><strong>ENR 2.2 Zonas de Control (CTR), Áreas de Control (ADA) y Zonas de Tránsito de Aeródromo (ATZ):</strong> Parámetros operacionales específicos para aeródromos controlados y no controlados (ej. CTR Del Norte, CTR Acapulco, ATZ Atizapán, ATZ Huatulco).</li>
+            </ul>
+          </div>
+
+          <!-- PESTAÑA ENR 3 -->
+          <div id="enr-3-tab" class="tab-pane">
+            <h4 style="color:var(--primary); margin-bottom:12px; font-size:1.05rem;">ENR 3: Rutas de Tránsito Aéreo</h4>
+            <ul class="rule-list">
+              <li><strong>ENR 3.1 Rutas ATS Inferiores:</strong> Aerovías convencionales basadas en radioayudas VOR/NDB en el EAI (prefijos Victor 'V', Juliet 'J', Alpha 'A', etc.).</li>
+              <li><strong>ENR 3.2 Rutas ATS Superiores:</strong> Rutas en el EAS (arriba de FL200, prefijos Upper 'UJ', 'UA', etc.).</li>
+              <li><strong>ENR 3.3 Rutas de Navegación de Área (RNAV):</strong> Rutas basadas en performance RNP/RNAV (prefijos 'UJ', 'Q', 'T' con especificaciones RNP 10 / RNP 4 / RNP 2).</li>
+            </ul>
+          </div>
+
+          <!-- PESTAÑA ENR 5 & 6 -->
+          <div id="enr-5-6-tab" class="tab-pane">
+            <h4 style="color:var(--primary); margin-bottom:12px; font-size:1.05rem;">ENR 5 (Alertas a la Navegación) & ENR 6 (Cartas en Ruta)</h4>
+            <div class="warning-box">
+              <strong>ENR 5.1 Zonas Especiales de Espacio Aéreo en México:</strong>
+              <p>• <strong>Prohibidas (MM P):</strong> Vuelo no permitido bajo ninguna circunstancia (ej. MMP-1).</p>
+              <p>• <strong>Restringidas (MM R):</strong> Vuelo civil sujeto a condiciones y autorizaciones específicas (ej. MMR-2 Albatros, MMR-106 Antón Lizardo).</p>
+              <p>• <strong>Peligrosas (MM D):</strong> Alerta sobre actividades de riesgo para aeronaves desplegadas en determinados periodos (ej. MMD-3).</p>
+            </div>
+            <div class="highlight-box">
+              <strong>ENR 6 Cartas de Navegación en Ruta (ERC):</strong> Cartografía aeronáutica oficial en cuadrantes ERC-1 a ERC-4 para espacio aéreo superior e inferior.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN AIP: AERÓDROMOS, SUP Y AIC -->
+      <section id="sec-aip-ad" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">AD / SUP / AIC</span>
+          <h2 class="section-title">AIP PARTE 3: AERÓDROMOS, SUPLEMENTOS Y CIRCULARES</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">AD 2 <span class="doc-tag">Aeródromos Específicos (Ej. MMSD / MMMX)</span></div>
+          <p style="font-size:0.9rem; margin-bottom:10px;">En la sección <strong>AD 2</strong> se desglosa la totalidad de los datos operacionales de cada aeropuerto civil de México:</p>
+          <ul class="rule-list">
+            <li><strong>AD 2.2 a AD 2.5:</strong> Coordenadas del ARP, elevación, temperatura de referencia, datos administrativos, horarios de funcionamiento (ATS, MET, COM, ARO), servicios de combustible y salvamento/extinción de incendios (SEI / Cat CREI).</li>
+            <li><strong>AD 2.12 a AD 2.14:</strong> Características físicas de pistas, dimensiones, resistencia PCN/ACN, zonas de parada, zonas libres de obstáculos y sistemas de luces.</li>
+            <li><strong>Cartografía AD 2:</strong> Planos de aeródromo (ADC), plano de estacionamiento de aeronaves (PDC), cartas de obstáculos, salidas normalizadas por instrumentos (SID), llegadas normalizadas (STAR) y cartas de aproximación por instrumentos (IAC).</li>
+          </ul>
+        </div>
+
+        <div class="card" id="sec-aip-sup-aic">
+          <div class="card-title-ref">SUP & AIC <span class="doc-tag">Suplementos al AIP y Circulares de Información Aeronáutica</span></div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+            <div class="highlight-box">
+              <strong style="color:#fff;">SUP (Suplementos al AIP):</strong>
+              <p style="margin-top:4px;">Modificaciones temporales de larga duración (más de 3 meses) o con profusión de texto/gráficos. Publicados en Boletines Serie A y C (ej. obras mayores, cambios temporales de procedimientos).</p>
+            </div>
+            <div class="highlight-box">
+              <strong style="color:#fff;">AIC (Circulares Serie A y C):</strong>
+              <p style="margin-top:4px;">Avisos sobre cambios en legislación, reglamentos, procedimientos o cuestiones técnicas y de asesoramiento que no califican para un NOTAM o SUP.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HERRAMIENTA INTERACTIVA: SIMULADOR Y DECODIFICADOR NOTAM -->
+      <section id="sec-sim-notam" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">NOTAM</span>
+          <h2 class="section-title">PÁGINA WEB DE NOTAM: SIMULADOR Y DECODIFICADOR</h2>
+        </div>
+
+        <div class="interactive-card">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-terminal text-primary"></i> Decodificador Interactivo de NOTAM Mexicano</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Haz clic en cualquier campo del NOTAM para ver su significado normativo según el formato OACI / SENEAM.</p>
+            </div>
+            <span class="interactive-badge">apps.seneam.gob.mx/notam/</span>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">SELECCIONA UN NOTAM DE EJEMPLO DEL SISTEMA SENEAM:</label>
+            <select id="notamSelect" class="form-control" onchange="loadNotamSample()" style="width:100%; background:var(--bg-main); color:#fff; border:1px solid var(--border-color); padding:8px 12px; border-radius:6px; margin-top:5px;">
+              <option value="0">B1399/26 - MMFR (Zona Restringida Salto de Paracaidistas / Anton Lizardo)</option>
+              <option value="1">B1397/26 - MMFR (Activación Área MMR-106 Albatros)</option>
+              <option value="2">A5757/26 - MMSD (Prohibición Pernocta Helicópteros Plataforma Aviación General)</option>
+            </select>
+          </div>
+
+          <div class="notam-box" id="notamContainer">
+            <!-- Inyectado por JS -->
+          </div>
+
+          <div class="notam-explainer" id="notamExplainer">
+            <strong style="color:var(--accent);"><i class="fa-solid fa-hand-pointer"></i> Haz clic en los campos resaltados</strong>
+            <p style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">Selecciona la serie, línea Q, casillas A, B, C, D, E o límites F/G para consultar su significado reglamentario.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- HERRAMIENTA INTERACTIVA: CAPMA (METEOROLOGÍA) -->
+      <section id="sec-sim-capma" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">CAPMA</span>
+          <h2 class="section-title">PÁGINA WEB DEL CAPMA: ANÁLISIS METEOROLÓGICO ATC</h2>
+        </div>
+
+        <div class="interactive-card">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-cloud-sun-rain text-primary"></i> Decodificador Meteorológico CAPMA (METAR / SPECI)</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">http://capma.mx/capma/capma.html — Información crítica para autorizaciones previas al rodaje (MGTAM 7.4.1.2).</p>
+            </div>
+            <span class="interactive-badge">capma.mx</span>
+          </div>
+
+          <div style="background:#080f1d; border:1px solid var(--border-color); border-radius:8px; padding:15px; font-family:'JetBrains Mono', monospace; font-size:0.92rem; color:#38bdf8; margin-bottom:15px;">
+            METAR MMSD 122245Z 27010KT 10SM FEW025 33/23 A2977 RMK 8/100 HZY DSNT TCU NE=
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+            <div style="background:var(--bg-card); border:1px solid var(--border-color); padding:12px; border-radius:6px;">
+              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">VIENTO SUPERFICIE</span>
+              <div style="color:#fff; font-weight:700; font-size:1.05rem;">270° a 10 nudos</div>
+              <small style="color:var(--text-muted);">Dirección y velocidad en pista</small>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid var(--border-color); padding:12px; border-radius:6px;">
+              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">VISIBILIDAD</span>
+              <div style="color:#fff; font-weight:700; font-size:1.05rem;">10 Millas Estatutas</div>
+              <small style="color:var(--accent-success);">Condiciones VMC óptimas</small>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid var(--border-color); padding:12px; border-radius:6px;">
+              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">NUBOSIDAD</span>
+              <div style="color:#fff; font-weight:700; font-size:1.05rem;">Escasas (FEW) a 2 500 ft</div>
+              <small style="color:var(--text-muted);">1 a 2 octas de cobertura</small>
+            </div>
+            <div style="background:var(--bg-card); border:1px solid var(--border-color); padding:12px; border-radius:6px;">
+              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">TEMP / QNH</span>
+              <div style="color:#fff; font-weight:700; font-size:1.05rem;">33°C / 29.77 inHg</div>
+              <small style="color:var(--primary);">Altimetría: 1008.1 hPa</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HERRAMIENTA INTERACTIVA: NORMATECA SENEAM -->
+      <section id="sec-sim-normateca" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">NORMATECA</span>
+          <h2 class="section-title">PÁGINA WEB DE LA NORMATECA SENEAM</h2>
+        </div>
+
+        <div class="interactive-card">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-book-bookmark text-primary"></i> Repositorio de Normatividad Interna y Externa</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">https://apps.seneam.gob.mx/Normateca/ — Filtrado interactivo de documentos reguladores para personal ATS.</p>
+            </div>
+            <span class="interactive-badge">apps.seneam.gob.mx</span>
+          </div>
+
+          <div class="normateca-mock">
+            <div class="norm-filter-bar">
+              <button class="norm-tag-btn active" onclick="filterNormDocs('all')">Todos</button>
+              <button class="norm-tag-btn" onclick="filterNormDocs('manuales')">Manuales</button>
+              <button class="norm-tag-btn" onclick="filterNormDocs('cartas')">Cartas de Acuerdo</button>
+              <button class="norm-tag-btn" onclick="filterNormDocs('circulares')">Circulares AFAC</button>
+              <button class="norm-tag-btn" onclick="filterNormDocs('boletines')">Boletines y Políticas</button>
+            </div>
+
+            <div id="normDocsList">
+              <!-- Inyectado por JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN QUIZ DE EVALUACIÓN -->
+      <section id="sec-quiz" class="norm-section">
+        <div class="section-header">
+          <span class="section-num"><i class="fa-solid fa-graduation-cap"></i></span>
+          <h2 class="section-title">EVALUACIÓN INTERACTIVA DE CONOCIMIENTOS (TEMA 1.2)</h2>
+        </div>
+
+        <div class="quiz-container">
+          <div class="quiz-q" id="q1">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">1.</span>
+              <span>¿En qué sección del AIP de México se consultan las cartas de aproximación, salida y plano de aeródromo?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(1, 0, false)">A) ENR 1.4 Clasificación del Espacio Aéreo.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 1, true)">B) AD 2 Aeródromos (AD 2 Aeropuerto MMXX).</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 2, false)">C) GEN 2.4 Indicadores de Lugar.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <div class="quiz-q" id="q2">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">2.</span>
+              <span>¿Cuál es el propósito operativo de consultar la sección GEN 2.7 en la torre de control?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(2, 0, false)">A) Conocer los derechos de cobro por uso de aeródromo.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 1, true)">B) Determinar los horarios oficiales de salida y puesta del sol (SR/SS) para regular operaciones VFR y encendido de luces.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 2, false)">C) Consultar las frecuencias de los sectores radar de ruta.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <div class="quiz-q" id="q3">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">3.</span>
+              <span>En un NOTAM, ¿qué información proporcionan las casillas F) y G)?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(3, 0, true)">A) Límites verticales inferior (F) y superior (G) de la afectación (ej. GND / 10000FT AMSL).</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 1, false)">B) Fecha y hora de inicio (F) y conclusión (G).</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 2, false)">C) Identificador del aeródromo emisor y receptor.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+
+          <div class="quiz-q" id="q4">
+            <div class="quiz-q-title">
+              <span style="color:var(--primary);">4.</span>
+              <span>De acuerdo con ENR 1.14, ¿cuál es el tiempo mínimo obligatorio para la conservación de cintas de grabación de comunicaciones ATS en caso de incidentes?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(4, 0, false)">A) 5 días naturales.</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 1, false)">B) 15 días hábiles.</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 2, true)">C) Al menos 30 días, o periodos mayores si se requiere para investigación.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-4"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM) — Tema 1.2: Acceso a Páginas Web</strong></p>
+      <p style="margin-top:4px;">SENEAM — Servicios a la Navegación en el Espacio Aéreo Mexicano | SICT</p>
+    </footer>
+  </main>
+
+  <!-- MODAL DE PRESENTACIÓN DIAPOSITIVAS -->
+  <div class="presentation-modal" id="presentationModal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="badge-doc"><i class="fa-solid fa-tv"></i> Diapositivas Ejecutivas Tema 1.2</span>
+      <button class="btn btn-outline" onclick="closePresentation()"><i class="fa-solid fa-xmark"></i> Salir</button>
+    </div>
+
+    <div class="slide-body" id="slideContent">
+      <!-- Dinámico vía JS -->
+    </div>
+
+    <div class="slide-controls">
+      <button class="btn btn-outline" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+      <span id="slideCounter" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:var(--text-muted);">Diapositiva 1 / 5</span>
+      <button class="btn btn-primary" onclick="nextSlide()">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // 1. BASE DE DATOS GEN 2.7 (MMSD San José del Cabo)
+    const srssDatabase = {
+      "ENE": { "01": ["14:00", "00:44"], "04": ["14:00", "00:46"], "07": ["14:01", "00:48"], "10": ["14:02", "00:50"], "13": ["14:02", "00:52"], "16": ["14:02", "00:55"], "19": ["14:02", "00:57"], "22": ["14:01", "00:59"], "25": ["14:01", "01:01"], "28": ["14:00", "01:03"] },
+      "FEB": { "01": ["13:58", "01:06"], "04": ["13:57", "01:08"], "07": ["13:56", "01:10"], "10": ["13:54", "01:11"], "13": ["13:52", "01:13"], "16": ["13:50", "01:15"], "19": ["13:48", "01:17"], "22": ["13:46", "01:18"], "25": ["13:43", "01:20"], "28": ["13:41", "01:21"] },
+      "MAR": { "01": ["13:39", "01:22"], "04": ["13:37", "01:23"], "07": ["13:34", "01:25"], "10": ["13:31", "01:26"], "13": ["13:28", "01:27"], "16": ["13:26", "01:28"], "19": ["13:23", "01:29"], "22": ["13:20", "01:31"], "25": ["13:17", "01:32"], "28": ["13:14", "01:33"] },
+      "ABR": { "01": ["13:10", "01:34"], "04": ["13:07", "01:35"], "07": ["13:04", "01:36"], "10": ["13:02", "01:38"], "13": ["12:59", "01:39"], "16": ["12:56", "01:40"], "19": ["12:54", "01:41"], "22": ["12:51", "01:42"], "25": ["12:49", "01:44"], "28": ["12:47", "01:45"] },
+      "MAY": { "01": ["12:45", "01:46"], "04": ["12:43", "01:48"], "07": ["12:41", "01:49"], "10": ["12:39", "01:51"], "13": ["12:38", "01:52"], "16": ["12:36", "01:53"], "19": ["12:35", "01:55"], "22": ["12:34", "01:56"], "25": ["12:33", "01:58"], "28": ["12:33", "01:59"] },
+      "JUN": { "01": ["12:32", "02:01"], "04": ["12:32", "02:02"], "07": ["12:32", "02:03"], "10": ["12:32", "02:04"], "13": ["12:32", "02:05"], "16": ["12:33", "02:06"], "19": ["12:33", "02:07"], "22": ["12:34", "02:07"], "25": ["12:35", "02:08"], "28": ["12:35", "02:08"] },
+      "JUL": { "01": ["12:36", "02:08"], "04": ["12:38", "02:08"], "07": ["12:39", "02:08"], "10": ["12:40", "02:08"], "13": ["12:41", "02:07"], "16": ["12:42", "02:07"], "19": ["12:44", "02:06"], "22": ["12:45", "02:05"], "25": ["12:46", "02:03"], "28": ["12:47", "02:02"] },
+      "AGO": { "01": ["12:49", "02:00"], "04": ["12:51", "01:58"], "07": ["12:52", "01:56"], "10": ["12:53", "01:54"], "13": ["12:54", "01:52"], "16": ["12:55", "01:49"], "19": ["12:56", "01:47"], "22": ["12:57", "01:44"], "25": ["12:59", "01:42"], "28": ["13:00", "01:39"] },
+      "SEP": { "01": ["13:01", "01:35"], "04": ["13:02", "01:32"], "07": ["13:03", "01:29"], "10": ["13:04", "01:26"], "13": ["13:05", "01:23"], "16": ["13:05", "01:20"], "19": ["13:06", "01:17"], "22": ["13:07", "01:14"], "25": ["13:08", "01:11"], "28": ["13:09", "01:08"] },
+      "OCT": { "01": ["13:10", "01:05"], "04": ["13:11", "01:02"], "07": ["13:12", "00:59"], "10": ["13:14", "00:56"], "13": ["13:15", "00:54"], "16": ["13:16", "00:51"], "19": ["13:17", "00:49"], "22": ["13:19", "00:46"], "25": ["13:20", "00:44"], "28": ["13:22", "00:42"] },
+      "NOV": { "01": ["13:24", "00:40"], "04": ["13:26", "00:38"], "07": ["13:27", "00:36"], "10": ["13:29", "00:35"], "13": ["13:31", "00:34"], "16": ["13:33", "00:33"], "19": ["13:35", "00:33"], "22": ["13:37", "00:32"], "25": ["13:39", "00:32"], "28": ["13:41", "00:32"] },
+      "DIC": { "01": ["13:43", "00:32"], "04": ["13:45", "00:32"], "07": ["13:47", "00:33"], "10": ["13:49", "00:34"], "13": ["13:51", "00:35"], "16": ["13:53", "00:36"], "19": ["13:54", "00:37"], "22": ["13:56", "00:39"], "25": ["13:57", "00:40"], "28": ["13:59", "00:42"] }
+    };
+
+    function updateSRSS() {
+      const m = document.getElementById('srMonth').value;
+      const d = document.getElementById('srDay').value;
+      if (srssDatabase[m] && srssDatabase[m][d]) {
+        document.getElementById('srValue').innerText = srssDatabase[m][d][0] + " UTC";
+        document.getElementById('ssValue').innerText = srssDatabase[m][d][1] + " UTC";
+      }
+    }
+
+    // 2. MOCK DATA Y SIMULADOR NOTAM
+    const notamSamples = [
+      {
+        raw: `<span class="notam-chunk" onclick="explainNotam('SERIE', 'B1399/26 NOTAM: Serie B (Nacional/Internacional), Número 1399 del año 2026.')">(B1399/26 NOTAM</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('LINEA Q', 'Q) MMFR/QRRCA/IV/BO/W/000/100/: Calificador. FIR México (MMFR), Código QRRCA (Área Restringida Activada), Reglas IFR/VFR (IV), Alcance Operacional (BO), Navegación en Ruta (W), Límites Verticales FL000 a FL100.')">Q) MMFR/QRRCA/IV/BO/W/000/100/</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA A', 'A) MMFR: FIR / Espacio Aéreo afectado (FIR México).')">A) MMFR</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA B', 'B) 2607111500: Inicio de vigencia (11 de Julio de 2026 a las 15:00 UTC).')">B) 2607111500</span> ` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA C', 'C) 2607122200: Fin de vigencia (12 de Julio de 2026 a las 22:00 UTC).')">C) 2607122200</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA D', 'D) DIARIO 1500-2200: Horario diario específico de activación.')">D) DIARIO 1500-2200</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA E', 'E) TEXTO CLARO: ÁREA RESTRINGIDA PARA TODO TIPO DE VUELOS POR OPERACIONES MILITARES DE SALTO DE PARACAIDISTAS. COORDENADAS: 184600N 0955100W A 184600N 0955100W POLÍGONO NAVAL DE ANTÓN LIZARDO, VERACRUZ.')">E) AREA RESTRINGIDA PARA TODO TIPO DE VUELOS POR OPERACIONES MILITARES DE SALTO DE PARACAIDISTAS POLIGONO NAVAL DE ANTON LIZARDO, VERACRUZ</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA F', 'F) GND: Límite vertical inferior (Superficie del Terreno).')">F) GND</span> ` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA G', 'G) 10000FT AMSL: Límite vertical superior (10,000 pies sobre el nivel medio del mar).')">G) 10000FT AMSL)</span>`
+      },
+      {
+        raw: `<span class="notam-chunk" onclick="explainNotam('SERIE', 'B1397/26 NOTAM: Serie B, Número 1397 del año 2026.')">(B1397/26 NOTAM</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('LINEA Q', 'Q) MMFR/QRRCA/IV/BO/W/000/025/: Calificador. FIR México, Activación de Zona Restringida de GND a 2,500 ft.')">Q) MMFR/QRRCA/IV/BO/W/000/025/</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA A', 'A) MMFR: FIR México.')">A) MMFR</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA B', 'B) 2607111500: Inicio de vigencia.')">B) 2607111500</span> ` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA C', 'C) 2607122200: Término de vigencia.')">C) 2607122200</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA D', 'D) DIARIO 1500-2200: Horario de activación.')">D) DIARIO 1500-2200</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA E', 'E) SE ACTIVA AREA MMR-106 ALBATROS CAMBIA LIMITE SUPERIOR.')">E) SE ACTIVA AREA MMR-106 ALBATROS CAMBIA LIMITE SUPERIOR</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA F', 'F) GND: Desde superficie.')">F) GND</span> ` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA G', 'G) 2500FT AMSL: Hasta 2,500 ft sobre el nivel medio del mar.')">G) 2500FT AMSL)</span>`
+      },
+      {
+        raw: `<span class="notam-chunk" onclick="explainNotam('SERIE', 'A5757/26 NOTAM: Serie A (Alcance Internacional), Número 5757 del año 2026.')">(A5757/26 NOTAM</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('LINEA Q', 'Q) MMFR/QHALT/IV/NBO/A/000/999/2309N10943W002: Afectación en aeródromo específico.')">Q) MMFR/QHALT/IV/NBO/A/000/999/2309N10943W002</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA A', 'A) MMSD: Aeropuerto Internacional de San José del Cabo, B.C.S.')">A) MMSD</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA B', 'B) 2606242300: Inicio de vigencia (24 de Junio de 2026, 23:00 UTC).')">B) 2606242300</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA C', 'C) 2609230000: Fin de vigencia (23 de Septiembre de 2026, 00:00 UTC).')">C) 2609230000</span><br>` +
+             `<span class="notam-chunk" onclick="explainNotam('CASILLA E', 'E) TEXTO: PROHIBIDAS LAS PERNOCTAS DE HELICÓPTEROS EN PLATAFORMA DE AVIACIÓN GENERAL.')">E) PROHIBIDAS LAS PERNOCTAS DE HELICOPTEROS EN PLATAFORMA AVIACION GENERAL)</span>`
+      }
+    ];
+
+    function loadNotamSample() {
+      const idx = document.getElementById('notamSelect').value;
+      document.getElementById('notamContainer').innerHTML = notamSamples[idx].raw;
+      document.getElementById('notamExplainer').innerHTML = `
+        <strong style="color:var(--accent);"><i class="fa-solid fa-hand-pointer"></i> Campo seleccionado</strong>
+        <p style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">Haz clic en cualquier segmento para ver su análisis reglamentario detallado.</p>
+      `;
+    }
+
+    function explainNotam(tag, text) {
+      document.getElementById('notamExplainer').innerHTML = `
+        <strong style="color:var(--primary);"><i class="fa-solid fa-circle-info"></i> ${tag}</strong>
+        <p style="font-size:0.88rem; color:#fff; margin-top:4px;">${text}</p>
+      `;
+    }
+
+    // 3. BASE DE DATOS MOCK NORMATECA
+    const normDocs = [
+      { cat: 'manuales', title: 'MGTAM - Manual de Gestión de Tránsito Aéreo de México', code: 'MGTAM-C00 Rev 08', date: 'Junio 2023' },
+      { cat: 'manuales', title: 'Manual de Servicios de Tránsito Aéreo (MSTA)', code: 'MSTA-GEN Rev 04', date: 'Enero 2022' },
+      { cat: 'cartas', title: 'Carta de Acuerdo Operacional TWR / APP México', code: 'CAO-MMMX-01/23', date: 'Marzo 2023' },
+      { cat: 'cartas', title: 'Carta de Acuerdo Operacional SENEAM - SEDENA / SEMAR', code: 'CAO-MIL-04/22', date: 'Noviembre 2022' },
+      { cat: 'circulares', title: 'Circular Obligatoria Prevención de Incursiones en Pista', code: 'CO DA-04/07 R-2 (AFAC)', date: 'Vigente' },
+      { cat: 'circulares', title: 'Circular Obligatoria Lugares Críticos (Hot Spots)', code: 'CO AV-20.4/07 R4 (AFAC)', date: 'Vigente' },
+      { cat: 'boletines', title: 'Boletín de Seguridad Operacional: Reporte Obligatorio SMS', code: 'BSO-SMS-02/23', date: 'Agosto 2023' }
+    ];
+
+    function filterNormDocs(category) {
+      document.querySelectorAll('.norm-tag-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const container = document.getElementById('normDocsList');
+      container.innerHTML = '';
+
+      const filtered = category === 'all' ? normDocs : normDocs.filter(d => d.cat === category);
+      filtered.forEach(d => {
+        container.innerHTML += `
+          <div class="doc-item">
+            <div class="doc-meta">
+              <strong>${d.title}</strong>
+              <span>Código: ${d.code} | Edición: ${d.date}</span>
+            </div>
+            <span class="badge-doc" style="margin:0;"><i class="fa-solid fa-file-pdf"></i> Consultar</span>
+          </div>
+        `;
+      });
+    }
+
+    // 4. PESTAÑAS
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+      event.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // 5. QUIZ
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      const parent = document.getElementById(`q${qNum}`);
+      const opts = parent.querySelectorAll('.quiz-opt');
+      const fb = document.getElementById(`fb-${qNum}`);
+
+      opts.forEach(o => {
+        o.classList.remove('correct', 'incorrect');
+        o.style.pointerEvents = 'none';
+      });
+
+      if (isCorrect) {
+        opts[optIdx].classList.add('correct');
+        fb.innerHTML = '<span style="color:var(--accent-success);"><i class="fa-solid fa-circle-check"></i> ¡Correcto según la normativa del AIP de México!</span>';
+      } else {
+        opts[optIdx].classList.add('incorrect');
+        fb.innerHTML = '<span style="color:var(--accent-danger);"><i class="fa-solid fa-circle-xmark"></i> Incorrecto. Revisa las secciones correspondientes del AIP/NOTAM.</span>';
+      }
+      fb.style.display = 'block';
+    }
+
+    // 6. BUSCADOR LATERAL
+    function filterSections() {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('#menuList li a');
+      items.forEach(a => {
+        const text = a.textContent.toLowerCase();
+        a.parentElement.style.display = text.includes(val) ? 'block' : 'none';
+      });
+    }
+
+    // 7. DIAPOSITIVAS MODO PRESENTACIÓN
+    const slides = [
+      {
+        title: "Tema 1.2: Acceso a Páginas Web Aeronáuticas",
+        content: `
+          <div class="highlight-box" style="font-size:1.1rem; line-height:1.8;">
+            <p><strong>Fuentes Primarias de Información para el Servicio de Tránsito Aéreo (ATS):</strong></p>
+            <p>• <strong>AIP de México:</strong> Estructura oficial OACI (GEN, ENR, AD, SUP, AIC).</p>
+            <p>• <strong>Sistema NOTAM Web:</strong> Información temporal de afectación operativa inmediata.</p>
+            <p>• <strong>Portal CAPMA:</strong> Vigilancia meteorológica aeronáutica (METAR, TAF, SIGMET, Cartas WX).</p>
+            <p>• <strong>Normateca SENEAM:</strong> Repositorio normativo de manuales, circulares y cartas de acuerdo.</p>
+          </div>
+        `
+      },
+      {
+        title: "Estructura del AIP de México para Controladores",
+        content: `
+          <ul class="rule-list" style="font-size:1.05rem; line-height:1.9;">
+            <li><strong>GEN 2.4:</strong> Indicadores de Lugar OACI de 4 letras (Doc 7910).</li>
+            <li><strong>GEN 2.7:</strong> Tablas de Salida y Puesta del Sol (SR/SS) para límites VFR y encendido de luces.</li>
+            <li><strong>ENR 1.1:</strong> Reglas generales, mínimos meteorológicos, falla de comunicaciones en AD.</li>
+            <li><strong>ENR 1.2 & 1.3:</strong> Normativa y mínimos VFR / IFR.</li>
+            <li><strong>AD 2:</strong> Datos específicos de aeródromos, pistas, cartas de aproximación y salida (IAC/SID).</li>
+          </ul>
+        `
+      },
+      {
+        title: "Procedimientos Críticos en ENR 1.4 a ENR 1.14",
+        content: `
+          <div class="card" style="font-size:1rem; line-height:1.8;">
+            <p>• <strong>ENR 1.4:</strong> Clasificación ATS y división vertical en EAI (hasta FL200) y EAS (arriba de FL200).</p>
+            <p>• <strong>ENR 1.5:</strong> Circuitos de espera, velocidades máximas (230 kt / 200 kt) y sectores de entrada (1, 2, 3).</p>
+            <p>• <strong>ENR 1.7:</strong> Capa de transición en México: <strong>18 500 ft a 19 500 ft (FL195)</strong>.</p>
+            <p>• <strong>ENR 1.14:</strong> Conservación de cintas de grabación ATS por al menos <strong>30 días</strong>.</p>
+          </div>
+        `
+      },
+      {
+        title: "Decodificación Operativa de NOTAM",
+        content: `
+          <div class="highlight-box" style="font-size:1.05rem; line-height:1.8;">
+            <p>• <strong>Línea Q:</strong> FIR, código Q de afectación, reglas de vuelo (IV), alcance (BO/A/W) y límites verticales.</p>
+            <p>• <strong>Casillas B) y C):</strong> Grupo fecha/hora UTC de inicio y término de vigencia.</p>
+            <p>• <strong>Casilla D):</strong> Horarios diarios específicos de activación.</p>
+            <p>• <strong>Casillas F) y G):</strong> Límite vertical inferior (GND) y superior (AMSL/FL).</p>
+          </div>
+        `
+      },
+      {
+        title: "CAPMA y Normateca SENEAM",
+        content: `
+          <ul class="rule-list" style="font-size:1.05rem; line-height:1.8;">
+            <li><strong>CAPMA:</strong> Suministro continuo de reportes ordinarios (METAR) y especiales (SPECI), indispensables antes de autorizar rodaje (MGTAM 7.4.1.2).</li>
+            <li><strong>Normateca SENEAM:</strong> Consulta de manuales vigentes (MGTAM, MSTA), circulares obligatorias de AFAC (prevención de incursiones, hot spots) y cartas de acuerdo vigentes.</li>
+          </ul>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+
+    function startPresentation() {
+      currentSlide = 0;
+      updateSlide();
+      document.getElementById('presentationModal').classList.add('active');
+    }
+
+    function closePresentation() {
+      document.getElementById('presentationModal').classList.remove('active');
+    }
+
+    function updateSlide() {
+      const data = slides[currentSlide];
+      document.getElementById('slideContent').innerHTML = `
+        <h2 style="font-size:1.8rem; color:#fff; margin-bottom:20px; font-weight:800;">${data.title}</h2>
+        <div>${data.content}</div>
+      `;
+      document.getElementById('slideCounter').innerText = `Diapositiva ${currentSlide + 1} / ${slides.length}`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // Inicialización al cargar la página
+    window.onload = () => {
+      loadNotamSample();
+      filterNormDocs('all');
+      updateSRSS();
+    };
+  </script>
+</body>
+</html>

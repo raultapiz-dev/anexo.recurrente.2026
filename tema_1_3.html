@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 1.3 | Operaciones VFR: Salida/Puesta de Sol, Crepúsculo Civil, Husos Horarios & SVFR</title>
+  
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-main: #080E1A;
+      --bg-card: #121D31;
+      --bg-card-hover: #192843;
+      --primary: #00A3FF;
+      --primary-glow: rgba(0, 163, 255, 0.25);
+      --accent-solar: #F59E0B;
+      --accent-twilight: #8B5CF6;
+      --accent-danger: #EF4444;
+      --accent-success: #10B981;
+      --zone-nw: #22C55E;
+      --zone-pac: #F97316;
+      --zone-cen: #38BDF8;
+      --zone-se: #F43F5E;
+      --zone-border: #6366F1;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-color: #1F2F4A;
+      --nav-width: 310px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA LATERAL */
+    #sidebar {
+      width: var(--nav-width);
+      background: #0A1424;
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, #112038 0%, #0A1424 100%);
+    }
+
+    .badge-doc {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-solar);
+      border: 1px solid var(--accent-solar);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .search-box {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 12px 8px 34px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 10px;
+      list-style: none;
+    }
+
+    .sidebar-menu::-webkit-scrollbar { width: 5px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+    .menu-cat-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 10px 4px 10px;
+      letter-spacing: 0.8px;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(0, 163, 255, 0.12);
+      color: #fff;
+      border-left: 3px solid var(--primary);
+    }
+
+    .sidebar-menu a span.num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--primary);
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    #main-content {
+      margin-left: var(--nav-width);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-header {
+      background: rgba(10, 20, 36, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .pill strong { color: #fff; }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-solar {
+      background: var(--accent-solar);
+      color: #000;
+    }
+    .btn-solar:hover {
+      background: #fbbf24;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: #fff;
+    }
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 80px 20px;
+      width: 100%;
+    }
+
+    /* HERO */
+    .hero-banner {
+      background: linear-gradient(135deg, #1A1435 0%, #121D31 50%, #0B1626 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 35px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .hero-banner::after {
+      content: '\f185';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 25px;
+      top: -20px;
+      font-size: 9.5rem;
+      color: rgba(245, 158, 11, 0.04);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 820px;
+    }
+
+    /* SECCIONES Y TARJETAS */
+    .norm-section {
+      margin-bottom: 45px;
+      scroll-margin-top: 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .section-num {
+      background: var(--accent-solar);
+      color: #050B14;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .card-title-ref {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent-solar);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .card-title-ref span.doc-tag {
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .rule-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .rule-list > li {
+      position: relative;
+      padding-left: 22px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .rule-list > li::before {
+      content: "•";
+      position: absolute;
+      left: 6px;
+      top: 0;
+      color: var(--accent-solar);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .highlight-box {
+      background: rgba(0, 163, 255, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .solar-box {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--accent-solar);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .twilight-callout {
+      background: linear-gradient(90deg, rgba(139, 92, 246, 0.15) 0%, rgba(18, 29, 49, 0.9) 100%);
+      border: 2px solid var(--accent-twilight);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin: 15px 0;
+      position: relative;
+    }
+
+    .twilight-callout-title {
+      color: #c4b5fd;
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .twilight-official-text {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 10px 14px;
+      border-radius: 6px;
+      border-left: 3px solid var(--accent-solar);
+      margin-top: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .alert-box {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 4px solid var(--accent-danger);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    /* GRID HUSOS HORARIOS GEN 2.1-4 */
+    .tz-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      margin: 15px 0;
+    }
+
+    .tz-card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 14px;
+      border-top: 4px solid;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .tz-card.nw { border-color: var(--zone-nw); }
+    .tz-card.pac { border-color: var(--zone-pac); }
+    .tz-card.cen { border-color: var(--zone-cen); }
+    .tz-card.se { border-color: var(--zone-se); }
+    .tz-card.borderline { border-color: var(--zone-border); }
+
+    .tz-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .tz-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .tz-airports {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* COMPONENTE INTERACTIVO CALCULADORA */
+    .interactive-card {
+      background: #0e182a;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 25px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .interactive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .interactive-badge {
+      background: var(--accent-solar);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* TIMELINE SOLAR */
+    .solar-timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .time-slot {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 14px 10px;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .time-slot.twilight { border-color: var(--accent-twilight); }
+    .time-slot.daylight { border-color: var(--accent-solar); }
+
+    .time-slot-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .time-slot-val-utc {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .time-slot-val-loc {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent-solar);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* VALIDADOR INTERACTIVO SVFR */
+    .svfr-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+    }
+
+    .status-verdict {
+      padding: 18px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 15px;
+      border: 2px dashed;
+      transition: all 0.3s;
+    }
+
+    /* TABLA RESPONSIVA */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .custom-table th {
+      background: #0c1524;
+      padding: 12px 16px;
+      color: #fff;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    .custom-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: #cbd5e1;
+    }
+
+    /* QUIZ */
+    .quiz-container {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 25px;
+    }
+
+    .quiz-q {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .quiz-q-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt {
+      background: #0d172a;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt:hover {
+      background: #172744;
+      border-color: var(--accent-solar);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: var(--accent-success) !important;
+      color: #34d399 !important;
+      font-weight: 600;
+    }
+
+    .quiz-opt.incorrect {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: var(--accent-danger) !important;
+      color: #f87171 !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-style: italic;
+      display: none;
+    }
+
+    /* MODAL DE PRESENTACIÓN */
+    .presentation-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #060b14;
+      z-index: 2000;
+      padding: 40px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .presentation-modal.active {
+      display: flex;
+    }
+
+    .slide-body {
+      max-width: 1000px;
+      margin: auto;
+      width: 100%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .slide-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      background: #060c18;
+      border-top: 1px solid var(--border-color);
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .menu-toggle-btn {
+      display: none;
+      background: var(--accent-solar);
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main-content { margin-left: 0; }
+      .menu-toggle-btn { display: block; }
+      .solar-timeline { grid-template-columns: 1fr 1fr; }
+      .svfr-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="badge-doc">SENEAM | TEMA 1.3</span>
+      <h1><i class="fa-solid fa-sun text-accent"></i> Operaciones VFR</h1>
+      <p>Crepúsculo, Husos Horarios, IFR & SVFR</p>
+    </div>
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Buscar regla o sección..." onkeyup="filterSections()" />
+      </div>
+    </div>
+    <ul class="sidebar-menu" id="menuList">
+      <li class="menu-cat-title">Normativa y Operaciones</li>
+      <li><a href="#sec-gen214-tz"><span class="num">GEN 2.1-4</span> Husos Horarios México</a></li>
+      <li><a href="#sec-crepusculo-regla"><span class="num">GEN 2.7</span> Regla Crepúsculo Civil</a></li>
+      <li><a href="#sec-vmc-min"><span class="num">ENR 1.2</span> Mínimos VMC & Alturas</a></li>
+      <li><a href="#sec-vfr-prohib"><span class="num">6.1</span> Prohibiciones VFR</a></li>
+      <li><a href="#sec-vfr-to-ifr"><span class="num">7.1</span> Transición VFR a IFR</a></li>
+      <li><a href="#sec-svfr-rules"><span class="num">8.1-8.9</span> VFR Especial (SVFR)</a></li>
+      <li><a href="#sec-vac-mmlp"><span class="num">VAC</span> Cartas Visuales & FPL</a></li>
+      
+      <li class="menu-cat-title">Herramientas Operativas</li>
+      <li><a href="#sec-solar-calc"><i class="fa-solid fa-calculator" style="color:var(--accent-solar);"></i> Calculadora Solar & Local</a></li>
+      <li><a href="#sec-svfr-sim"><i class="fa-solid fa-shield-halved text-primary"></i> Validador Autorización SVFR</a></li>
+      <li><a href="#sec-quiz"><i class="fa-solid fa-graduation-cap text-primary"></i> Evaluación de Aprendizaje</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="main-content">
+
+    <!-- TOP BAR -->
+    <header class="top-header">
+      <div class="top-header-meta">
+        <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <span class="pill">Módulo: <strong>1.3 Operaciones VFR, Crepúsculo & Husos Horarios</strong></span>
+        <span class="pill">Cartas: <strong>GEN 2.1-4 / GEN 2.7 / ENR 1.2</strong></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-solar" onclick="startPresentation()"><i class="fa-solid fa-play"></i> Modo Diapositivas</button>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- BANNER HERO -->
+      <section class="hero-banner">
+        <span class="badge-doc">Gestión y Reglamentación de Vuelos Visuales</span>
+        <h1 class="hero-title">OPERACIONES VFR CERCANAS A LA SALIDA Y PUESTA DEL SOL</h1>
+        <p class="hero-subtitle">
+          Regulación aeronáutica mexicana de acuerdo con el AIP (GEN 2.1-4, GEN 2.7 y ENR 1.2): Cálculo de minutos solares, consideración operativa diurna del crepúsculo civil, husos horarios oficiales y procedimientos de cambio a IFR y VFR Especial (SVFR).
+        </p>
+      </section>
+
+      <!-- 1. HUSOS HORARIOS GEN 2.1-4 -->
+      <section id="sec-gen214-tz" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">GEN 2.1-4</span>
+          <h2 class="section-title">HORARIO ESTÁNDAR Y ESTACIONAL DE LA REPÚBLICA MEXICANA</h2>
+        </div>
+
+        <div class="card">
+          <p style="font-size:0.92rem; margin-bottom:12px;">
+            La carta oficial <strong>AIP GEN 2.1-4 (Horario Estándar)</strong> divide el territorio y espacio aéreo mexicano en 4 zonas de horario estándar más el régimen de frontera norte:
+          </p>
+
+          <div class="tz-grid">
+            <div class="tz-card nw">
+              <div>
+                <div class="tz-name"><i class="fa-solid fa-clock" style="color:var(--zone-nw);"></i> ZONA NOROESTE</div>
+                <div class="tz-val" style="color:var(--zone-nw);">UTC - 8</div>
+              </div>
+              <div class="tz-airports">
+                <strong>Estado:</strong> Baja California.<br>
+                <strong>Aeródromos:</strong> Tijuana (MMTJ), Mexicali (MMML), Ensenada (MMES), San Felipe (MMSF).
+              </div>
+            </div>
+
+            <div class="tz-card pac">
+              <div>
+                <div class="tz-name"><i class="fa-solid fa-clock" style="color:var(--zone-pac);"></i> ZONA PACÍFICO</div>
+                <div class="tz-val" style="color:var(--zone-pac);">UTC - 7</div>
+              </div>
+              <div class="tz-airports">
+                <strong>Estados:</strong> Baja California Sur, Sonora, Sinaloa, Nayarit.<br>
+                <strong>Aeródromos:</strong> La Paz (MMLP), Los Cabos (MMSD), Hermosillo (MMHO), Culiacán (MMCL), Mazatlán (MMMZ).
+              </div>
+            </div>
+
+            <div class="tz-card cen">
+              <div>
+                <div class="tz-name"><i class="fa-solid fa-clock" style="color:var(--zone-cen);"></i> ZONA CENTRO</div>
+                <div class="tz-val" style="color:var(--zone-cen);">UTC - 6</div>
+              </div>
+              <div class="tz-airports">
+                <strong>Área Mayoritaria:</strong> CDMX, Edo. Méx., Jalisco, N.L., Veracruz, etc.<br>
+                <strong>Aeródromos:</strong> MMMX, MMSM, MMGL, MMMY, MMVA, MMVR, MMOX, MMAA, MMPR.
+              </div>
+            </div>
+
+            <div class="tz-card se">
+              <div>
+                <div class="tz-name"><i class="fa-solid fa-clock" style="color:var(--zone-se);"></i> ZONA SURESTE</div>
+                <div class="tz-val" style="color:var(--zone-se);">UTC - 5</div>
+              </div>
+              <div class="tz-airports">
+                <strong>Estado:</strong> Quintana Roo.<br>
+                <strong>Aeródromos:</strong> Cancún (MMUN), Cozumel (MMCZ), Tulum (MMTL), Chetumal (MMCM).
+              </div>
+            </div>
+          </div>
+
+          <!-- HORARIO ESTACIONAL FRONTERA NORTE -->
+          <div class="tz-card borderline" style="margin-top:12px; border-left:4px solid var(--zone-border); border-top:none;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+              <div>
+                <div class="tz-name" style="color:#a5b4fc;"><i class="fa-solid fa-arrows-split-up-and-left"></i> HORARIO ESTACIONAL DE LA FRONTERA NORTE (NORTHERN BORDERLINE SEASONAL TIME)</div>
+                <p style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">
+                  Surtirá efecto desde las <strong>02:00 horas del segundo domingo de marzo</strong> y concluirá a las <strong>02:00 horas del primer domingo de noviembre</strong>:
+                </p>
+                <ul class="rule-list" style="margin-top:6px; font-size:0.84rem;">
+                  <li><strong>Frontera Coahuila, N.L. y Tamaulipas:</strong> MMMA (Matamoros), MMNL (Nuevo Laredo), MMPG (Piedras Negras), MMRX (Reynosa) &rarr; <strong style="color:var(--accent-solar);">HORA LOCAL = UTC - 5</strong></li>
+                  <li><strong>Baja California y municipios norte de Chihuahua (Janos, Juárez, etc.):</strong> MMCS (Cd. Juárez), MMES, MMML, MMSF, MMTJ &rarr; <strong style="color:var(--accent-solar);">HORA LOCAL = UTC - 7</strong></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. REGLA FUNDAMENTAL DE CREPÚSCULO CIVIL -->
+      <section id="sec-crepusculo-regla" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">GEN 2.7 / 2.1-4</span>
+          <h2 class="section-title">CREPÚSCULO CIVIL Y SU CONSIDERACIÓN PARA OPERACIONES DIURNAS</h2>
+        </div>
+
+        <div class="twilight-callout">
+          <div class="twilight-callout-title">
+            <i class="fa-solid fa-certificate text-accent"></i> DISPOSICIÓN NORMATIVA OFICIAL (AIP GEN 2.1-4 Y GEN 2.7)
+          </div>
+          <p style="font-size:0.92rem; color:#cbd5e1;">
+            De acuerdo con el recuadro oficial de las cartas de navegación de México (GEN 2.1-4 y GEN 2.7 numeral 1.3):
+          </p>
+
+          <div class="twilight-official-text">
+            «INICIA O TERMINA 20 MINUTOS ANTES O 20 MINUTOS DESPUÉS DE LA SALIDA O PUESTA DEL SOL RESPECTIVAMENTE.<br>
+            <span style="color:var(--accent-solar); font-size:1.05rem;">SE PODRÁ CONSIDERAR PARA OPERACIONES DIURNAS EL CREPÚSCULO CIVIL.</span>»
+          </div>
+
+          <p style="font-size:0.85rem; color:#cbd5e1; margin-top:10px;">
+            <em>* Civil twilight begins 20 minutes before sunrise or ends 20 minutes after sunset respectively. Civil twilight may be considered for daytime operations.</em>
+          </p>
+          <div class="highlight-box" style="margin-top:10px;">
+            <strong>Traducción operativa para el Controlador de Torre y Pilotos:</strong> Aunque la puesta del sol haya ocurrido (SS), el vuelo VFR conserva legalidad para operar visualmente dentro de la ventana de <strong>20 minutos del crepúsculo civil vespertino (TWIL TO)</strong>, al considerarse legalmente como parte de las operaciones diurnas. Pasada esa hora, la aeronave incurre en vuelo nocturno no autorizado a menos que cambie a IFR o cuente con permiso especial de la AFAC.
+          </div>
+        </div>
+
+        <!-- HERRAMIENTA INTERACTIVA: CALCULADORA SOLAR Y CONVERSOR DE HORA LOCAL -->
+        <div class="interactive-card" id="sec-solar-calc">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-sun text-accent"></i> Calculadora Oficial Solar, Crepúsculo Civil & Conversión a Hora Local</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Tablas GEN 2.7 — Consulta instantánea de horas UTC y conversión automática según el huso horario oficial (GEN 2.1-4).</p>
+            </div>
+            <span class="interactive-badge">GEN 2.7 + GEN 2.1-4</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap:15px; margin-bottom:15px;">
+            <div>
+              <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">AEROPUERTO / ESTACIÓN</label>
+              <select id="adSelect" class="form-control" onchange="calculateSolarTimes()">
+                <option value="MMLP">MMLP — La Paz (Zona Pacífico UTC-7)</option>
+                <option value="MMSD">MMSD — Los Cabos (Zona Pacífico UTC-7)</option>
+                <option value="MMMX">MMMX — CDMX / AICM (Zona Centro UTC-6)</option>
+                <option value="MMUN">MMUN — Cancún (Zona Sureste UTC-5)</option>
+                <option value="MMTJ">MMTJ — Tijuana (Zona Noroeste UTC-8)</option>
+                <option value="MMGL">MMGL — Guadalajara (Zona Centro UTC-6)</option>
+                <option value="MMCU">MMCU — Chihuahua (Zona Centro UTC-6)</option>
+                <option value="MMCS">MMCS — Cd. Juárez (Frontera Estacional)</option>
+                <option value="MMRX">MMRX — Reynosa (Frontera Estacional)</option>
+                <option value="MMMA">MMMA — Matamoros (Frontera Estacional)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">MES DE CONSULTA</label>
+              <select id="monthSelect" class="form-control" onchange="calculateSolarTimes()">
+                <option value="ENE">Enero</option>
+                <option value="FEB">Febrero</option>
+                <option value="MAR">Marzo</option>
+                <option value="ABR">Abril</option>
+                <option value="MAY">Mayo</option>
+                <option value="JUN" selected>Junio</option>
+                <option value="JUL">Julio</option>
+                <option value="AGO">Agosto</option>
+                <option value="SEP">Septiembre</option>
+                <option value="OCT">Octubre</option>
+                <option value="NOV">Noviembre</option>
+                <option value="DIC">Diciembre</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">DÍA</label>
+              <select id="daySelect" class="form-control" onchange="calculateSolarTimes()">
+                <option value="01">01</option>
+                <option value="04">04</option>
+                <option value="07">07</option>
+                <option value="10">10</option>
+                <option value="13">13</option>
+                <option value="16" selected>16</option>
+                <option value="19">19</option>
+                <option value="22">22</option>
+                <option value="25">25</option>
+                <option value="28">28</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:5px;">RÉGIMEN HORARIO</label>
+              <select id="seasonSelect" class="form-control" onchange="calculateSolarTimes()">
+                <option value="STD">Horario Estándar (Invierno)</option>
+                <option value="ESTACIONAL" selected>Horario Estacional Frontera (Verano)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- LÍNEA DE TIEMPO VISUAL CON HORAS UTC Y LOCALES -->
+          <div class="solar-timeline">
+            <div class="time-slot twilight">
+              <div class="time-slot-title"><i class="fa-solid fa-moon"></i> Alba (TWIL FROM)</div>
+              <div class="time-slot-val-utc" id="valTwilFrom">--:-- UTC</div>
+              <div class="time-slot-val-loc" id="valTwilFromLoc">--:-- Local</div>
+              <small style="color:var(--text-muted); font-size:0.72rem;">SR - 20 min (Apto Diurno)</small>
+            </div>
+
+            <div class="time-slot daylight">
+              <div class="time-slot-title"><i class="fa-solid fa-sun"></i> Salida Sol (SR)</div>
+              <div class="time-slot-val-utc" id="valSR">--:-- UTC</div>
+              <div class="time-slot-val-loc" id="valSRLoc">--:-- Local</div>
+              <small style="color:var(--accent-success); font-size:0.72rem;">Salida Oficial Disco Solar</small>
+            </div>
+
+            <div class="time-slot daylight">
+              <div class="time-slot-title"><i class="fa-solid fa-sun-plant-wilt"></i> Puesta Sol (SS)</div>
+              <div class="time-slot-val-utc" id="valSS">--:-- UTC</div>
+              <div class="time-slot-val-loc" id="valSSLoc">--:-- Local</div>
+              <small style="color:var(--accent-solar); font-size:0.72rem;">Puesta Oficial Disco Solar</small>
+            </div>
+
+            <div class="time-slot twilight">
+              <div class="time-slot-title"><i class="fa-solid fa-moon"></i> Fin Crepúsculo (TWIL TO)</div>
+              <div class="time-slot-val-utc" id="valTwilTo">--:-- UTC</div>
+              <div class="time-slot-val-loc" id="valTwilToLoc">--:-- Local</div>
+              <small style="color:var(--accent-danger); font-size:0.72rem;">SS + 20 min (Límite Máx Diurno)</small>
+            </div>
+          </div>
+
+          <div id="solarVerdict" class="solar-box" style="margin-top:16px;">
+            <!-- Generado por JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. MÍNIMOS VMC Y PROHIBICIONES ENR 1.2 -->
+      <section id="sec-vmc-min" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">ENR 1.2</span>
+          <h2 class="section-title">MÍNIMOS VMC, ALTURAS Y PROHIBICIONES EN VUELO VISUAL</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">2.1 & TABLA 1 <span class="doc-tag">Mínimos Meteorológicos Visuales (VMC)</span></div>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Clase de Espacio Aéreo</th>
+                  <th>Distancia de las Nubes</th>
+                  <th>Visibilidad de Vuelo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color:var(--primary);">Clase B</strong></td>
+                  <td>Libre de nubes</td>
+                  <td rowspan="2">
+                    • <strong>8 km (5 SM)</strong> a/o arriba de 3 050 m (10 000 ft) AMSL.<br>
+                    • <strong>5 km (3 SM)</strong> por debajo de 3 050 m (10 000 ft) AMSL.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong style="color:var(--primary);">Clases C, D, E</strong></td>
+                  <td>• 1 600 m (1 SM) horizontalmente<br>• 305 m (1 000 ft) verticalmente</td>
+                </tr>
+                <tr>
+                  <td><strong style="color:var(--primary);">Clase F, G</strong> (&gt; 305 m / 1 000 ft AGL)</td>
+                  <td>• 1 600 m (1 SM) horizontalmente<br>• 305 m (1 000 ft) verticalmente</td>
+                  <td>• 8 km a/o arriba 10 000 ft AMSL / 5 km debajo</td>
+                </tr>
+                <tr>
+                  <td><strong style="color:var(--primary);">Clase F, G</strong> (&le; 305 m / 1 000 ft AGL)</td>
+                  <td>Libre de nubes y a la vista de tierra o agua</td>
+                  <td><strong>1 600 m (1 SM)</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="highlight-box">
+            <strong>Mínimos en el circuito de aeródromo civil controlado:</strong>
+            <p>• Techo de nubes mínimo: <strong>457 m (1 500 ft)</strong> | Visibilidad mínima en superficie: <strong>5 km (3 SM)</strong>.</p>
+          </div>
+        </div>
+
+        <div class="card" id="sec-vfr-prohib">
+          <div class="card-title-ref">6.1 <span class="doc-tag">Prohibiciones VFR Estrictas</span></div>
+          <div class="alert-box">
+            <ul class="rule-list">
+              <li><strong>a) Capa de transición altimétrica (18 500 ft a 19 500 ft / FL195):</strong> Prohibido sin autorización ATC.</li>
+              <li><strong>b) Horas nocturnas:</strong> Prohibido operar entre la puesta y salida del sol (salvo autorización especial AFAC y considerando el crepúsculo civil).</li>
+              <li><strong>c) Espacio Aéreo Superior:</strong> Prohibido a/o arriba de <strong>6 100 m (20 000 ft / FL200)</strong>.</li>
+              <li><strong>d) Velocidad:</strong> Prohibido volar a velocidades de crucero <strong>iguales o mayores a 250 kt IAS</strong>.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. CAMBIO DE VFR A IFR Y VFR ESPECIAL -->
+      <section id="sec-vfr-to-ifr" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">ENR 1.2 (7 & 8)</span>
+          <h2 class="section-title">TRANSICIÓN A IFR Y AUTORIZACIÓN DE VFR ESPECIAL (SVFR)</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">7.1 <span class="doc-tag">Pasos para el Cambio de VFR a IFR en Vuelo</span></div>
+          <p style="font-size:0.9rem; margin-bottom:10px;">Si la puesta del sol se aproxima o se degradan las condiciones a IMC, el piloto debe:</p>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
+            <div style="background:#08101d; border:1px solid var(--border-color); padding:12px; border-radius:6px;">
+              <strong style="color:var(--primary);">1. Estar capacitado</strong>
+              <p style="font-size:0.82rem; color:var(--text-muted); margin-top:3px;">Licencia y capacidad IFR vigente.</p>
+            </div>
+            <div style="background:#08101d; border:1px solid var(--border-color); padding:12px; border-radius:6px;">
+              <strong style="color:var(--primary);">2. Transmitir cambios</strong>
+              <p style="font-size:0.82rem; color:var(--text-muted); margin-top:3px;">Notificar modificaciones de FPL al ATS.</p>
+            </div>
+            <div style="background:#08101d; border:1px solid var(--border-color); padding:12px; border-radius:6px;">
+              <strong style="color:var(--primary);">3. Recabar autorización</strong>
+              <p style="font-size:0.82rem; color:var(--text-muted); margin-top:3px;">Autorización ATC antes de entrar a IMC.</p>
+            </div>
+            <div style="background:#08101d; border:1px solid var(--border-color); padding:12px; border-radius:6px;">
+              <strong style="color:var(--primary);">4. Ajuste IFR</strong>
+              <p style="font-size:0.82rem; color:var(--text-muted); margin-top:3px;">Altitudes mínimas MEA y semicirculares.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- VALIDADOR INTERACTIVO SVFR -->
+        <div class="interactive-card" id="sec-svfr-sim">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-shield-halved text-primary"></i> Validador de Autorización VFR Especial (SVFR - ENR 1.2 Sección 8)</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Comprobador de parámetros normativos para autorizaciones SVFR en CTR / TMA.</p>
+            </div>
+            <span class="interactive-badge">Simulador ATC</span>
+          </div>
+
+          <div class="svfr-grid">
+            <div class="form-group">
+              <label>Visibilidad en Superficie</label>
+              <select id="svfrVis" class="form-control" onchange="evaluateSVFR()">
+                <option value="ok">&ge; 1 Milla Terrestre (1 600 m o más) (8.3.c)</option>
+                <option value="fail">&lt; 1 Milla Terrestre (No procede)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Límite de Distancia</label>
+              <select id="svfrDist" class="form-control" onchange="evaluateSVFR()">
+                <option value="ok">Dentro de las 10 NM en CTR/TMA Clase B/C/D (8.3)</option>
+                <option value="fail">Más allá de 10 NM del aeródromo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tránsito IFR y Demoras</label>
+              <select id="svfrTraffic" class="form-control" onchange="evaluateSVFR()">
+                <option value="ok">Separación asegurada / Sin demora a tránsitos IFR (8.3.h)</option>
+                <option value="fail">Generaría demora al tránsito IFR de salida/llegada</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Operaciones SVFR Simultáneas</label>
+              <select id="svfrSimultaneous" class="form-control" onchange="evaluateSVFR()">
+                <option value="ok">Una sola operación a la vez (8.3.h)</option>
+                <option value="fail">Existe otra aeronave operando en SVFR simultáneamente</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="svfrVerdictBox" class="status-verdict">
+            <!-- Dinámico vía JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. PROCEDIMIENTOS LOCALES VAC (MMLP) -->
+      <section id="sec-vac-mmlp" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">MMLP VAC</span>
+          <h2 class="section-title">PROCEDIMIENTOS LOCALES Y CARTAS DE APROXIMACIÓN VISUAL</h2>
+        </div>
+
+        <div class="card">
+          <ul class="rule-list">
+            <li><strong>Transpondedor VFR:</strong> Ala fija en <strong>1200</strong> (9.1); helicópteros en <strong>1500</strong> en vuelo y <strong>STANDBY</strong> en plataforma civil/militar para evitar eventos TCAS a tránsitos en aproximación final (9.2 & 12.4.9).</li>
+            <li><strong>Vigencia del Plan de Vuelo FPL:</strong> <strong>1:30 horas (90 minutos)</strong> a partir del ETD consignado (17.2).</li>
+            <li><strong>Área de Emergencia y Rescate (16.1):</strong> Radio de 2 NM desde la superficie hasta 500 ft AGL en frecuencia <strong>CTAF 122.50 MHz</strong>. Orbitar con virajes por la derecha no menor a 1 NM.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="sec-quiz" class="norm-section">
+        <div class="section-header">
+          <span class="section-num"><i class="fa-solid fa-graduation-cap"></i></span>
+          <h2 class="section-title">EVALUACIÓN INTERACTIVA DE CONOCIMIENTOS (TEMA 1.3)</h2>
+        </div>
+
+        <div class="quiz-container">
+          <div class="quiz-q" id="q1">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-solar);">1.</span>
+              <span>¿Qué disposición oficial establece el recuadro de Crepúsculo Civil en las cartas AIP GEN 2.1-4 y GEN 2.7?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(1, 0, false)">A) El crepúsculo civil solo es aplicable a aeronaves militares.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 1, true)">B) Inicia/termina 20 min antes/después de la salida o puesta del sol, y se podrá considerar para operaciones diurnas el crepúsculo civil.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 2, false)">C) Las operaciones VFR concluyen estrictamente 1 hora antes de la puesta del sol.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <div class="quiz-q" id="q2">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-solar);">2.</span>
+              <span>¿Cuál es el huso horario estándar para Cancún (MMUN) y los aeródromos del estado de Quintana Roo según GEN 2.1-4?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(2, 0, false)">A) Zona Centro (UTC - 6).</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 1, true)">B) Zona Sureste (UTC - 5).</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 2, false)">C) Zona Pacífico (UTC - 7).</div>
+            </div>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <div class="quiz-q" id="q3">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-solar);">3.</span>
+              <span>¿Cuáles son los dos límites operacionales cuantitativos más estrictos para un vuelo VFR Especial (SVFR) en CTR/TMA? (ENR 1.2 numeral 8.3)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(3, 0, true)">A) Visibilidad no menor a 1 SM (1 600 m) y no más allá de 10 NM del aeródromo.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 1, false)">B) Visibilidad no menor a 5 km y no más allá de 25 NM.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 2, false)">C) Techo no menor a 3 000 ft y velocidad inferior a 100 kt.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM) — Tema 1.3: Operaciones VFR, Crepúsculo Civil & Husos Horarios</strong></p>
+      <p style="margin-top:4px;">SENEAM — Servicios a la Navegación en el Espacio Aéreo Mexicano | SICT-AFAC</p>
+    </footer>
+  </main>
+
+  <!-- MODAL DE PRESENTACIÓN DIAPOSITIVAS -->
+  <div class="presentation-modal" id="presentationModal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="badge-doc"><i class="fa-solid fa-tv"></i> Diapositivas Ejecutivas Tema 1.3</span>
+      <button class="btn btn-outline" onclick="closePresentation()"><i class="fa-solid fa-xmark"></i> Salir</button>
+    </div>
+
+    <div class="slide-body" id="slideContent"></div>
+
+    <div class="slide-controls">
+      <button class="btn btn-outline" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+      <span id="slideCounter" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:var(--text-muted);">Diapositiva 1 / 5</span>
+      <button class="btn btn-solar" onclick="nextSlide()">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // BASE DE DATOS SOLAR Y HUSOS HORARIOS GEN 2.1-4 / GEN 2.7
+    const airportSolarData = {
+      MMLP: {
+        name: "La Paz (MMLP)",
+        tzStd: -7, tzSeason: -7, zone: "Zona Pacífico",
+        months: {
+          ENE: { "01": ["14:04","00:45"], "16": ["14:06","00:55"] },
+          FEB: { "01": ["14:02","01:07"], "16": ["13:54","01:17"] },
+          MAR: { "01": ["13:43","01:24"], "16": ["13:28","01:31"] },
+          ABR: { "01": ["13:12","01:37"], "16": ["12:58","01:43"] },
+          MAY: { "01": ["12:46","01:50"], "16": ["12:37","01:58"] },
+          JUN: { "01": ["12:33","02:05"], "16": ["12:33","02:11"] },
+          JUL: { "01": ["12:37","02:13"], "16": ["12:43","02:11"] },
+          AGO: { "01": ["12:50","02:04"], "16": ["12:57","01:53"] },
+          SEP: { "01": ["13:03","01:38"], "16": ["13:08","01:23"] },
+          OCT: { "01": ["13:13","01:07"], "16": ["13:19","00:53"] },
+          NOV: { "01": ["13:28","00:41"], "16": ["13:37","00:34"] },
+          DIC: { "01": ["13:48","00:33"], "16": ["13:57","00:37"] }
+        }
+      },
+      MMSD: {
+        name: "Los Cabos (MMSD)",
+        tzStd: -7, tzSeason: -7, zone: "Zona Pacífico",
+        months: {
+          ENE: { "01": ["14:00","00:44"], "16": ["14:02","00:55"] },
+          FEB: { "01": ["13:58","01:06"], "16": ["13:50","01:15"] },
+          MAR: { "01": ["13:39","01:22"], "16": ["13:26","01:28"] },
+          ABR: { "01": ["13:10","01:34"], "16": ["12:56","01:40"] },
+          MAY: { "01": ["12:45","01:46"], "16": ["12:36","01:53"] },
+          JUN: { "01": ["12:32","02:01"], "16": ["12:33","02:06"] },
+          JUL: { "01": ["12:36","02:08"], "16": ["12:42","02:07"] },
+          AGO: { "01": ["12:49","02:00"], "16": ["12:55","01:49"] },
+          SEP: { "01": ["13:01","01:35"], "16": ["13:05","01:20"] },
+          OCT: { "01": ["13:10","01:05"], "16": ["13:16","00:51"] },
+          NOV: { "01": ["13:24","00:40"], "16": ["13:33","00:33"] },
+          DIC: { "01": ["13:43","00:32"], "16": ["13:53","00:36"] }
+        }
+      },
+      MMMX: {
+        name: "CDMX / AICM (MMMX)",
+        tzStd: -6, tzSeason: -6, zone: "Zona Centro",
+        months: {
+          ENE: { "01": ["13:10","00:09"], "16": ["13:13","00:18"] },
+          FEB: { "01": ["13:11","00:28"], "16": ["13:04","00:36"] },
+          MAR: { "01": ["12:55","00:41"], "16": ["12:43","00:46"] },
+          ABR: { "01": ["12:29","00:50"], "16": ["12:17","00:54"] },
+          MAY: { "01": ["12:07","00:59"], "16": ["12:00","01:05"] },
+          JUN: { "01": ["11:57","01:11"], "16": ["11:58","01:16"] },
+          JUL: { "01": ["12:01","01:18"], "16": ["12:07","01:17"] },
+          AGO: { "01": ["12:12","01:12"], "16": ["12:17","01:03"] },
+          SEP: { "01": ["12:21","00:50"], "16": ["12:24","00:37"] },
+          OCT: { "01": ["12:27","00:23"], "16": ["12:31","00:11"] },
+          NOV: { "01": ["12:37","00:02"], "16": ["12:45","23:57"] },
+          DIC: { "01": ["12:54","23:56"], "16": ["13:03","00:01"] }
+        }
+      },
+      MMUN: {
+        name: "Cancún (MMUN)",
+        tzStd: -5, tzSeason: -5, zone: "Zona Sureste",
+        months: {
+          JUN: { "01": ["11:05","00:25"], "16": ["11:06","00:30"] },
+          DIC: { "01": ["12:08","23:05"], "16": ["12:17","23:09"] }
+        }
+      },
+      MMTJ: {
+        name: "Tijuana (MMTJ)",
+        tzStd: -8, tzSeason: -7, zone: "Zona Noroeste / Frontera",
+        months: {
+          JUN: { "01": ["12:41","02:50"], "16": ["12:40","02:57"] },
+          DIC: { "01": ["14:32","00:41"], "16": ["14:43","00:44"] }
+        }
+      },
+      MMGL: {
+        name: "Guadalajara (MMGL)",
+        tzStd: -6, tzSeason: -6, zone: "Zona Centro",
+        months: {
+          JUN: { "01": ["12:12","01:30"], "16": ["12:12","01:35"] },
+          DIC: { "01": ["13:13","00:11"], "16": ["13:22","00:16"] }
+        }
+      },
+      MMCU: {
+        name: "Chihuahua (MMCU)",
+        tzStd: -6, tzSeason: -6, zone: "Zona Centro",
+        months: {
+          JUN: { "01": ["12:06","01:57"], "16": ["12:05","02:03"] },
+          DIC: { "01": ["13:39","00:06"], "16": ["13:50","00:09"] }
+        }
+      },
+      MMCS: {
+        name: "Cd. Juárez (MMCS)",
+        tzStd: -6, tzSeason: -7, zone: "Frontera Norte",
+        months: {
+          JUN: { "01": ["12:01","02:06"], "16": ["12:00","02:12"] },
+          DIC: { "01": ["13:48","00:01"], "16": ["13:58","00:04"] }
+        }
+      },
+      MMRX: {
+        name: "Reynosa (MMRX)",
+        tzStd: -6, tzSeason: -5, zone: "Frontera Norte",
+        months: {
+          JUN: { "01": ["11:40","01:21"], "16": ["11:40","01:26"] },
+          DIC: { "01": ["13:03","23:40"], "16": ["13:13","23:44"] }
+        }
+      },
+      MMMA: {
+        name: "Matamoros (MMMA)",
+        tzStd: -6, tzSeason: -5, zone: "Frontera Norte",
+        months: {
+          JUN: { "01": ["11:38","01:17"], "16": ["11:38","01:23"] },
+          DIC: { "01": ["13:00","23:38"], "16": ["13:09","23:42"] }
+        }
+      }
+    };
+
+    function shiftMinutes(timeStr, mins) {
+      if(!timeStr) return "--:--";
+      const parts = timeStr.split(':');
+      let h = parseInt(parts[0], 10);
+      let m = parseInt(parts[1], 10);
+
+      m += mins;
+      while (m >= 60) { m -= 60; h = (h + 1) % 24; }
+      while (m < 0) { m += 60; h = (h - 1 + 24) % 24; }
+
+      return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+    }
+
+    function utcToLocal(timeStr, offsetHours) {
+      if(!timeStr) return "--:--";
+      const parts = timeStr.split(':');
+      let h = parseInt(parts[0], 10);
+      let m = parts[1];
+
+      h = (h + offsetHours) % 24;
+      if(h < 0) h += 24;
+
+      return `${String(h).padStart(2,'0')}:${m}`;
+    }
+
+    function calculateSolarTimes() {
+      const ad = document.getElementById('adSelect').value;
+      const month = document.getElementById('monthSelect').value;
+      const day = document.getElementById('daySelect').value;
+      const season = document.getElementById('seasonSelect').value;
+
+      const adData = airportSolarData[ad] || airportSolarData["MMLP"];
+      const mData = (adData.months && adData.months[month]) ? adData.months[month] : airportSolarData["MMLP"].months[month];
+
+      let times = mData[day] || mData["16"] || mData["01"] || ["12:30", "01:30"];
+
+      const sr = times[0];
+      const ss = times[1];
+      const twilFrom = shiftMinutes(sr, -20);
+      const twilTo = shiftMinutes(ss, 20);
+
+      const offset = (season === 'ESTACIONAL') ? adData.tzSeason : adData.tzStd;
+
+      document.getElementById('valTwilFrom').innerText = twilFrom + " UTC";
+      document.getElementById('valTwilFromLoc').innerText = utcToLocal(twilFrom, offset) + " Local";
+
+      document.getElementById('valSR').innerText = sr + " UTC";
+      document.getElementById('valSRLoc').innerText = utcToLocal(sr, offset) + " Local";
+
+      document.getElementById('valSS').innerText = ss + " UTC";
+      document.getElementById('valSSLoc').innerText = utcToLocal(ss, offset) + " Local";
+
+      document.getElementById('valTwilTo').innerText = twilTo + " UTC";
+      document.getElementById('valTwilToLoc').innerText = utcToLocal(twilTo, offset) + " Local";
+
+      document.getElementById('solarVerdict').innerHTML = `
+        <strong><i class="fa-solid fa-clock"></i> Resumen Operacional (${adData.name} — ${adData.zone}):</strong>
+        <p style="margin-top:4px;">
+          • Huso Horario Aplicado: <strong>UTC ${offset >= 0 ? '+' : ''}${offset}</strong>.<br>
+          • Período de Operación Diurna Legal: Desde el Alba (<strong>${twilFrom} UTC / ${utcToLocal(twilFrom, offset)} Local</strong>) hasta el Fin del Crepúsculo Civil (<strong>${twilTo} UTC / ${utcToLocal(twilTo, offset)} Local</strong>).<br>
+          • <em>Regla GEN 2.1-4 / GEN 2.7:</em> <strong>«Se podrá considerar para operaciones diurnas el crepúsculo civil»</strong> (20 minutos antes de SR y 20 minutos después de SS).
+        </p>
+      `;
+    }
+
+    // 2. VALIDADOR DE VFR ESPECIAL (SVFR)
+    function evaluateSVFR() {
+      const vis = document.getElementById('svfrVis').value === 'ok';
+      const dist = document.getElementById('svfrDist').value === 'ok';
+      const traffic = document.getElementById('svfrTraffic').value === 'ok';
+      const sim = document.getElementById('svfrSimultaneous').value === 'ok';
+
+      const box = document.getElementById('svfrVerdictBox');
+
+      if (vis && dist && traffic && sim) {
+        box.style.borderColor = "var(--accent-success)";
+        box.style.background = "rgba(16, 185, 129, 0.1)";
+        box.innerHTML = `
+          <h4 style="color:var(--accent-success); font-size:1.1rem;"><i class="fa-solid fa-circle-check"></i> AUTORIZACIÓN VFR ESPECIAL (SVFR) PROCEDENTE</h4>
+          <p style="font-size:0.88rem; color:#cbd5e1; margin-top:6px;">
+            Cumple con todos los requisitos de <strong>ENR 1.2 numeral 8.3</strong>: Visibilidad &ge; 1 SM, dentro de las 10 NM en CTR/TMA, sin demora a tránsitos IFR y operación única.
+          </p>
+        `;
+      } else {
+        box.style.borderColor = "var(--accent-danger)";
+        box.style.background = "rgba(239, 68, 68, 0.1)";
+        let reasons = [];
+        if(!vis) reasons.push("Visibilidad inferior a 1 milla terrestre (1 600 m).");
+        if(!dist) reasons.push("Se encuentra a más de 10 NM del aeródromo controlado.");
+        if(!traffic) reasons.push("Genera demora al tráfico IFR.");
+        if(!sim) reasons.push("Ya existe otra operación VFR Especial en el área.");
+
+        box.innerHTML = `
+          <h4 style="color:var(--accent-danger); font-size:1.1rem;"><i class="fa-solid fa-circle-xmark"></i> AUTORIZACIÓN SVFR DENEGADA</h4>
+          <p style="font-size:0.88rem; color:#cbd5e1; margin-top:6px;"><strong>Motivos:</strong> ${reasons.join(" | ")}</p>
+        `;
+      }
+    }
+
+    // 3. QUIZ
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      const parent = document.getElementById(`q${qNum}`);
+      const opts = parent.querySelectorAll('.quiz-opt');
+      const fb = document.getElementById(`fb-${qNum}`);
+
+      opts.forEach(o => {
+        o.classList.remove('correct', 'incorrect');
+        o.style.pointerEvents = 'none';
+      });
+
+      if (isCorrect) {
+        opts[optIdx].classList.add('correct');
+        fb.innerHTML = '<span style="color:var(--accent-success);"><i class="fa-solid fa-circle-check"></i> ¡Correcto según las cartas AIP GEN 2.1-4, GEN 2.7 y ENR 1.2!</span>';
+      } else {
+        opts[optIdx].classList.add('incorrect');
+        fb.innerHTML = '<span style="color:var(--accent-danger);"><i class="fa-solid fa-circle-xmark"></i> Incorrecto. Revisa las disposiciones de las cartas AIP de México.</span>';
+      }
+      fb.style.display = 'block';
+    }
+
+    function filterSections() {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('#menuList li a');
+      items.forEach(a => {
+        const text = a.textContent.toLowerCase();
+        a.parentElement.style.display = text.includes(val) ? 'block' : 'none';
+      });
+    }
+
+    // DIAPOSITIVAS
+    const slides = [
+      {
+        title: "Tema 1.3: Operaciones VFR, Crepúsculo Civil & Husos Horarios",
+        content: `
+          <div class="highlight-box" style="font-size:1.1rem; line-height:1.8;">
+            <p><strong>Marco Normativo Oficial:</strong></p>
+            <p>• <strong>GEN 2.1-4:</strong> Horario Estándar y Horario Estacional de la Frontera Norte.</p>
+            <p>• <strong>GEN 2.7:</strong> Tablas de Salida (SR) y Puesta del Sol (SS) con cálculo de crepúsculo.</p>
+            <p>• <strong>ENR 1.2:</strong> Mínimos VMC, prohibición nocturna y VFR Especial (SVFR).</p>
+          </div>
+        `
+      },
+      {
+        title: "Regla de Oro del Crepúsculo Civil (GEN 2.1-4 & GEN 2.7)",
+        content: `
+          <div class="twilight-callout" style="font-size:1.1rem; line-height:1.8;">
+            <p><strong>«INICIA O TERMINA 20 MINUTOS ANTES O 20 MINUTOS DESPUÉS DE LA SALIDA O PUESTA DEL SOL RESPECTIVAMENTE.»</strong></p>
+            <p style="margin-top:10px; color:var(--accent-solar); font-size:1.2rem; font-weight:800;">
+              «SE PODRÁ CONSIDERAR PARA OPERACIONES DIURNAS EL CREPÚSCULO CIVIL.»
+            </p>
+            <p style="margin-top:8px; font-size:0.95rem; color:#cbd5e1;">
+              Permite a los vuelos VFR operar legalmente durante la ventana crepuscular (TWIL TO = SS + 20 min).
+            </p>
+          </div>
+        `
+      },
+      {
+        title: "Husos Horarios de México (AIP GEN 2.1-4)",
+        content: `
+          <ul class="rule-list" style="font-size:1.05rem; line-height:1.9;">
+            <li><strong>Zona Noroeste (UTC - 8):</strong> Baja California (Tijuana, Mexicali, Ensenada).</li>
+            <li><strong>Zona Pacífico (UTC - 7):</strong> BCS, Sonora, Sinaloa, Nayarit (La Paz, Los Cabos).</li>
+            <li><strong>Zona Centro (UTC - 6):</strong> Mayoría del país (CDMX, Guadalajara, Monterrey).</li>
+            <li><strong>Zona Sureste (UTC - 5):</strong> Quintana Roo (Cancún, Cozumel, Tulum, Chetumal).</li>
+            <li><strong>Frontera Norte (Estacional):</strong> Marzo a Noviembre (Coahuila/NL/Tamps UTC-5; BC/Chih UTC-7).</li>
+          </ul>
+        `
+      },
+      {
+        title: "Cambio de VFR a IFR & VFR Especial (SVFR)",
+        content: `
+          <div class="card" style="font-size:1rem; line-height:1.8;">
+            <p>• <strong>Transición IFR:</strong> Piloto capacitado + Transmitir FPL + Autorización ATC antes de entrar a IMC.</p>
+            <p>• <strong>VFR Especial (8.3):</strong> Dentro de 10 NM en CTR/TMA Clase B/C/D con visibilidad &ge; 1 SM (1 600 m).</p>
+            <p>• <strong>Capacidad:</strong> Una sola operación SVFR a la vez sin demorar tránsitos IFR.</p>
+          </div>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+    function startPresentation() {
+      currentSlide = 0;
+      updateSlide();
+      document.getElementById('presentationModal').classList.add('active');
+    }
+    function closePresentation() {
+      document.getElementById('presentationModal').classList.remove('active');
+    }
+    function updateSlide() {
+      const data = slides[currentSlide];
+      document.getElementById('slideContent').innerHTML = `
+        <h2 style="font-size:1.8rem; color:#fff; margin-bottom:20px; font-weight:800;">${data.title}</h2>
+        <div>${data.content}</div>
+      `;
+      document.getElementById('slideCounter').innerText = `Diapositiva ${currentSlide + 1} / ${slides.length}`;
+    }
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    window.onload = () => {
+      calculateSolarTimes();
+      evaluateSVFR();
+    };
+  </script>
+</body>
+</html>

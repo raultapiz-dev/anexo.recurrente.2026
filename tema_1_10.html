@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 1.10 | LOA MMLP TWR, SSEI & Prevención de Incursiones FREQUENTIS (SENEAM 2026)</title>
+  
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-main: #060D1A;
+      --bg-card: #0F1B2E;
+      --bg-card-hover: #162742;
+      --primary: #00A3FF;
+      --primary-glow: rgba(0, 163, 255, 0.25);
+      --accent-ssei: #EF4444;
+      --accent-ssei-glow: rgba(239, 68, 68, 0.25);
+      --accent-freq: #10B981;
+      --accent-freq-glow: rgba(16, 185, 129, 0.25);
+      --accent-warning: #F59E0B;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --border-color: #1E3250;
+      --nav-width: 310px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* BARRA LATERAL */
+    #sidebar {
+      width: var(--nav-width);
+      background: #091424;
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, #1A1833 0%, #091424 100%);
+    }
+
+    .badge-doc {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-ssei);
+      border: 1px solid var(--accent-ssei);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .search-box {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 8px 12px 8px 34px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--accent-ssei);
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 10px;
+      list-style: none;
+    }
+
+    .sidebar-menu::-webkit-scrollbar { width: 5px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+    .menu-cat-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 10px 4px 10px;
+      letter-spacing: 0.8px;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background: rgba(239, 68, 68, 0.12);
+      color: #fff;
+      border-left: 3px solid var(--accent-ssei);
+    }
+
+    .sidebar-menu a span.num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent-ssei);
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    #main-content {
+      margin-left: var(--nav-width);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-header {
+      background: rgba(9, 19, 34, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .pill strong { color: #fff; }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-ssei {
+      background: var(--accent-ssei);
+      color: #fff;
+    }
+    .btn-ssei:hover {
+      background: #dc2626;
+      box-shadow: 0 0 15px var(--accent-ssei-glow);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: #fff;
+    }
+    .btn-outline:hover {
+      border-color: var(--accent-ssei);
+      color: var(--accent-ssei);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 80px 20px;
+      width: 100%;
+    }
+
+    /* HERO */
+    .hero-banner {
+      background: linear-gradient(135deg, #2A0808 0%, #111D31 55%, #060D1A 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 35px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .hero-banner::after {
+      content: '\f134';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 25px;
+      top: -20px;
+      font-size: 9.5rem;
+      color: rgba(239, 68, 68, 0.04);
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 820px;
+    }
+
+    /* SECCIONES Y TARJETAS */
+    .norm-section {
+      margin-bottom: 45px;
+      scroll-margin-top: 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .section-num {
+      background: var(--accent-ssei);
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .card-title-ref {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent-ssei);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .card-title-ref span.doc-tag {
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .rule-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .rule-list > li {
+      position: relative;
+      padding-left: 22px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .rule-list > li::before {
+      content: "•";
+      position: absolute;
+      left: 6px;
+      top: 0;
+      color: var(--accent-ssei);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .callout-critical {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.18) 0%, rgba(15, 27, 46, 0.9) 100%);
+      border: 2px solid var(--accent-ssei);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin: 15px 0;
+    }
+
+    .callout-critical-title {
+      color: #fca5a5;
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .callout-phrase {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 10px 14px;
+      border-radius: 6px;
+      border-left: 4px solid var(--accent-ssei);
+      margin-top: 8px;
+      display: block;
+    }
+
+    .highlight-box {
+      background: rgba(0, 163, 255, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .freq-box {
+      background: rgba(16, 185, 129, 0.08);
+      border-left: 4px solid var(--accent-freq);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    .alert-box {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 4px solid var(--accent-ssei);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.88rem;
+    }
+
+    /* GRID DE DISTINTIVOS */
+    .callsign-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .callsign-card {
+      background: #091424;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px 14px;
+      transition: all 0.2s;
+    }
+
+    .callsign-card:hover {
+      border-color: var(--accent-ssei);
+      transform: translateY(-2px);
+    }
+
+    .callsign-card span {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .callsign-card strong {
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      margin-top: 3px;
+      display: block;
+    }
+
+    /* SIMULADOR FREQUENTIS RUNWAY INCURSION */
+    .frequentis-console {
+      background: #0B1320;
+      border: 2px solid #334155;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 15px 0;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    .frequentis-btn {
+      width: 180px;
+      height: 75px;
+      border-radius: 8px;
+      border: 3px solid #475569;
+      background: #1E293B;
+      color: #94A3B8;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .frequentis-btn.active {
+      background: #059669;
+      border-color: #34D399;
+      color: #FFFFFF;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+      transform: scale(1.02);
+    }
+
+    .freq-audio-alert {
+      margin-top: 15px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--accent-warning);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* SIMULADOR DE TIEMPO DE RESPUESTA */
+    .interactive-card {
+      background: #091322;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 25px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .interactive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .interactive-badge {
+      background: var(--accent-ssei);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .timer-display-box {
+      background: #040913;
+      border: 2px dashed var(--accent-ssei);
+      border-radius: 8px;
+      padding: 25px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .timer-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--accent-ssei);
+      text-shadow: 0 0 20px var(--accent-ssei-glow);
+    }
+
+    .phrase-dialogue {
+      background: #0c1626;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 15px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      line-height: 1.8;
+    }
+
+    .phrase-role {
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+
+    .phrase-role.twr { background: rgba(0, 163, 255, 0.2); color: #38bdf8; }
+    .phrase-role.ssei { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+    /* QUIZ */
+    .quiz-container {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 25px;
+    }
+
+    .quiz-q {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .quiz-q-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt {
+      background: #08111e;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt:hover {
+      background: #132239;
+      border-color: var(--accent-ssei);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: var(--accent-success) !important;
+      color: #34d399 !important;
+      font-weight: 600;
+    }
+
+    .quiz-opt.incorrect {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: var(--accent-ssei) !important;
+      color: #f87171 !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-style: italic;
+      display: none;
+    }
+
+    /* MODAL DE PRESENTACIÓN */
+    .presentation-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #040810;
+      z-index: 2000;
+      padding: 40px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .presentation-modal.active {
+      display: flex;
+    }
+
+    .slide-body {
+      max-width: 1000px;
+      margin: auto;
+      width: 100%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .slide-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      background: #040810;
+      border-top: 1px solid var(--border-color);
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .menu-toggle-btn {
+      display: none;
+      background: var(--accent-ssei);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main-content { margin-left: 0; }
+      .menu-toggle-btn { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <span class="badge-doc">SENEAM / SEGURIDAD AEROPORTUARIA</span>
+      <h1><i class="fa-solid fa-truck-medical text-danger"></i> LOA MMLP – SSEI</h1>
+      <p>Tema 1.10 — Coordinación TWR, SSEI, CCO, CF & FREQUENTIS</p>
+    </div>
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Buscar directiva o procedimiento..." onkeyup="filterSections()" />
+      </div>
+    </div>
+    <ul class="sidebar-menu" id="menuList">
+      <li class="menu-cat-title">LOA MMLP 2026</li>
+      <li><a href="#sec-asunto-vigencia"><span class="num">LOA 1-2</span> Asunto & Vigencia (Mayo 2026)</a></li>
+      <li><a href="#sec-callsigns"><span class="num">COM</span> Distintivos & Frecuencias</a></li>
+      <li><a href="#sec-callouts-protocolo"><span class="num">CALL OUTS</span> Cruce de Pista Mandatorio</a></li>
+      <li><a href="#sec-sim-tiempo-resp"><span class="num">SSEI</span> Tiempo de Respuesta (2-3 min)</a></li>
+      
+      <li class="menu-cat-title">Directivas Nacionales 2026</li>
+      <li><a href="#sec-circular-0226"><span class="num">02/26</span> Circular ATS-02/26 FREQUENTIS</a></li>
+      <li><a href="#sec-sim-frequentis"><i class="fa-solid fa-bell text-success"></i> Simulador Tecla RUNWAY INCURS</a></li>
+      <li><a href="#sec-oficios-2026"><span class="num">OFICIOS</span> Vehículos SENEAM & Revisiones</a></li>
+      <li><a href="#sec-quiz"><i class="fa-solid fa-graduation-cap text-danger"></i> Quiz de Evaluación</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="main-content">
+
+    <!-- TOP BAR -->
+    <header class="top-header">
+      <div class="top-header-meta">
+        <button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <span class="pill">Módulo: <strong>1.10 LOA MMLP TWR – SSEI, CCO, CF & Circulares 2026</strong></span>
+        <span class="pill">Normativa: <strong>Circular ATS-02/26 / LOA Mayo 2026</strong></span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ssei" onclick="startPresentation()"><i class="fa-solid fa-play"></i> Modo Diapositivas</button>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- BANNER HERO -->
+      <section class="hero-banner">
+        <span class="badge-doc">Coordinación Operativa en el Área de Maniobras</span>
+        <h1 class="hero-title">LOA TWR MMLP – SSEI, CCO, MANTENIMIENTO, CF & DIRECTIVAS 2026</h1>
+        <p class="hero-subtitle">
+          Carta operacional del Aeropuerto Internacional de La Paz, protocolo de activación de la función "RUNWAY INCURSION" en consolas FREQUENTIS (Circular ATS-02/26) y directivas de mitigación de incursiones en pista emitidas por la Dirección de Tránsito Aéreo de SENEAM.
+        </p>
+      </section>
+
+      <!-- 1. CARTA OPERACIONAL MMLP MAYO 2026 -->
+      <section id="sec-asunto-vigencia" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">LOA MMLP</span>
+          <h2 class="section-title">CARTA OPERACIONAL LOCAL: ASUNTO, VIGENCIA Y DISTINTIVOS</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">1 & 2 <span class="doc-tag">Marco de Aplicación en el Área de Maniobras de La Paz</span></div>
+          <ul class="rule-list">
+            <li><strong>Vigencia:</strong> A partir del <strong style="color:var(--accent-warning);">28 de mayo de 2026</strong>.</li>
+            <li><strong>Finalidad:</strong> Procedimientos operacionales, de coordinación y de comunicación entre TWR MMLP, Operaciones (CCO), Mantenimiento, SSEI y Control de Fauna (CF) en el área de maniobras.</li>
+          </ul>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:12px;" id="sec-callsigns">
+            <div class="highlight-box">
+              <strong style="color:#fff;"><i class="fa-solid fa-tower-broadcast"></i> Frecuencias VHF Aeronáuticas:</strong>
+              <p style="margin-top:4px;">• <strong>TWR MMLP (Torre):</strong> 118.1 MHz</p>
+              <p>• <strong>Frecuencia de Emergencia:</strong> 121.5 MHz</p>
+            </div>
+            <div class="highlight-box">
+              <strong style="color:#fff;"><i class="fa-solid fa-id-badge"></i> Identificación Obligatoria:</strong>
+              <p style="margin-top:4px;">Los vehículos se identificarán en todo momento con su indicativo oficial y el <strong>número económico</strong> asignado por el aeropuerto.</p>
+            </div>
+          </div>
+
+          <div class="callsign-grid">
+            <div class="callsign-card"><span>Torre de Control</span><strong style="color:var(--primary);">Torre La Paz</strong></div>
+            <div class="callsign-card"><span>Unidades de Rescate (SSEI)</span><strong style="color:var(--accent-ssei);">Móvil SSEI</strong></div>
+            <div class="callsign-card"><span>Centro Control Operaciones</span><strong style="color:var(--accent-warning);">Móvil Operaciones</strong></div>
+            <div class="callsign-card"><span>Personal Mantenimiento</span><strong style="color:#38bdf8;">Móvil Mantenimiento</strong></div>
+            <div class="callsign-card"><span>Control de Fauna</span><strong style="color:var(--accent-freq);">Móvil CF</strong></div>
+          </div>
+        </div>
+
+        <!-- CALL OUTS Y PROTOCOLO CRÍTICO -->
+        <div class="card" id="sec-callouts-protocolo">
+          <div class="callout-critical">
+            <div class="callout-critical-title">
+              <i class="fa-solid fa-triangle-exclamation"></i> ACCIÓN CRÍTICA: INGRESO O CRUCE DE PISTA
+            </div>
+            <p style="font-size:0.92rem; color:#cbd5e1;">
+              Las unidades de Operaciones, Mantenimiento, SSEI y Control de Fauna <strong>bajo ninguna circunstancia ingresarán a ninguna pista</strong> hasta recibir autorización explícita en la frecuencia <strong>118.1 MHz</strong>.
+            </p>
+            <p style="font-size:0.92rem; color:#cbd5e1; margin-top:8px;">
+              Luego de recibir autorización, se realizará una revisión visual obligatoria de ambos sentidos de la pista y trayectorias de aproximación, realizando sin excepción el <strong>CALL OUT</strong> antes de cruzar:
+            </p>
+            <span class="callout-phrase">«[Libre izquierda, libre derecha]»</span>
+          </div>
+
+          <ul class="rule-list" style="margin-top:14px;">
+            <li>
+              <strong>Prueba Diaria de Alarma Directa y SIE:</strong> Todos los días al inicio de cada turno, el personal de TWR se comunicará vía el <strong>Sistema de Intercomunicación de Emergencia (SIE)</strong> con el SSEI y <strong>activará la alarma directa</strong> para comprobar su correcto funcionamiento.
+            </li>
+            <li>
+              <strong>Equipamiento de Vehículos:</strong> Radio VHF-AM aeronáutica (118.1 MHz) + Balizamiento con <strong>bandera a cuadros rojos y blancos</strong> y <strong>faro cintilante color ámbar/amarillo</strong>.
+            </li>
+            <li>
+              <strong>Emergencia Real:</strong> TWR instruirá a todas las aeronaves en el área de maniobras a <strong style="color:#fff;">MANTENER POSICIÓN</strong> para permitir el desplazamiento libre y seguro de los vehículos de rescate.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2. CIRCULAR ATS-02/26: FUNCIÓN RUNWAY INCURSION EN FREQUENTIS -->
+      <section id="sec-circular-0226" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">ATS-02/26</span>
+          <h2 class="section-title">CIRCULAR ATS - 02/26: PROTOCOLO "RUNWAY INCURSION" EN SISTEMA FREQUENTIS</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">VIGENCIA ABRIL 2026 <span class="doc-tag">Recordatorio Visual y Audible de Pista Ocupada</span></div>
+          <p style="font-size:0.92rem; margin-bottom:10px;">
+            Fundamentado en el <strong>Doc. 9870 de la OACI</strong> (Manual sobre la prevención de incursiones en la pista), la función <strong>"RUNWAY INCURSION"</strong> en la consola FREQUENTIS sirve como recordatorio visual y audible inequívoco de que una pista se encuentra temporalmente ocupada.
+          </p>
+
+          <div class="freq-box">
+            <strong>Mecanismo Operativo:</strong>
+            <p>• La función cambia de <strong>OFF</strong> a <strong>ON</strong> al oprimir la tecla <code style="color:#fff; background:#000; padding:2px 5px; border-radius:3px;">RUNWAY INCURS</code>, quedando permanentemente sombreada en verde.</p>
+            <p>• <strong>Alerta en Recepción:</strong> Durante una recepción de comunicación, activa una alerta visual parpadeante en la tecla y emite una <strong>alerta auditiva simultánea (<span style="color:var(--accent-warning); font-weight:700;">RWY INC</span>)</strong> indicando que la pista está ocupada.</p>
+            <p>• <strong>Alerta al Transmitir:</strong> Al finalizar una transmisión del controlador, emite una breve alerta visual y auditiva.</p>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:14px;">
+            <div class="alert-box">
+              <strong style="color:#fff;"><i class="fa-solid fa-play"></i> ACTIVACIÓN OBLIGATORIA:</strong>
+              <ul class="rule-list" style="margin-top:6px; font-size:0.85rem;">
+                <li>1. Cuando se instruya a ingresar un <strong>vehículo</strong> a la pista.</li>
+                <li>2. Cuando se instruya a ingresar una <strong>persona</strong> a la pista.</li>
+                <li>3. Cuando se tenga conocimiento de una <strong>obstrucción</strong> en la pista.</li>
+                <li>4. Cuando se considere necesario por seguridad.</li>
+              </ul>
+            </div>
+
+            <div class="alert-box" style="border-left-color:var(--accent-warning);">
+              <strong style="color:#fff;"><i class="fa-solid fa-stop"></i> DESACTIVACIÓN ESTRICTA:</strong>
+              <p style="font-size:0.85rem; margin-top:6px;">
+                El ATCO <strong>mantendrá activada la función y NO la desactivará bajo ninguna circunstancia</strong> hasta que el vehículo, persona u obstáculo abandone completamente la pista (o reporte libre en condiciones de baja visibilidad).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIMULADOR INTERACTIVO FREQUENTIS -->
+        <div class="interactive-card" id="sec-sim-frequentis">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-bell text-success"></i> Simulador de Consola FREQUENTIS: Tecla RUNWAY INCURS</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Haz clic en la tecla para activar/desactivar la función y prueba la alerta auditiva y visual.</p>
+            </div>
+            <span class="interactive-badge">Circular ATS-02/26</span>
+          </div>
+
+          <div class="frequentis-console">
+            <button id="freqBtn" class="frequentis-btn" onclick="toggleFrequentisKey()">
+              <span>RUNWAY</span>
+              <span>INCURS</span>
+            </button>
+
+            <div class="freq-audio-alert" id="freqStatusText">
+              <i class="fa-solid fa-circle" style="color:#64748b;"></i> Estado: <strong>OFF (Pista Libre)</strong>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:15px;">
+              <button class="btn btn-outline" onclick="simulateIncomingCall()"><i class="fa-solid fa-microphone"></i> Simular Recepción Radio</button>
+              <button class="btn btn-outline" onclick="simulateTransmission()"><i class="fa-solid fa-tower-broadcast"></i> Simular Fin de Transmisión PTT</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. NUEVAS DIRECTIVAS OPERACIONALES 2026 -->
+      <section id="sec-oficios-2026" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">OFICIOS 2026</span>
+          <h2 class="section-title">DIRECTIVAS SENEAM: VEHÍCULOS EN PISTA Y REVISIONES</h2>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">OFICIO 4.5.211.-130/2026 (07 AGOSTO 2026) <span class="doc-tag">Prohibición de Entrada a Pista a Vehículos de SENEAM</span></div>
+          <div class="alert-box">
+            <strong style="color:#fff; font-size:0.95rem;"><i class="fa-solid fa-ban"></i> Restricción Total:</strong>
+            <p style="margin-top:4px; font-size:0.9rem;">
+              Con la intención de evitar una Incursión en la Pista, <strong>NO se permitirá la entrada a pista a vehículos de SENEAM</strong>; estos deberán de ser instruidos invariablemente a proseguir por los <strong>caminos perimetrales</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title-ref">OFICIO 4.5.211.-106/2026 (29 JULIO 2026) <span class="doc-tag">Protocolo Mandatorio para Revisiones de Pista (FOD, Temblor, Inundación)</span></div>
+          <p style="font-size:0.92rem; margin-bottom:10px;">
+            Cuando se tenga la necesidad de que un vehículo ingrese a pista para una revisión obligatoria (por reporte de restos FOD, sismo/temblor, inundación o daños), se aplicarán estrictamente los siguientes 4 pasos:
+          </p>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+            <div style="background:#09121f; border:1px solid var(--border-color); padding:14px; border-radius:6px;">
+              <strong style="color:var(--primary);">1. Escucha Continua</strong>
+              <p style="font-size:0.84rem; color:#cbd5e1; margin-top:4px;">El vehículo deberá estar invariablemente en frecuencia con Torre de Control (118.1 MHz).</p>
+            </div>
+
+            <div style="background:#09121f; border:1px solid var(--border-color); padding:14px; border-radius:6px;">
+              <strong style="color:var(--accent-warning);">2. Emisión de NOTAM</strong>
+              <p style="font-size:0.84rem; color:#cbd5e1; margin-top:4px;">Se deberá emitir el NOTAM correspondiente de afectación/cierre temporal de la pista.</p>
+            </div>
+
+            <div style="background:#09121f; border:1px solid var(--border-color); padding:14px; border-radius:6px;">
+              <strong style="color:var(--accent-ssei);">3. Suspensión de Operaciones</strong>
+              <p style="font-size:0.84rem; color:#cbd5e1; margin-top:4px;">Suspender totalmente las operaciones de aterrizaje y despegue en esa pista.</p>
+            </div>
+
+            <div style="background:#09121f; border:1px solid var(--accent-freq); padding:14px; border-radius:6px;">
+              <strong style="color:var(--accent-freq);">4. Informe de Comandancia</strong>
+              <p style="font-size:0.84rem; color:#fff; margin-top:4px;"><strong>No se utilizará la pista hasta que la Comandancia informe formalmente que se encuentra libre</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. SIMULADOR EJERCICIO TIEMPO DE RESPUESTA SSEI -->
+      <section id="sec-sim-tiempo-resp" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">SSEI TIEMPO</span>
+          <h2 class="section-title">EJERCICIO DE TIEMPO DE RESPUESTA DEL SSEI (2 A 3 MINUTOS)</h2>
+        </div>
+
+        <div class="interactive-card">
+          <div class="interactive-header">
+            <div>
+              <h3 style="color:#fff; font-size:1.1rem;"><i class="fa-solid fa-stopwatch text-danger"></i> Simulador del Ejercicio de Tiempo de Respuesta</h3>
+              <p style="font-size:0.8rem; color:var(--text-muted);">Meta operacional: Dos (2) minutos, máximo tres (3) minutos hasta el extremo de pista con 50% de régimen de descarga.</p>
+            </div>
+            <span class="interactive-badge">LOA MMLP</span>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:10px; margin-bottom:10px;">
+            <button class="btn btn-ssei" id="btnStartDrill" onclick="startDrill()"><i class="fa-solid fa-bell"></i> Activar Alarma & Iniciar</button>
+            <button class="btn btn-outline" id="btnStopDrill" onclick="stopDrill()" disabled><i class="fa-solid fa-flag-checkered"></i> Llegada a Umbral</button>
+            <button class="btn btn-outline" onclick="resetDrill()"><i class="fa-solid fa-rotate-left"></i> Reiniciar</button>
+          </div>
+
+          <div class="timer-display-box">
+            <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">CRONÓMETRO DE RESPUESTA SSEI</span>
+            <div class="timer-val" id="timerDisplay">00:00.0</div>
+            <div id="timerStatus" style="font-size:0.88rem; color:var(--text-muted); margin-top:6px;">En espera de activación de alarma directa.</div>
+          </div>
+
+          <div class="phrase-dialogue">
+            <div><span class="phrase-role twr">TWR MMLP</span> <em>(Activa Alarma Directa) «EJERCICIO DE TIEMPO DE RESPUESTA al umbral 36.»</em></div>
+            <div><span class="phrase-role ssei">MÓVIL RESCATE</span> <em>«TWR MMLP, de Móvil Rescate ¿cuál es la emergencia?»</em></div>
+            <div><span class="phrase-role twr">TWR MMLP</span> <em>«Ejercicio de tiempo de respuesta al umbral 36, repito, ejercicio de tiempo de respuesta al umbral 36, proceda vía calle Alfa.»</em></div>
+            <div><span class="phrase-role ssei">MÓVIL RESCATE</span> <em>«Enterado, ejercicio de tiempo de respuesta al umbral 36 vía rodaje Alfa, Móvil Rescate.»</em></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. EVENTOS FOD, FAUNA Y REVISIONES -->
+      <section id="sec-eventos-fod" class="norm-section">
+        <div class="section-header">
+          <span class="section-num">5 & 6</span>
+          <h2 class="section-title">NOTIFICACIÓN DE EVENTOS RELEVANTES & RUNWAY SAFETY TEAM (RST)</h2>
+        </div>
+
+        <div class="card">
+          <p style="font-size:0.92rem;">
+            Torre MMLP notificará en toda circunstancia cualquier presencia de <strong>FOD (Foreign Object Debris)</strong>, impacto de fauna o avistamiento a <strong>Operaciones</strong>, quien designará al área encargada. Las revisiones de esta Carta Operacional se realizan con base en resoluciones del <strong>Runway Safety Team (RST)</strong> del aeropuerto.
+          </p>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="sec-quiz" class="norm-section">
+        <div class="section-header">
+          <span class="section-num"><i class="fa-solid fa-graduation-cap"></i></span>
+          <h2 class="section-title">EVALUACIÓN INTERACTIVA DE CONOCIMIENTOS (TEMA 1.10)</h2>
+        </div>
+
+        <div class="quiz-container">
+          <div class="quiz-q" id="q1">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-ssei);">1.</span>
+              <span>De acuerdo con la Circular ATS-02/26, ¿en cuáles escenarios el ATCO DEBE activar la función "RUNWAY INCURSION" en FREQUENTIS?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(1, 0, false)">A) Únicamente durante la noche si hay niebla.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 1, true)">B) Al instruir el ingreso de un vehículo, de una persona o ante la existencia de una obstrucción en pista.</div>
+              <div class="quiz-opt" onclick="checkAnswer(1, 2, false)">C) Solamente cuando aterrice un vuelo comercial internacional.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <div class="quiz-q" id="q2">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-ssei);">2.</span>
+              <span>Según el Oficio 4.5.211.-130/2026 de SENEAM, ¿qué disposición rige para los vehículos propios de SENEAM en los aeropuertos?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(2, 0, true)">A) No se permitirá su entrada a pista; deberán ser instruidos a proseguir por los caminos perimetrales.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 1, false)">B) Tienen derecho de paso prioritario sobre las pistas en todo momento.</div>
+              <div class="quiz-opt" onclick="checkAnswer(2, 2, false)">C) Pueden cruzar la pista sin necesidad de comunicarse con Torre.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <div class="quiz-q" id="q3">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-ssei);">3.</span>
+              <span>Según el Oficio 4.5.211.-106/2026, cuando un vehículo entra a revisar la pista por FOD, temblor o inundación, ¿cuándo se reinician las operaciones?</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(3, 0, false)">A) A los 5 minutos de haber salido el vehículo.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 1, false)">B) Cuando el piloto de la siguiente aeronave lo solicite.</div>
+              <div class="quiz-opt" onclick="checkAnswer(3, 2, true)">C) No se utilizará la pista hasta que la Comandancia informe formalmente que se encuentra libre para reiniciar operaciones.</div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+
+          <div class="quiz-q" id="q4">
+            <div class="quiz-q-title">
+              <span style="color:var(--accent-ssei);">4.</span>
+              <span>¿Cuál es el «CALL OUT» obligatorio que debe realizar el personal en tierra antes de cruzar la pista activa en La Paz? (LOA MMLP)</span>
+            </div>
+            <div class="quiz-options">
+              <div class="quiz-opt" onclick="checkAnswer(4, 0, true)">A) «[Libre izquierda, libre derecha]» tras revisión visual de ambos sentidos y aproximaciones.</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 1, false)">B) «[Cruzando pista ahora]».</div>
+              <div class="quiz-opt" onclick="checkAnswer(4, 2, false)">C) «[Pista libre de tráfico comercial]».</div>
+            </div>
+            <div class="quiz-feedback" id="fb-4"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM) — Tema 1.10: LOA MMLP TWR, SSEI & Circulares 2026</strong></p>
+      <p style="margin-top:4px;">SENEAM — Dirección de Tránsito Aéreo | Prevención de Incursiones en Pista & Seguridad Operacional</p>
+    </footer>
+  </main>
+
+  <!-- MODAL DE PRESENTACIÓN DIAPOSITIVAS -->
+  <div class="presentation-modal" id="presentationModal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="badge-doc"><i class="fa-solid fa-tv"></i> Diapositivas Ejecutivas Tema 1.10</span>
+      <button class="btn btn-outline" onclick="closePresentation()"><i class="fa-solid fa-xmark"></i> Salir</button>
+    </div>
+
+    <div class="slide-body" id="slideContent"></div>
+
+    <div class="slide-controls">
+      <button class="btn btn-outline" onclick="prevSlide()"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+      <span id="slideCounter" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:var(--text-muted);">Diapositiva 1 / 6</span>
+      <button class="btn btn-ssei" onclick="nextSlide()">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // 1. SIMULADOR FREQUENTIS RUNWAY INCURSION (CON SONIDO SINTETIZADO)
+    let freqActive = false;
+    let audioCtx = null;
+
+    function playTone(freq, duration) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.log("Audio not supported / muted", e);
+      }
+    }
+
+    function toggleFrequentisKey() {
+      freqActive = !freqActive;
+      const btn = document.getElementById('freqBtn');
+      const statusText = document.getElementById('freqStatusText');
+
+      if (freqActive) {
+        btn.classList.add('active');
+        playTone(880, 0.2); // Beep agudo de activación
+        statusText.innerHTML = '<i class="fa-solid fa-circle text-success fa-beat"></i> Estado: <strong style="color:var(--accent-freq);">ON (PISTA TEMPORALMENTE OCUPADA)</strong>';
+      } else {
+        btn.classList.remove('active');
+        playTone(440, 0.2); // Beep de desactivación
+        statusText.innerHTML = '<i class="fa-solid fa-circle" style="color:#64748b;"></i> Estado: <strong>OFF (Pista Libre)</strong>';
+      }
+    }
+
+    function simulateIncomingCall() {
+      if (freqActive) {
+        playTone(950, 0.25);
+        setTimeout(() => playTone(950, 0.25), 300);
+        alert("[ALERTA AUDIBLE RWY INC]: ¡Recepción de comunicación con PISTA OCUPADA activa en FREQUENTIS!");
+      } else {
+        alert("Recepción normal. Tecla RUNWAY INCURS se encuentra en OFF.");
+      }
+    }
+
+    function simulateTransmission() {
+      if (freqActive) {
+        playTone(600, 0.2);
+        alert("[ALERTA FREQUENTIS]: Fin de transmisión PTT. Recordatorio: Pista Ocupada activa.");
+      } else {
+        alert("Transmisión finalizada normal.");
+      }
+    }
+
+    // 2. CRONÓMETRO SSEI
+    let timerInterval = null;
+    let startTime = null;
+
+    function startDrill() {
+      document.getElementById('btnStartDrill').disabled = true;
+      document.getElementById('btnStopDrill').disabled = false;
+      startTime = Date.now();
+      playTone(750, 0.4);
+
+      document.getElementById('timerStatus').innerHTML = '<span style="color:var(--accent-ssei); font-weight:700;"><i class="fa-solid fa-bell fa-shake"></i> ¡ALARMA DIRECTA ACTIVADA! Unidades SSEI en trayecto...</span>';
+
+      timerInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const mins = Math.floor(elapsed / 60000);
+        const secs = Math.floor((elapsed % 60000) / 1000);
+        const tenths = Math.floor((elapsed % 1000) / 100);
+
+        document.getElementById('timerDisplay').innerText = 
+          `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${tenths}`;
+      }, 100);
+    }
+
+    function stopDrill() {
+      clearInterval(timerInterval);
+      document.getElementById('btnStopDrill').disabled = true;
+      const elapsed = Date.now() - startTime;
+      const secsTotal = elapsed / 1000;
+
+      const statusBox = document.getElementById('timerStatus');
+      if (secsTotal <= 120) {
+        statusBox.innerHTML = `<span style="color:var(--accent-freq); font-weight:800;"><i class="fa-solid fa-circle-check"></i> ¡EXCELENTE! ${secsTotal.toFixed(1)} s cumple con el objetivo óptimo (&le; 2:00 min).</span>`;
+      } else if (secsTotal <= 180) {
+        statusBox.innerHTML = `<span style="color:var(--accent-warning); font-weight:800;"><i class="fa-solid fa-triangle-exclamation"></i> ACEPTABLE: ${secsTotal.toFixed(1)} s dentro del límite máximo (&le; 3:00 min).</span>`;
+      } else {
+        statusBox.innerHTML = `<span style="color:var(--accent-ssei); font-weight:800;"><i class="fa-solid fa-circle-xmark"></i> EXCEDIDO: ${secsTotal.toFixed(1)} s supera el límite máximo permitido.</span>`;
+      }
+    }
+
+    function resetDrill() {
+      clearInterval(timerInterval);
+      document.getElementById('btnStartDrill').disabled = false;
+      document.getElementById('btnStopDrill').disabled = true;
+      document.getElementById('timerDisplay').innerText = "00:00.0";
+      document.getElementById('timerStatus').innerText = "En espera de activación de alarma directa.";
+    }
+
+    // 3. QUIZ
+    function checkAnswer(qNum, optIdx, isCorrect) {
+      const parent = document.getElementById(`q${qNum}`);
+      const opts = parent.querySelectorAll('.quiz-opt');
+      const fb = document.getElementById(`fb-${qNum}`);
+
+      opts.forEach(o => {
+        o.classList.remove('correct', 'incorrect');
+        o.style.pointerEvents = 'none';
+      });
+
+      if (isCorrect) {
+        opts[optIdx].classList.add('correct');
+        fb.innerHTML = '<span style="color:var(--accent-freq);"><i class="fa-solid fa-circle-check"></i> ¡Correcto según las circulares oficiales y LOA MMLP 2026!</span>';
+      } else {
+        opts[optIdx].classList.add('incorrect');
+        fb.innerHTML = '<span style="color:var(--accent-ssei);"><i class="fa-solid fa-circle-xmark"></i> Incorrecto. Revisa el documento normativo correspondiente.</span>';
+      }
+      fb.style.display = 'block';
+    }
+
+    function filterSections() {
+      const val = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('#menuList li a');
+      items.forEach(a => {
+        const text = a.textContent.toLowerCase();
+        a.parentElement.style.display = text.includes(val) ? 'block' : 'none';
+      });
+    }
+
+    // DIAPOSITIVAS
+    const slides = [
+      {
+        title: "Tema 1.10: LOA MMLP – SSEI, CCO, CF & Circulares 2026",
+        content: `
+          <div class="highlight-box" style="font-size:1.1rem; line-height:1.8;">
+            <p><strong>Marco Normativo Integral 2026:</strong></p>
+            <p>• <strong>LOA MMLP (Mayo 2026):</strong> Procedimientos operativos en área de maniobras entre Torre La Paz, SSEI, CCO, Mantenimiento y Control de Fauna.</p>
+            <p>• <strong>Circular ATS-02/26:</strong> Uso obligatorio de la función "RUNWAY INCURSION" en FREQUENTIS.</p>
+            <p>• <strong>Directivas SENEAM:</strong> Prohibición de vehículos SENEAM en pista y protocolos de revisión ante FOD/temblor.</p>
+          </div>
+        `
+      },
+      {
+        title: "Circular ATS-02/26: Función RUNWAY INCURSION",
+        content: `
+          <ul class="rule-list" style="font-size:1.05rem; line-height:1.9;">
+            <li><strong>Propósito (Doc. 9870 OACI):</strong> Alerta visual y audible (RWY INC) que recuerda que la pista se encuentra temporalmente ocupada.</li>
+            <li><strong>Activación Obligatoria:</strong> Al ingresar un vehículo, una persona o detectarse una obstrucción en pista.</li>
+            <li><strong>Desactivación:</strong> Prohibido desactivar hasta que se confirme el desalojo total o reporte libre en baja visibilidad.</li>
+          </ul>
+        `
+      },
+      {
+        title: "Directivas Operacionales SENEAM 2026",
+        content: `
+          <div class="card" style="font-size:1rem; line-height:1.8;">
+            <p>• <strong>Oficio 130/2026:</strong> Prohibida la entrada a pista de vehículos SENEAM; tránsito exclusivo por <strong>caminos perimetrales</strong>.</p>
+            <p>• <strong>Oficio 106/2026 (Revisiones por FOD/Temblor/Inundación):</strong></p>
+            <ol style="padding-left:22px; margin-top:6px;">
+              <li>Vehículo en frecuencia constante con Torre.</li>
+              <li>Emisión de NOTAM de afectación.</li>
+              <li>Suspensión de operaciones en la pista.</li>
+              <li>Reapertura sólo tras informe formal de Comandancia libre.</li>
+            </ol>
+          </div>
+        `
+      },
+      {
+        title: "Call Outs y Cruce de Pista (LOA MMLP)",
+        content: `
+          <div class="callout-critical" style="font-size:1.05rem; line-height:1.8;">
+            <p>• Prohibido ingresar a pista sin autorización explícita en 118.1 MHz.</p>
+            <p>• Revisión visual obligatoria en ambos sentidos de pista y aproximaciones.</p>
+            <p style="color:#fff; font-weight:800; margin-top:8px;">
+              CALL OUT OBLIGATORIO: «[Libre izquierda, libre derecha]»
+            </p>
+          </div>
+        `
+      },
+      {
+        title: "Tiempo de Respuesta SSEI (2 a 3 Minutos)",
+        content: `
+          <div class="highlight-box" style="font-size:1.05rem; line-height:1.8;">
+            <p>• <strong>Meta OACI:</strong> Dos (2) minutos, máximo tres (3) minutos al extremo de pista con 50% de régimen de descarga.</p>
+            <p>• <strong>Prueba Diaria:</strong> Comprobación de Alarma Directa y Sistema de Intercomunicación de Emergencia (SIE) al inicio de cada turno.</p>
+            <p>• <strong>Vehículo Escolta:</strong> Inspección de pista para verificar que no se genere FOD durante la prueba.</p>
+          </div>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+    function startPresentation() {
+      currentSlide = 0;
+      updateSlide();
+      document.getElementById('presentationModal').classList.add('active');
+    }
+    function closePresentation() {
+      document.getElementById('presentationModal').classList.remove('active');
+    }
+    function updateSlide() {
+      const data = slides[currentSlide];
+      document.getElementById('slideContent').innerHTML = `
+        <h2 style="font-size:1.8rem; color:#fff; margin-bottom:20px; font-weight:800;">${data.title}</h2>
+        <div>${data.content}</div>
+      `;
+      document.getElementById('slideCounter').innerText = `Diapositiva ${currentSlide + 1} / ${slides.length}`;
+    }
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
