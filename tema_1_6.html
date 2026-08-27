@@ -1040,12 +1040,188 @@
         </div>
       </section>
 
+      <!-- ================= BARRA DE NAVEGACIÓN INFERIOR (PEGAR DENTRO DE .container) ================= -->
+<div class="atc-bottom-bar-wrapper">
+  <div class="atc-bottom-bar">
+    <a href="javascript:void(0)" id="btnAtcPrev" class="atc-btn atc-btn-prev">
+      <i class="fa-solid fa-arrow-left"></i> <span>Anterior</span>
+    </a>
+    <a href="index.html" class="atc-btn atc-btn-home">
+      <i class="fa-solid fa-house"></i> <span>Menú Principal</span>
+    </a>
+    <button id="btnAtcNext" class="atc-btn atc-btn-next">
+      <span>Completar & Siguiente</span> <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+</div>
+
+<style>
+  /* ESTILOS DE LA BARRA INFERIOR */
+  .atc-bottom-bar-wrapper {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    display: block;
+    clear: both;
+  }
+  .atc-bottom-bar {
+    width: 100%;
+    background: #091322;
+    border: 1px solid #1E3250;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+  }
+  .atc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    font-family: 'Outfit', sans-serif;
+  }
+  .atc-btn-prev {
+    background: #0F1B2E;
+    border-color: #1E3250;
+    color: #94A3B8;
+  }
+  .atc-btn-prev:hover {
+    background: #162742;
+    color: #fff;
+  }
+  .atc-btn-prev.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .atc-btn-home {
+    background: rgba(0, 163, 255, 0.12);
+    border-color: rgba(0, 163, 255, 0.35);
+    color: #00A3FF;
+  }
+  .atc-btn-home:hover {
+    background: #00A3FF;
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 163, 255, 0.35);
+  }
+  .atc-btn-next {
+    background: #10B981;
+    color: #000;
+    border-color: #10B981;
+  }
+  .atc-btn-next:hover {
+    background: #34D399;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+  }
+
+  /* RESPONSIVO PARA CELULARES */
+  @media (max-width: 700px) {
+    .atc-bottom-bar {
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px;
+    }
+    .atc-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
+<script>
+  // SCRIPT AUTOMÁTICO DE NAVEGACIÓN Y GUARDADO
+  (function initAtcNav() {
+    const currentProfile = localStorage.getItem('atc_user_profile') || 'TWR';
+
+    const trackTWR = [
+      { file: 'tema_1_1.html', id: 'tema_1_1' },
+      { file: 'tema_1_2.html', id: 'tema_1_2' },
+      { file: 'tema_1_3.html', id: 'tema_1_3' },
+      { file: 'tema_1_4.html', id: 'tema_1_4' },
+      { file: 'tema_1_5.html', id: 'tema_1_5' },
+      { file: 'tema_1_6.html', id: 'tema_1_6' },
+      { file: 'tema_1_8.html', id: 'tema_1_8' },
+      { file: 'tema_1_9.html', id: 'tema_1_9' },
+      { file: 'tema_1_10.html', id: 'tema_1_10' }
+    ];
+
+    const trackAPP = [
+      { file: 'tema_1_1_app.html', id: 'tema_1_1_app' },
+      { file: 'tema_1_2.html', id: 'tema_1_2' },
+      { file: 'tema_1_3.html', id: 'tema_1_3' },
+      { file: 'tema_1_4.html', id: 'tema_1_4' },
+      { file: 'tema_1_5.html', id: 'tema_1_5' },
+      { file: 'tema_1_6.html', id: 'tema_1_6' },
+      { file: 'tema_1_8.html', id: 'tema_1_8' },
+      { file: 'tema_1_9.html', id: 'tema_1_9' },
+      { file: 'tema_1_10.html', id: 'tema_1_10' }
+    ];
+
+    const activeTrack = (currentProfile === 'APP') ? trackAPP : trackTWR;
+    const currentPath = window.location.pathname.split('/').pop().toLowerCase() || 'tema_1_1.html';
+    
+    let currentIndex = activeTrack.findIndex(item => item.file.toLowerCase() === currentPath);
+    if (currentIndex === -1) currentIndex = 0;
+
+    const currentMod = activeTrack[currentIndex];
+    const prevMod = (currentIndex > 0) ? activeTrack[currentIndex - 1] : null;
+    const nextMod = (currentIndex < activeTrack.length - 1) ? activeTrack[currentIndex + 1] : null;
+
+    // Configurar Botón Anterior
+    const prevBtn = document.getElementById('btnAtcPrev');
+    if (prevMod) {
+      prevBtn.href = prevMod.file;
+    } else {
+      prevBtn.classList.add('disabled');
+    }
+
+    // Configurar Botón Siguiente / Completar
+    const nextBtn = document.getElementById('btnAtcNext');
+    if (nextMod) {
+      nextBtn.innerHTML = `<span>Completar & Siguiente</span> <i class="fa-solid fa-arrow-right"></i>`;
+      nextBtn.onclick = function() {
+        saveProgress(currentMod.id);
+        window.location.href = nextMod.file;
+      };
+    } else {
+      nextBtn.innerHTML = `<span><i class="fa-solid fa-flag-checkered"></i> Finalizar Curso</span>`;
+      nextBtn.onclick = function() {
+        saveProgress(currentMod.id);
+        alert('¡Felicidades! Has completado todos los módulos.');
+        window.location.href = 'index.html';
+      };
+    }
+
+    function saveProgress(modId) {
+      let progress = JSON.parse(localStorage.getItem('atc_hub_progress') || '[]');
+      if (!progress.includes(modId)) {
+        progress.push(modId);
+        localStorage.setItem('atc_hub_progress', JSON.stringify(progress));
+      }
+    }
+  })();
+</script>
+
     </div>
 
     <!-- FOOTER -->
     <footer>
       <p><strong>Manual de Gestión de Tránsito Aéreo de México (MGTAM) — Tema 1.6: Gestión de Vuelos Visuales en IFR</strong></p>
-      <p style="margin-top:4px;">SENEAM — Dirección de Tránsito Aéreo | AIP ENR 1.3 & Carta de Acuerdo MMLP 2024</p>
+      <p style="margin-top:4px;">AIP ENR 1.3 & Carta de Acuerdo MMLP 2024</p>
+       <p style="margin-top:4px;">SENEAM - Servicios a la Navegación en el Espacio Aéreo Mexicano</p>
+      <p style="margin-top:4px;">Instructor: ATCO. Raul Jesus Ruiz Tapiz</p>
     </footer>
   </main>
 
