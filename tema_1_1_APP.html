@@ -652,6 +652,179 @@
           </div>
         </div>
       </section>
+      <!-- ================= BARRA DE NAVEGACIÓN INFERIOR (PEGAR DENTRO DE .container) ================= -->
+<div class="atc-bottom-bar-wrapper">
+  <div class="atc-bottom-bar">
+    <a href="javascript:void(0)" id="btnAtcPrev" class="atc-btn atc-btn-prev">
+      <i class="fa-solid fa-arrow-left"></i> <span>Anterior</span>
+    </a>
+    <a href="index.html" class="atc-btn atc-btn-home">
+      <i class="fa-solid fa-house"></i> <span>Menú Principal</span>
+    </a>
+    <button id="btnAtcNext" class="atc-btn atc-btn-next">
+      <span>Completar & Siguiente</span> <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+</div>
+
+<style>
+  /* ESTILOS DE LA BARRA INFERIOR */
+  .atc-bottom-bar-wrapper {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    display: block;
+    clear: both;
+  }
+  .atc-bottom-bar {
+    width: 100%;
+    background: #091322;
+    border: 1px solid #1E3250;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+  }
+  .atc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    font-family: 'Outfit', sans-serif;
+  }
+  .atc-btn-prev {
+    background: #0F1B2E;
+    border-color: #1E3250;
+    color: #94A3B8;
+  }
+  .atc-btn-prev:hover {
+    background: #162742;
+    color: #fff;
+  }
+  .atc-btn-prev.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .atc-btn-home {
+    background: rgba(0, 163, 255, 0.12);
+    border-color: rgba(0, 163, 255, 0.35);
+    color: #00A3FF;
+  }
+  .atc-btn-home:hover {
+    background: #00A3FF;
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 163, 255, 0.35);
+  }
+  .atc-btn-next {
+    background: #10B981;
+    color: #000;
+    border-color: #10B981;
+  }
+  .atc-btn-next:hover {
+    background: #34D399;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+  }
+
+  /* RESPONSIVO PARA CELULARES */
+  @media (max-width: 700px) {
+    .atc-bottom-bar {
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px;
+    }
+    .atc-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
+<script>
+  // SCRIPT AUTOMÁTICO DE NAVEGACIÓN Y GUARDADO
+  (function initAtcNav() {
+    const currentProfile = localStorage.getItem('atc_user_profile') || 'TWR';
+
+    const trackTWR = [
+      { file: 'tema_1_1.html', id: 'tema_1_1' },
+      { file: 'tema_1_2.html', id: 'tema_1_2' },
+      { file: 'tema_1_3.html', id: 'tema_1_3' },
+      { file: 'tema_1_4.html', id: 'tema_1_4' },
+      { file: 'tema_1_5.html', id: 'tema_1_5' },
+      { file: 'tema_1_6.html', id: 'tema_1_6' },
+      { file: 'tema_1_8.html', id: 'tema_1_8' },
+      { file: 'tema_1_9.html', id: 'tema_1_9' },
+      { file: 'tema_1_10.html', id: 'tema_1_10' }
+    ];
+
+    const trackAPP = [
+      { file: 'tema_1_1_app.html', id: 'tema_1_1_app' },
+      { file: 'tema_1_2.html', id: 'tema_1_2' },
+      { file: 'tema_1_3.html', id: 'tema_1_3' },
+      { file: 'tema_1_4.html', id: 'tema_1_4' },
+      { file: 'tema_1_5.html', id: 'tema_1_5' },
+      { file: 'tema_1_6.html', id: 'tema_1_6' },
+      { file: 'tema_1_8.html', id: 'tema_1_8' },
+      { file: 'tema_1_9.html', id: 'tema_1_9' },
+      { file: 'tema_1_10.html', id: 'tema_1_10' }
+    ];
+
+    const activeTrack = (currentProfile === 'APP') ? trackAPP : trackTWR;
+    const currentPath = window.location.pathname.split('/').pop().toLowerCase() || 'tema_1_1.html';
+    
+    let currentIndex = activeTrack.findIndex(item => item.file.toLowerCase() === currentPath);
+    if (currentIndex === -1) currentIndex = 0;
+
+    const currentMod = activeTrack[currentIndex];
+    const prevMod = (currentIndex > 0) ? activeTrack[currentIndex - 1] : null;
+    const nextMod = (currentIndex < activeTrack.length - 1) ? activeTrack[currentIndex + 1] : null;
+
+    // Configurar Botón Anterior
+    const prevBtn = document.getElementById('btnAtcPrev');
+    if (prevMod) {
+      prevBtn.href = prevMod.file;
+    } else {
+      prevBtn.classList.add('disabled');
+    }
+
+    // Configurar Botón Siguiente / Completar
+    const nextBtn = document.getElementById('btnAtcNext');
+    if (nextMod) {
+      nextBtn.innerHTML = `<span>Completar & Siguiente</span> <i class="fa-solid fa-arrow-right"></i>`;
+      nextBtn.onclick = function() {
+        saveProgress(currentMod.id);
+        window.location.href = nextMod.file;
+      };
+    } else {
+      nextBtn.innerHTML = `<span><i class="fa-solid fa-flag-checkered"></i> Finalizar Curso</span>`;
+      nextBtn.onclick = function() {
+        saveProgress(currentMod.id);
+        alert('¡Felicidades! Has completado todos los módulos.');
+        window.location.href = 'index.html';
+      };
+    }
+
+    function saveProgress(modId) {
+      let progress = JSON.parse(localStorage.getItem('atc_hub_progress') || '[]');
+      if (!progress.includes(modId)) {
+        progress.push(modId);
+        localStorage.setItem('atc_hub_progress', JSON.stringify(progress));
+      }
+    }
+  })();
+</script>
 
     </div>
 
@@ -831,187 +1004,5 @@
       updateHoldingData();
     };
   </script>
-  <!-- ================= BARRA DE NAVEGACIÓN INFERIOR AUTOMÁTICA (MÓVIL Y DESKTOP) ================= -->
-<script>
-(function() {
-  // 1. Catálogo ordenado de rutas según el perfil de especialidad
-  const currentProfile = localStorage.getItem('atc_user_profile') || 'TWR';
-  
-  const trackTWR = [
-    { file: 'tema_1_1.html', id: 'tema_1_1', name: '1.1 TWR (Aeródromo)' },
-    { file: 'tema_1_2.html', id: 'tema_1_2', name: '1.2 AIP, NOTAM & CAPMA' },
-    { file: 'tema_1_3.html', id: 'tema_1_3', name: '1.3 VFR, Sol & Husos' },
-    { file: 'tema_1_4.html', id: 'tema_1_4', name: '1.4 Militares (CENAVI)' },
-    { file: 'tema_1_5.html', id: 'tema_1_5', name: '1.5 Nocturnas (Art. 170)' },
-    { file: 'tema_1_6.html', id: 'tema_1_6', name: '1.6 VFR en IFR' },
-    { file: 'tema_1_8.html', id: 'tema_1_8', name: '1.8 Carta Visual MMLP' },
-    { file: 'tema_1_9.html', id: 'tema_1_9', name: '1.9 Drones (NOM-107)' },
-    { file: 'tema_1_10.html', id: 'tema_1_10', name: '1.10 LOA MMLP & FREQUENTIS' }
-  ];
-
-  const trackAPP = [
-    { file: 'tema_1_1_app.html', id: 'tema_1_1_app', name: '1.1 APP (Aproximación)' },
-    { file: 'tema_1_2.html', id: 'tema_1_2', name: '1.2 AIP, NOTAM & CAPMA' },
-    { file: 'tema_1_3.html', id: 'tema_1_3', name: '1.3 VFR, Sol & Husos' },
-    { file: 'tema_1_4.html', id: 'tema_1_4', name: '1.4 Militares (CENAVI)' },
-    { file: 'tema_1_5.html', id: 'tema_1_5', name: '1.5 Nocturnas (Art. 170)' },
-    { file: 'tema_1_6.html', id: 'tema_1_6', name: '1.6 VFR en IFR' },
-    { file: 'tema_1_8.html', id: 'tema_1_8', name: '1.8 Carta Visual MMLP' },
-    { file: 'tema_1_9.html', id: 'tema_1_9', name: '1.9 Drones (NOM-107)' },
-    { file: 'tema_1_10.html', id: 'tema_1_10', name: '1.10 LOA MMLP & FREQUENTIS' }
-  ];
-
-  // Seleccionar la secuencia activa
-  const activeSequence = (currentProfile === 'APP') ? trackAPP : trackTWR;
-
-  // 2. Detectar archivo actual
-  const currentPath = window.location.pathname.split('/').pop() || 'tema_1_1.html';
-  let currentIndex = activeSequence.findIndex(item => item.file.toLowerCase() === currentPath.toLowerCase());
-  
-  // Fallback si se abrió directamente
-  if (currentIndex === -1) {
-    if (currentPath.includes('app')) {
-      currentIndex = trackAPP.findIndex(item => item.file === 'tema_1_1_app.html');
-    } else {
-      currentIndex = 0;
-    }
-  }
-
-  const currentModule = activeSequence[currentIndex] || activeSequence[0];
-  const prevModule = (currentIndex > 0) ? activeSequence[currentIndex - 1] : null;
-  const nextModule = (currentIndex < activeSequence.length - 1) ? activeSequence[currentIndex + 1] : null;
-
-  // 3. Inyectar estilos CSS de la barra inferior
-  const styleEl = document.createElement('style');
-  styleEl.innerHTML = `
-    .atc-bottom-navbar {
-      position: sticky;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(6, 13, 26, 0.95);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid #1E3250;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 9999;
-      box-shadow: 0 -8px 25px rgba(0,0,0,0.6);
-      gap: 10px;
-    }
-    .atc-bottom-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.2s ease;
-      font-family: 'Outfit', sans-serif;
-    }
-    .atc-btn-prev {
-      background: #0F1B2E;
-      border-color: #1E3250;
-      color: #94A3B8;
-    }
-    .atc-btn-prev:hover {
-      background: #162742;
-      color: #fff;
-    }
-    .atc-btn-prev.disabled {
-      opacity: 0.4;
-      pointer-events: none;
-    }
-    .atc-btn-home {
-      background: rgba(0, 163, 255, 0.12);
-      border-color: rgba(0, 163, 255, 0.35);
-      color: #00A3FF;
-    }
-    .atc-btn-home:hover {
-      background: #00A3FF;
-      color: #000;
-      box-shadow: 0 0 15px rgba(0, 163, 255, 0.3);
-    }
-    .atc-btn-next {
-      background: #10B981;
-      color: #000;
-      border-color: #10B981;
-    }
-    .atc-btn-next:hover {
-      background: #34D399;
-      box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
-    }
-    @media (max-width: 650px) {
-      .atc-bottom-navbar {
-        padding: 10px 12px;
-      }
-      .atc-bottom-btn {
-        padding: 9px 10px;
-        font-size: 0.76rem;
-        gap: 5px;
-      }
-      .atc-btn-text-long {
-        display: none;
-      }
-    }
-  `;
-  document.head.appendChild(styleEl);
-
-  // 4. Inyectar contenedor HTML
-  const navContainer = document.createElement('div');
-  navContainer.className = 'atc-bottom-navbar';
-
-  // Botón Anterior
-  const prevBtn = document.createElement('a');
-  prevBtn.className = 'atc-bottom-btn atc-btn-prev' + (!prevModule ? ' disabled' : '');
-  prevBtn.href = prevModule ? prevModule.file : 'javascript:void(0)';
-  prevBtn.innerHTML = `<i class="fa-solid fa-arrow-left"></i> <span>Anterior</span>`;
-
-  // Botón Menú Principal
-  const homeBtn = document.createElement('a');
-  homeBtn.className = 'atc-bottom-btn atc-btn-home';
-  homeBtn.href = 'index.html';
-  homeBtn.innerHTML = `<i class="fa-solid fa-house"></i> <span>Menú Principal</span>`;
-
-  // Botón Siguiente / Completar
-  const nextBtn = document.createElement('button');
-  nextBtn.className = 'atc-bottom-btn atc-btn-next';
-  if (nextModule) {
-    nextBtn.innerHTML = `<span>Completar <span class="atc-btn-text-long">& Siguiente</span></span> <i class="fa-solid fa-arrow-right"></i>`;
-    nextBtn.onclick = function() {
-      markCurrentCompleted(currentModule.id);
-      window.location.href = nextModule.file;
-    };
-  } else {
-    nextBtn.innerHTML = `<span><i class="fa-solid fa-flag-checkered"></i> Finalizar Curso</span>`;
-    nextBtn.onclick = function() {
-      markCurrentCompleted(currentModule.id);
-      alert('¡Felicidades! Has completado todos los módulos del programa.');
-      window.location.href = 'index.html';
-    };
-  }
-
-  navContainer.appendChild(prevBtn);
-  navContainer.appendChild(homeBtn);
-  navContainer.appendChild(nextBtn);
-
-  document.body.appendChild(navContainer);
-
-  // 5. Función de guardado de progreso
-  function markCurrentCompleted(modId) {
-    let progress = JSON.parse(localStorage.getItem('atc_hub_progress') || '[]');
-    if (!progress.includes(modId)) {
-      progress.push(modId);
-      localStorage.setItem('atc_hub_progress', JSON.stringify(progress));
-    }
-  }
-})();
-</script>
 </body>
 </html>
